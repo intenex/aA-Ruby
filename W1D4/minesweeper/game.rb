@@ -1,5 +1,9 @@
+# Things done
+# Create Board and Tile classes
+# Populate the @board with Tiles with a 10% chance of being a bomb
+
 # Things to implement:
-# Render the board
+# Render the board --> the recursive bit might be here call the recursive function on all the neighbor tiles unless base case is hit, and base case is if not all neighboring tiles are not bombs love it so great that they're still doing recursion
 # Randomly assign the bomb values to each tile with some probability (like 10% are bombs)
 # Implement the reveal functionality
 # In the reveal functionality, check if the revealed tile has any adjacent bombs - if not, then reveal all of its adjacent neighbors too.
