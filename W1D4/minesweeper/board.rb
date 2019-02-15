@@ -25,12 +25,7 @@ class Board
     end
 
     def render
-        @grid.each do |subgrid|
-            subgrid.each do |tile|
-                print "#{tile.to_s} " # boom works flawlessly love it
-            end
-            puts # to create a new line
-        end
+        @grid.each { |subgrid| subgrid.each { |tile| print "#{tile.to_s} " }; puts } # puts at the end to create a new line. Interesitng that the semi colon does work in ruby to put multiple lines of code on one line, interesting, just guessed it as the logical thing and it does indeed work https://stackoverflow.com/a/3953856/674794
     end
 
 end
