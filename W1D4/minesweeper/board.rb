@@ -7,6 +7,7 @@ class Board
 
     def initialize
         @grid = populate_grid
+        set_tile_values # things to run as soon as the board is set up shouldn't have to automatically do it right love it know where to put everything awesome
     end
 
     def populate_grid
@@ -24,7 +25,12 @@ class Board
     end
 
     def render
-
+        @grid.each do |subgrid|
+            subgrid.each do |tile|
+                print "#{tile.to_s} " # boom works flawlessly love it
+            end
+            puts # to create a new line
+        end
     end
 
 end
