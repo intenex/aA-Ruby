@@ -1,7 +1,7 @@
 class Tile
 
-    attr_reader :bomb, :board, :pos # many not needed like @pos likely prune later don't make elegant in the very beginning be safe and redundant then clean up and protect what's not needed
-    attr_accessor :revealed, :flagged, :value
+    attr_reader :bomb, :pos, :revealed
+    attr_accessor :flagged, :value
 
     def initialize(board, pos, bomb) # true or false
         @board = board; @bomb = bomb; @revealed = false; @flagged = false; @pos = pos; @value = nil  # right need to call the getter method of board's grid later, board being the object that was just passed in...but also can't do this at exactly the same time. Have to define it later after the board is fully populated, right. || # start by setting @value to nil then later call neighbor_bomb_count to change this value for everything
@@ -12,6 +12,13 @@ class Tile
     # end
 
     def reveal
+        if @value == 0 && @revealed == false # if the tile hasn't already been revealed before, do the following, otherwise skip so it doesn't inefficiently just keep doing this for tiles that have already done this recursive step
+            @revealed = true # have to put this in here to not recurse forever heh you're real good at avoiding these since you did it so much in helldoku lol what a great experience honestly
+            neighbors(self.pos).each do |loc|
+                row, col = loc
+                @board.grid[row][col].reveal # recursion! --> if it's an internal tile with no bomb neighbors reveal all the tiles next to it too love it think this is great wow so easy actually
+            end
+        end
         @revealed = true
     end
 
@@ -41,6 +48,7 @@ class Tile
 
     def to_s
         if @revealed # not checked since nothing revealed yet, see if this works once revealed
+            return "*" if @bomb # if it's a bomb, reveal it as such --> and since the whole board will be revealed when a mine is hit you can show these as the * since there will be no unrevealed tiles anymore
             @value != 0 ? @value.to_s : "_" # this is how to do a one line if statement love it https://stackoverflow.com/a/3827879/674794 if @value is not equal to 0 is true, then @value.to_s, otherwise if it is false and @value is 0, then print "_" to symbolize it's an interior piece surrounded by no bombs # send the string value of the count of number of bombs nearby || # if there are no bombs nearby then it's an interior square so print "_"
         elsif @flagged # if the square is revealed, that overwrites a flag and comes first, otherwise if flagged, display it as F
             "F"

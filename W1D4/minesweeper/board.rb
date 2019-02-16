@@ -5,9 +5,7 @@ class Board
 
     attr_reader :grid # so that the tile class can access this - internal instance methods can access attributes of that class natively, but other class instance methods can't, right, of course that's how it works remember that
 
-    def initialize # damn learning that you can chain multi lines of code onto one line with semicolons is so lit lol
-        @grid = populate_grid; set_tile_values # things to run as soon as the board is set up shouldn't have to automatically do it right love it know where to put everything awesome
-    end
+    def initialize; @grid = populate_grid; set_tile_values end # damn learning that you can chain multi lines of code onto one line with semicolons is so lit lol. To make a method def on one line you can just put a semicolon after the method name, write the lines of code, then with no semicolon add the end at the end, totally nuts lol. You can put a semicolon at the end too if you want --> totally up to you if you want to put a semicolon on every line, love it. || # things to run as soon as the board is set up shouldn't have to automatically do it right love it know where to put everything awesome
 
     def populate_grid
         grid_arr = Array.new(9) { Array.new(9) }
@@ -15,12 +13,17 @@ class Board
         grid_arr
     end
 
-    def set_tile_values
-        @grid.each { |row| row.each { |tile| tile.value = tile.neighbor_bomb_count(tile.pos) } } # set the values of each tile to how many neighbors it has now that the whole grid has been correctly created
-    end
+    def set_tile_values; @grid.each { |row| row.each { |tile| tile.value = tile.neighbor_bomb_count(tile.pos) } } end # set the values of each tile to how many neighbors it has now that the whole grid has been correctly created
 
-    def render
-        @grid.each { |row| row.each { |tile| print "#{tile.to_s} " }; puts } # puts at the end to create a new line. Interesitng that the semi colon does work in ruby to put multiple lines of code on one line, interesting, just guessed it as the logical thing and it does indeed work https://stackoverflow.com/a/3953856/674794
+    def render; @grid.each { |row| row.each { |tile| print "#{tile.to_s} " }; puts } end # puts at the end to create a new line. Interesitng that the semi colon does work in ruby to put multiple lines of code on one line, interesting, just guessed it as the logical thing and it does indeed work https://stackoverflow.com/a/3953856/674794
+
+    def guess(pos)
+        row, col = pos
+        @grid[row][col].reveal
+    end
+    
+    def reveal_all
+        @grid.each { |row| row.each { |tile| tile.reveal } } # reveal all the tiles when the game is over. Insane how easy it is to write these when you write the right instance methods for each class, truly amazing. Love it. Makes new functionality so easy to write once you get started, very lucky that you're getting so good at this.
     end
 
 end
