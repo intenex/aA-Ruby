@@ -1,5 +1,4 @@
 # Things to implement:
-# Add functionality to flag squares
 # Add save game functionality
 
 # Bonus Features
@@ -32,7 +31,7 @@ class Game
     def validate_pos(pos)
         g_or_f_or_s, row, col = pos
         row = row.to_i; col = col.to_i # ah did two == signs here by accident that was the issue of course
-        if g_or_f_or_s.downcase != "g" && g_or_f_or_s.downcase != "f" && g_or_f_or_s.downcase != "u"
+        if g_or_f_or_s.downcase != "g" && g_or_f_or_s.downcase != "f" && g_or_f_or_s.downcase != "u" # these statements evaluate in order and that's important if these were in different order there could be some errors here
             puts "That was not a valid guess, flag, or unflag. Try again."
             user_guess
         elsif row == nil || col == nil || row < 0 || col < 0 || row > 8 || col > 8 # this works even though nil < 0 or something would hit an error because Ruby lazy evaluates and will return as soon as the first two ors are evaluated to true or not love it very cool
