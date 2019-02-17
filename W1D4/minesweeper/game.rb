@@ -1,16 +1,3 @@
-# Things done
-# Create Board and Tile classes
-# Populate the @board with Tiles with a 10% chance of being a bomb
-# Create Tile#neighbor_bomb_count to count the # of bombs near each Tile and to set a value in each tile that counts this number with Board#set_tile_values
-# Render the board
-# Get user input
-# Implement the reveal functionality --> the recursive bit might be here call the recursive function on all the neighbor tiles unless base case is hit, and base case is if not all neighboring tiles are not bombs love it so great that they're still doing recursion --> ah no the recursive bit is in the user input section, right
-# In the reveal functionality, check if the revealed tile has any adjacent bombs - if not, then reveal all of its adjacent neighbors too.
-# If any of the adjacent neighbors have no bombs either, reveal all of their adjacent neighbors too.
-# Basically, have a helper method that checks if any adjacent tiles to the one that is revealed are bombs and reveal or don't reveal based on that behavior.
-# Check if the game is over - when a bomb is revealed, game over is triggered with a loss. If all the tiles except bombs are revealed, then the game is over with a win.
-# Add functionality to not allow guessing an already revealed position
-
 # Things to implement:
 # Add functionality to flag squares
 # Add save game functionality
@@ -28,7 +15,7 @@ class Game
     def play_game
         while !game_over?
             @board.render
-            @board.guess(user_guess)
+            @board.guess_or_flag(user_guess)
         end
         game_won? ? (puts "Congratulations, you won!") : (puts "Oh no, you hit a bomb and lost!") # if game_won? is true then put that they won otherwise put that they lost love it
         @board.reveal_all # show the whole board when the game is over
@@ -38,20 +25,30 @@ class Game
     def inspect; end # empty method just so the game doesn't return itself as a return value when it ends, it just returns nothing now, awesome, inspect is just the default method for every class object that returns a bunch of info about that object when the object is evaluated to itself interesting so you can overwrite it like this very helpful to know
 
     def user_guess
-        puts "Please enter a position to guess, like 0,0"
-        validate_pos(gets.chomp.split(',').map(&:to_i)) # this will need to be refactored later for flagging but nice for now lol --> gets input from the user
+        puts "Please enter a position to guess (G,1,2),\nflag (F,2,3), unflag (U,3,4), or save the game (S)"
+        validate_pos(gets.chomp.split(',')) # this will need to be refactored later for flagging but nice for now lol --> gets input from the user
     end
 
     def validate_pos(pos)
-        row, col = pos
-        if row == nil || col == nil || row < 0 || col < 0 || row > 8 || col > 8 # this works even though nil < 0 or something would hit an error because Ruby lazy evaluates and will return as soon as the first two ors are evaluated to true or not love it very cool
+        g_or_f_or_s, row, col = pos
+        row = row.to_i; col = col.to_i # ah did two == signs here by accident that was the issue of course
+        if g_or_f_or_s.downcase != "g" && g_or_f_or_s.downcase != "f" && g_or_f_or_s.downcase != "u"
+            puts "That was not a valid guess, flag, or unflag. Try again."
+            user_guess
+        elsif row == nil || col == nil || row < 0 || col < 0 || row > 8 || col > 8 # this works even though nil < 0 or something would hit an error because Ruby lazy evaluates and will return as soon as the first two ors are evaluated to true or not love it very cool
             puts "Position was not valid! Try again."
-            user_guess          
+            user_guess
         elsif @board.grid[row][col].revealed # if the revealed flag has already been turned on love it getting really good at this
             puts "Position has already been revealed! Try a new position."
             user_guess
+        elsif @board.grid[row][col].flagged && g_or_f_or_s.downcase != "u" # if they're trying to guess or flag a position and not unflag it and it's been flagged
+            puts "That position has been flagged. It must be unflagged before being guessed."
+            user_guess
+        elsif !@board.grid[row][col].flagged && g_or_f_or_s.downcase == "u"
+            puts "That position has not been flagged, so it cannot be unflagged. Try again."
+            user_guess
         else
-            pos
+            [g_or_f_or_s.downcase, row, col]
         end
     end
 

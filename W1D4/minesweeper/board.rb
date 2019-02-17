@@ -1,9 +1,8 @@
 require_relative './tile.rb'
-require "byebug"
 
 class Board
 
-    attr_reader :grid # so that the tile class can access this - internal instance methods can access attributes of that class natively, but other class instance methods can't, right, of course that's how it works remember that
+    attr_reader :grid # so that the tile and game classes can access this - internal instance methods can access attributes of that class natively, but other class instance methods can't, right, of course that's how it works remember that
 
     def initialize; @grid = populate_grid; set_tile_values end # damn learning that you can chain multi lines of code onto one line with semicolons is so lit lol. To make a method def on one line you can just put a semicolon after the method name, write the lines of code, then with no semicolon add the end at the end, totally nuts lol. You can put a semicolon at the end too if you want --> totally up to you if you want to put a semicolon on every line, love it. || # things to run as soon as the board is set up shouldn't have to automatically do it right love it know where to put everything awesome
 
@@ -17,9 +16,15 @@ class Board
 
     def render; @grid.each { |row| row.each { |tile| print "#{tile.to_s} " }; puts } end # puts at the end to create a new line. Interesitng that the semi colon does work in ruby to put multiple lines of code on one line, interesting, just guessed it as the logical thing and it does indeed work https://stackoverflow.com/a/3953856/674794
 
-    def guess(pos)
-        row, col = pos
-        @grid[row][col].reveal
+    def guess_or_flag(pos)
+        g_or_f, row, col = pos
+        if g_or_f == "g"
+            @grid[row][col].reveal
+        elsif g_or_f == "f"
+            @grid[row][col].flagged = true
+        elsif g_or_f == "u"
+            @grid[row][col].flagged = false
+        end
     end
     
     def reveal_all

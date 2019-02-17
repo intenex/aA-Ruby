@@ -3,13 +3,9 @@ class Tile
     attr_reader :bomb, :pos, :revealed
     attr_accessor :flagged, :value
 
-    def initialize(board, pos, bomb) # true or false
+    def initialize(board, pos, bomb)
         @board = board; @bomb = bomb; @revealed = false; @flagged = false; @pos = pos; @value = nil  # right need to call the getter method of board's grid later, board being the object that was just passed in...but also can't do this at exactly the same time. Have to define it later after the board is fully populated, right. || # start by setting @value to nil then later call neighbor_bomb_count to change this value for everything
     end
-
-    # def inspect learn how to make this work correctly lol
-    #     puts "Bomb: #{@bomb}, Flagged: #{@flagged}, Revealed: #{@revealed}"
-    # end
 
     def reveal
         if @value == 0 && @revealed == false # if the tile hasn't already been revealed before, do the following, otherwise skip so it doesn't inefficiently just keep doing this for tiles that have already done this recursive step
@@ -27,16 +23,6 @@ class Tile
         neighbor_tile_locations.each { |loc| row, col = loc; count += 1 if (@board.grid[row][col]).bomb }# if this value is true --> note that it's actually the index of the @board.grid attribute that you're calling with @grid's getter method, since @board is actual the board object you passed in, since you couldn't pass in the grid while it was being formed, you needed to wait until every Tile was initialized first and then populate these values, it has to be a two step process. So you pass in the Board object first, wait for the grid to be instantiated with tiles completely first, then call the grid from within that object passed in (a pointer to it, at least) to see how many other tiles are around it and what values they have, awesome, love it.
         count
     end
-
-    # amazing bug that byebug helped you find, you had an accidental col-offset in neighbors that was creating a very occasional error when there was just like one tile that exceeded the bounds of the grid love it but thanks to a conditional debugger call you found it pretty much instantly, so amazing. Byebug is the greatest tool ever and knowing how to use it is so insanely powerful for sure no questions.
-
-    # so basically you need to do 3 elements of (row-1) for all 3, then col-1, col, col+1
-    # then two of row, then col-1, col, col+1
-    # then three of row+1, then col-1, col, col+1
-    # the opposite obviously also works but this is good
-    # [0,0], [0,1], [0,2]
-    # [1,0], [1,1], [1,2]
-    # [2,0], [2,1], [2,2]
 
     def neighbors(pos) # ah this is the helper method to get the neighbors right love it
         neighbor_tiles = Array.new; row, col = pos # find all 8 neighbors by doing each row sequentially and getting those positions. Do three enumerators to get the top row, the middle row, and the bottom row respectively
