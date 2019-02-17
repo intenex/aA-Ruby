@@ -13,7 +13,7 @@ class Game
     def initialize; @board = Board.new; play_game end # just start the game, love it
     
     def play_game
-        load_game
+        loaded_game = load_game; @board = loaded_game if loaded_game.is_a?(Board) # save it if it is a board otherwise move on, this returns false if the method returns nil, which is the result of the final if statement where there's no answer yes for the file to be loaded
         while !game_over?
             @board.render
             @board.guess_or_flag(user_guess)
@@ -31,7 +31,7 @@ class Game
             begin
                 loaded_file = YAML::load(IO.read(gets.chomp)) # http://ruby-doc.org/core-2.6.1/IO.html#method-c-read on IO and https://github.com/appacademy/curriculum/blob/master/ruby/readings/serialization.md on YAML loading awesome. Set the board equal to this object basically
                 if loaded_file.is_a?(Board) # check if this is indeed a valid Board object that was loaded - if so, continue the game, if not, have them reload
-                    @board = loaded_file
+                    loaded_file # return the board itself just as is
                 else
                     puts "Sorry, that was not a valid save game file. Please try again."
                     load_game
