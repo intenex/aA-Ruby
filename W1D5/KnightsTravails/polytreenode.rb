@@ -21,9 +21,9 @@ class PolyTreeNode
     # killed it on your first shot without even referencing the lecture material so grea
     def dfs(target_value)
         return self if self.value == target_value # if the value is found, return the value
-        @children.each do |child|
-            value = child.dfs(target_value) # this captures the value of each child, which returns the node that was found up the stack of children if its in the subtree with root being that given child node, or the whole thing returns nil if the thing isn't to be found anywhere so great
-            return value if !value.nil? # right love it you totally just did this right lol
+        @children.each do |child| # amazing yeah this search does just go all the way down super fast really incredible that you see that happen with the nested enumerator
+            node = child.dfs(target_value) # this captures the value of each child, which returns the node that was found up the stack of children if its in the subtree with root being that given child node, or the whole thing returns nil if the thing isn't to be found anywhere so great
+            return node if !node.nil? # right love it you totally just did this right lol
         end
         nil
     end
