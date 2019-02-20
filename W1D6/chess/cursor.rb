@@ -91,6 +91,6 @@ class Cursor
 
   def update_pos(diff)
     transposed_pos = [@cursor_pos, diff].transpose.map(&:sum) # this will transpose the rows together, such that if @cursor_pos = [1,2] and diff = [0, -1], the transposed thing will be [[cursor_pos[0], diff[0]], [cursor_pos[1], diff[1]]], or [[1, 0], [2, -1]], and then .map will run on [1, 0] and [2, -1] and sum them together to return a final array of [1, 1] heh amazing
-    @board.valid_pos?(transposed_pos) ? transposed_pos : nil # perhaps have a different exception later, but for now only return the transposed position if it is a valid position as per the @board.valid_pos method. By returning nil it should just not update the position so nothing should happen I think
+    @board.valid_pos?(transposed_pos) ? (@cursor_pos = transposed_pos) : nil # perhaps have a different exception later, but for now only return the transposed position if it is a valid position as per the @board.valid_pos method. By returning nil it should just not update the position so nothing should happen I think
   end
 end
