@@ -1,6 +1,6 @@
 require_relative 'piece'
 require 'byebug' # byebug finds every bug in literally seconds lol so insane you're so lucky to love this stuff *and* be rather good at it and to especially be good at debugging really was worth getting really good at no question can identify every bug so quickly now
-# 25 min so far so great. Having your own opinions already, awesome.
+# 2.5 hours to finish part 1 with all the extra bonus ends and pieces and really taking your time to dive into everything well love it
 
 class Board # getting very good at this love it just fucking dive in and crush it don't ever get discouraged by large projects you know that by now man being well rested is so fucking good, no distractions just killing it
     # include Singleton # should only be one of these --> nvm fuck this no idea how to use it yet save it for later lol
