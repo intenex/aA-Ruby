@@ -1,6 +1,8 @@
 # PHASE 2
 def convert_to_int(str)
-  Integer(str)
+  Integer(str) # this only converts str if it is completely a correct Integer, unlike .to_i. .to_i will try to convert as much as it can and return 0 if it can't convert anything
+rescue ArgumentError # should be a type error...nope nevermind it's an ArgumentError hmm --> ah right because the argument for Integer, which is a method it appears, though weird that it's a method that begins with a capital letter to signify that it's a ::constant? Hmm. So the argument for Integer is what's throwing the error love it
+  nil
 end
 
 # PHASE 3
