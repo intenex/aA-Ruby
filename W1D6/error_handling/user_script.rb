@@ -6,7 +6,7 @@ feed_me_a_fruit
 
 # lmao this shit lol
 
-sam = BestFriend.new('', 1, '')
+sam = BestFriend.new('Ben', 5, 'sleeping')
 
 sam.talk_about_friendship
 sam.do_friendstuff

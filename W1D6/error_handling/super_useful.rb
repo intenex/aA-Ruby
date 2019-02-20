@@ -1,3 +1,5 @@
+# could have done this in 10 min if you really pushed but ended up doing it in 30 lol and playing around with it
+
 # PHASE 2
 def convert_to_int(str)
   Integer(str) # this only converts str if it is completely a correct Integer, unlike .to_i. .to_i will try to convert as much as it can and return 0 if it can't convert anything
@@ -36,15 +38,24 @@ rescue StandardError
 end  
 
 # PHASE 4
+class NewBestFriendError < StandardError
+end
+
+class NoNameError < StandardError
+end
+
+class NoFavPastimeError < StandardError # don't really need these can just describe the error but this works fine lol
+end
+
 class BestFriend
   def initialize(name, yrs_known, fav_pastime)
-    @name = name
-    @yrs_known = yrs_known
-    @fav_pastime = fav_pastime
+    (name.length > 0) ? (@name = name) : (raise NoNameError.new("It is so not okay to not put your name in here."))
+    (yrs_known >= 5) ? (@yrs_known = yrs_known) : (raise NewBestFriendError.new("You haven't even known each other for 5 years yet!")) # awesome works perfectly
+    (fav_pastime.length > 0) ? (@fav_pastime = fav_pastime) : (raise NoFavPastimeError.new("It is so not okay to not put in a favorite pastime."))
   end
 
   def talk_about_friendship
-    puts "Wowza, we've been friends for #{@yrs_known}. Let's be friends for another #{1000 * @yrs_known}."
+    puts "Wowza, we've been friends for #{@yrs_known} years. Let's be friends for another #{1000 * @yrs_known}."
   end
 
   def do_friendstuff
