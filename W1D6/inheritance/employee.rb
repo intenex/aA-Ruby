@@ -1,3 +1,4 @@
+# all complete in like 40 minutes or so longer than it needed to take but wanted to get the protected methods right and all that and getting the bonuses right took some time awesome
 class Employee    
     def initialize(name, title, salary, boss) # only managers don't have bosses by default, employees do normally love it so require it normally, but if it's a manager class then it will automatically pass on the nil boss value love it
         @name = name
