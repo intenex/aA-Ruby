@@ -1,6 +1,7 @@
 # The cursor manages user input, according to which it updates its @cursor_pos. The display will render the square at @cursor_pos in a different color. Awesome
 
 require "io/console"
+require "byebug"
 
 KEYMAP = {
   " " => :space,
@@ -34,11 +35,12 @@ MOVES = {
 
 class Cursor
 
-  attr_reader :cursor_pos, :board
+  attr_reader :cursor_pos, :board, :selected
 
   def initialize(cursor_pos, board)
     @cursor_pos = cursor_pos
     @board = board
+    @selected = false # change this to true if a piece is selected --> make sure later you can only select your own pieces and whatnot
   end
 
   def get_input
@@ -46,7 +48,7 @@ class Cursor
     handle_key(key)
   end
 
-  private
+  private # ah nice they already made it all private sweet
 
   def read_char
     STDIN.echo = false # stops the console from printing return values # whoah this is awesome love it
@@ -80,6 +82,8 @@ class Cursor
   def handle_key(key)
     case key # whoah *that's* how it works right say what we're casing is the variable key which is what was passed in amazing. case is just a conditional like an if/else just simplified syntactic sugar, switch statements same thing, just specifies in all the different cases what to do but same as an if/else for sure https://www.rubyguides.com/2015/10/ruby-case/
     when :return, :space # if key = :return or :space, return the cursor pos
+      row, col = @cursor_pos
+      @board.grid[row][col].is_a?(NullPiece) ? nil : toggle_selected # if the current position is a NullPiece then don't do anything, otherwise if it's a piece, toggle selected --> you'll need to make this way more robust later in ensuring that it's only the specific piece that's selected that is currently on cursor_pos, etc., but fuck it for now let's see what the rest of making this game entails first then you can fix all the little odds and ends later :)
       @cursor_pos
     when :left, :right, :up, :down
       update_pos(MOVES[key]) # MOVES is an array with symbols as the keys love it
@@ -87,6 +91,10 @@ class Cursor
     when :ctrl_c
       Process.exit(0) # http://ruby-doc.org/core-2.2.0/Process.html#method-c-exit # omg this is amazing lmao it literally just terminates the Ruby script by raising the SystemExit exception - you can literally catch this exception and prevent the exit if you want LOL so amazing the *function* is to raise a terminal exception wow lol
     end
+  end
+
+  def toggle_selected
+    @selected ? (@selected = false) : (@selected = true) # if selected is true, make it false, else, make it true
   end
 
   def update_pos(diff)

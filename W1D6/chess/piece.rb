@@ -37,6 +37,6 @@ end
 class NullPiece < Piece
     def initialize # no color here
     end
-    
-    def to_s; "_" end # just print an empty space for this bad boy
+
+    def to_s; "-" end # just print an empty space for this bad boy --> make it a - and not a _ so it's centered in the middle of the grid display lol
 end
