@@ -8,7 +8,7 @@ class Employee
         boss.employees << self if !boss.nil? # add yourself to the boss/manager instance's array of employees awesome if there is any boss, if not, don't do this of course otherwise it'll return an error lol
     end
 
-    def bonus(multiplier)
+    def bonus(multiplier) # no default needed here
         @salary * multiplier
     end
 
