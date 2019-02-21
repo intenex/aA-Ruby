@@ -1,42 +1,72 @@
 require 'colorize'
+require 'singleton' # right need to require it nice
+
+module Slideable
+    def moves(directions) # directions being an array of symbols :diagonal and/or :straight
+    end
+end
+
+module Stepable
+end
 
 class Piece
-    def initialize(color)
+    def initialize(color, board, pos)
         @color = color
+        @board = board
+        @pos = pos
     end
 
+    def to_s; colorizer(@symbol) end # hmm I wonder if you can colorize symbols we'll find out I guess lol othwerise just convert it to a string wow this diagram thing is super helpful actually lmao not that much to write at all fucking love it
+
+    private
     def colorizer(piece) # great OOP principles a parent class method awesome factored out that all the children classes use love it
-        (@color == :white) ? piece.colorize(:white) : piece.colorize(:blue) # if the piece is white, print it as blue, otherwise print it as yellow lol
+        return piece.to_s.colorize(:light_cyan) if piece == :- # if the piece is a NullPiece return this color otherwise return the color of the side the piece is of, white or black. Works great love it
+        (@color == :white) ? piece.to_s.colorize(:white) : piece.to_s.colorize(:blue) # if the piece is white, print it as blue, otherwise print it as yellow lol # yep need to turn the symbol into a string before running colorize on it but this works great fuck yeah all greatly refactored so glad the setting the back row thing worked so fine lol
     end
 end
 
 class Pawn < Piece
-    def to_s; colorizer("P") end # the key is to factor out even things that take the same lines of code but are just longer on that line than running a method love it
+    def initialize(color, board, pos); super; @symbol = :P end
+
 end
 
 class King < Piece
-    def to_s; colorizer("K") end
+    def initialize(color, board, pos); super; @symbol = :K end
 end
 
 class Queen < Piece
-    def to_s; colorizer("Q") end
+    include Slideable
+
+    def initialize(color, board, pos); super; @symbol = :Q end
+
+    def move_dirs # for the Slideable module
+    end
 end
 
 class Rook < Piece
-    def to_s; colorizer("R") end
+    include Slideable
+
+    def initialize(color, board, pos); super; @symbol = :R end
+
+    def move_dirs
+    end
 end
 
 class Bishop < Piece
-    def to_s; colorizer("B") end
+    include Slideable
+
+    def initialize(color, board, pos); super; @symbol = :B end
+
+    def move_dirs
+    end
 end
 
 class Knight < Piece
-    def to_s; colorizer("N") end
+    def initialize(color, board, pos); super; @symbol = :N end
 end
 
-class NullPiece < Piece
-    def initialize # no color here
-    end
+class NullPiece < Piece # hmm Singleton interesting look into that later you'll need to take out these to_s's sigh
+    include Singleton
 
-    def to_s; "-" end # just print an empty space for this bad boy --> make it a - and not a _ so it's centered in the middle of the grid display lol
+    def initialize; @symbol = :- end # they say make sure to read your color here but can't see how this could have a color since there's only one NullPiece ever hmm
 end

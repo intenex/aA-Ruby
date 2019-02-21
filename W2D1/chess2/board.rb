@@ -13,7 +13,7 @@ class Board # getting very good at this love it just fucking dive in and crush i
         set_pawns(:black, 1)
         set_back_row(:white, 7)
         set_pawns(:white, 6)
-        (2..5).each { |row| @grid[row].each_index { |col| @grid[row][col] = NullPiece.new } } # set the NullPieces in all the places where real pieces haven't been set
+        (2..5).each { |row| @grid[row].each_index { |col| @grid[row][col] = NullPiece.instance } } # set the NullPieces in all the places where real pieces haven't been set. use .instance and not .new since you included Singleton for NullPiece meaning .new is now a private method and you use .instance to call the one instance ever made of NullPiece lol
     end
 
     def move_piece(start_pos, end_pos)
@@ -34,11 +34,11 @@ class Board # getting very good at this love it just fucking dive in and crush i
     private # these shouldn't be called by anything else, only in initialize
 
     def set_back_row(color, row) # awesome you can pass in symbols and not specify here that it should be a symbol explicitly nice, in fact you *can't* specify a symbol here awesome if you did that it wouldn't put the variable you passed in it would just put the symbol love it no real need to pass in a symbol but why not lol learn more about symbols and when to use them correctly later for sure though so good to be off Slack all distractions from better coding and more coding so lucky to be in this focused state now so much wasted time it's insane no more now # you actually do need to instantiate each piece in here not out of here so better to just keep it like two separate methods instead of one single set_row method where you pass in the pieces to set hmm
-        pieces = [Rook.new(color), Knight.new(color), Bishop.new(color), Queen.new(color), King.new(color), Bishop.new(color), Knight.new(color), Rook.new(color)]
-        @grid[row].each_index { |col| @grid[row][col] = pieces.shift } #remove a piece from pieces and set the @grid at that index location to that piece
+        pieces = [:Rook, :Knight, :Bishop, :Queen, :King, :Bishop, :Knight, :Rook] # need to call these from inside the @grid[row][col] thing to be able to pass the position [row, col] correctly to the piece as specified in the Chess UML - use this Array and const_get to correctly convert this to a call of the Class name lol amazing there's a way to do everything if you just know how insane amazing that StackOverflow exists and people really know everything programmers really are the best and so nice with StackOverflow the basic truth of human nature is people love helping each other create a StackOverflow for everything, really, though they already did do that lmao https://stackoverflow.com/questions/10568173/class-instance-creating-with-class-name-in-variable-ruby # omfg this makes sense const_get works because Class names are CONSTANTS LOL so it checks if there's a constant with that name given AMAZING you can definitely do this on symbols too so make it a symbol since that's more *symbolic* of a constant fucking love it brilliant hack
+        @grid[row].each_index { |col| @grid[row][col] = Object.const_get(pieces.shift).new(color, self, [row, col]) } #remove a piece from pieces and set the @grid at that index location to that piece
     end
 
     def set_pawns(color, row)
-        @grid[row].each_index { |col| @grid[row][col] = Pawn.new(color) }
+        @grid[row].each_index { |col| @grid[row][col] = Pawn.new(color, self, [row, col]) }
     end
 end

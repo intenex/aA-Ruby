@@ -8,8 +8,8 @@ class Display
         @cursor = Cursor.new([0,0], @board) # they literally do tell you exactly what to do lol
     end
 
-    def inspect # just silence it for now lol
-    end
+    # def inspect # just silence it for now lol
+    # end
 
     def render
         @board.grid.each_with_index do |row, row_i|
