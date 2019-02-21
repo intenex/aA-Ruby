@@ -1,10 +1,45 @@
 require 'colorize'
 require 'singleton' # right need to require it nice
 
-module Slideable
+# assume position is 4, 4
+# Possible moves: --> Always 14 possible moves
+# [4,5], [4,6], [4,7]
+# [4,3], [4,2], [4,1], [4,0]
+# [5,4], [6,4], [7,4]
+# [3,4], [2,4], [1,4], [0,4]
+# Easy to calculate -- great, writing it all out is the way to do things, love it. Definitely just writ eit all out for it work. Do one step at a time too break it down and add complexity later too difficult to attack just straight up
+# refactoring things is easy and you're super comfortable writing code again this is fucking amazing keep being like this and just crush it with familiarity you *always* get what you put in so always put in the most and you'll crush it all fucking love this shit
+
+# okay time for diagonal slide
+# assume position is 4, 4
+
+
+
+def straight_slide(row, col)
+    up = check_blocking_pieces((0...row).map { |new_r| [new_r, col] }.reverse) # reverse this to traverse out from the piece's current location now and use the check_blocking_pieces thing to see if there are any blocking pieces in the way incredible
+    down = check_blocking_pieces((row+1..7).map { |new_r| [new_r, col] })
+    left = check_blocking_pieces((0...col).map { |new_c| [row, new_c] }.reverse) # you'll want to reverse this to traverse out from the piece itself hah omg this works perfectly lmao
+    right = check_blocking_pieces((col+1..7).map { |new_c| [row, new_c] })
+    (up + down + left + right) # return all the arrays together love it
+end
+
+def check_blocking_pieces(moves) # works fucking brilliantly love it and testing in pry is so fucking great fucking love your workflow
+    moves.each_with_index do |move, index| # omg this is using each perfectly, because if it doesn't return inside this helper method it'll just return what was passed to it as is that's what .each is good for - either doing some random action for each enumeration or even more ideally just returning a different value if something inside is different or returning the whole thing if not fucking incredible
+        return moves.slice(0...index) if !@board[move[0]][move[1]].is_a?(NullPiece) # only get the moves before the first blocking piece is found, immediately return once/if a non NullPiece is found in the path # if the current position is not a null piece, then return this with a truncated version of the array
+    end
+end
+
+module Slideable # see if you need an getter method to read the current position and all that
     @@HORIZONTAL_DIRS = Array.new # wtf are these supposed to be lol
     @@DIAGONAL_DIRS = Array.new
-    def moves(directions) # directions being an array of symbols :diagonal and/or :straight
+    def moves(directions) # directions being an array of symbols :diagonal and/or :straight --> should return an array of places that the piece can move to
+        row, col = @pos # get the row and col to see which ways the thing can move
+        possible_moves = Array.new
+
+        if directions.include?(:straight)
+            # write this for :straight and :diagonal shovel into possible_moves the possible moves from te current @pos to every other position on the board *except* when blocked by another piece
+            
+        end
     end
 end
 
@@ -49,7 +84,7 @@ class Queen < Piece
     def initialize(color, board, pos); super; @symbol = :Q end
 
     def move_dirs # for the Slideable module
-        moves([:diagonal, :straight])
+        moves([:diagonal, :straight]) # love it should return an array of places the piece can move to love it
     end
 end
 
