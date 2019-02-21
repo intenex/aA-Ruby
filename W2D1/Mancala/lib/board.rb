@@ -1,4 +1,4 @@
-require "byebug"
+# done in one hour and ten minutes lol not great but good for being so hyper caffeinated I suppose lol and for just getting through it when this one was not the easiest for sure love it awesome :) interesting code unconventional but it works! Man you love that conditional shorthand if else SO much lmfao so glad you learned it lol. And learning so many other awesome Ruby methods and googling them as they go so great
 
 class Board
   attr_accessor :cups
@@ -48,6 +48,7 @@ class Board
     # helper method to determine whether #make_move returns :switch, :prompt, or ending_cup_idx
     return :prompt if (ending_cup_idx == 6 || ending_cup_idx == 13) # if the ending_cup_idx is either of the player cups that means that it was *the* players cup because it could only end on that index if it was that player awesome love it good logic skills lol. Also run this before :switch since if you end here there's a chance this cup is empty so it'll have a value of 1 the first time you land here love it
     return :switch if (@cups[ending_cup_idx].count == 1) # right want it to equal 1 because you put a stone in there love it not empty smart god conditional debuggers are god mode seriously so glad you learned how to use it
+    ending_cup_idx # if neither of the above, just return the index of the cup you ended on so just pass this through
   end
 
   def render
@@ -59,8 +60,11 @@ class Board
   end
 
   def one_side_empty?
+    @cups[0..5].all? { |cup| cup.empty? } || @cups[7..12].all? { |cup| cup.empty? } # if either side is all empty
   end
 
   def winner
+    return :draw if @cups[6].count == @cups[13].count
+    (@cups[6].count > @cups[13].count) ? @player1 : @player2 # if player one's stones are greater than player two's, return player1's name, otherwise return player2
   end
 end
