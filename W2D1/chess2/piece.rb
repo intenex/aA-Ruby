@@ -77,10 +77,21 @@ class Piece
     end
 end
 
-class Pawn < Piece
+class Pawn < Piece # ah an interesting piece to move! goes down if black, goes up if white. Also can only attack sideways. No sense implementing all this for now since need to understand the battle mechanism first so let's go there first to see. Just checks for now
     def initialize(color, board, pos); super; @symbol = :P end
 
     def move_dirs
+    end
+
+    private
+    def forward_dir
+        (self.color == :white) ? 1 : -1 # if the thing moves up or down --> if it's white, it moves up, if it's black, it moves down
+    end
+
+    def forward_steps
+    end
+
+    def side_attacks
     end
 end
 
