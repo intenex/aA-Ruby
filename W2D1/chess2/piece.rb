@@ -59,6 +59,8 @@ module Stepable
 end
 
 class Piece
+    attr_reader :pos, :color
+
     def initialize(color, board, pos)
         @color = color
         @board = board
@@ -66,9 +68,6 @@ class Piece
     end
 
     def to_s; colorizer(@symbol) end # hmm I wonder if you can colorize symbols we'll find out I guess lol othwerise just convert it to a string wow this diagram thing is super helpful actually lmao not that much to write at all fucking love it
-
-    protected
-    attr_reader :color
 
     private
     def colorizer(piece) # great OOP principles a parent class method awesome factored out that all the children classes use love it

@@ -41,4 +41,14 @@ class Board # getting very good at this love it just fucking dive in and crush i
     def set_pawns(color, row)
         @grid[row].each_index { |col| @grid[row][col] = Pawn.new(color, self, [row, col]) }
     end
+
+    # hmm interestingly inefficient algorithm but oh well
+    def in_check?(color)
+        king_pos = [] # may not need this if the variable assignment can just happen for the first time in the line below check it later
+        @grid.each { |row| row.each { |piece| (king_pos = piece.pos) if (piece.is_a?(King) && piece.color == color) } } # I think eaches work like this we'll see lol a nested each may not, yeah it doesn't fix it for now and do it later. This is poor code writing figure out a better way
+        @grid.any? { |row| row.any? { |piece| (piece.moves.include?(king_pos)) && (piece.color != color) } } # return the result of this double nested any of which the innermost returns any value other than false or nil - note that, it doesn't only return true if any value inside returns true, just if it returns anything besides false or nil, interesting. Interesting design and very important to read the documentation for everything in depth. And then if the innermost any? returns true then the outermost any? returns true then the whole method returns true, otherwise the whole thing returns false heh awesome. Very Ruby specific things. Will need to learn how to do these in other languages for sure though thankfully most things are the same.
+    end
+
+    
+
 end
