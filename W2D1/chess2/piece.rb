@@ -36,15 +36,25 @@ def straight_slide(row, col)
 end
 
 # so great to have this helper method DRY is the best thing ever fucking love it
-def check_blocking_pieces(moves) # works fucking brilliantly love it and testing in pry is so fucking great fucking love your workflow
-    moves.each_with_index do |move, index| # omg this is using each perfectly, because if it doesn't return inside this helper method it'll just return what was passed to it as is that's what .each is good for - either doing some random action for each enumeration or even more ideally just returning a different value if something inside is different or returning the whole thing if not fucking incredible
-        return moves.slice(0...index) if !@board.grid[move[0]][move[1]].is_a?(NullPiece) # only get the moves before the first blocking piece is found, immediately return once/if a non NullPiece is found in the path # if the current position is not a null piece, then return this with a truncated version of the array
+def check_blocking_pieces(positions) # works fucking brilliantly love it and testing in pry is so fucking great fucking love your workflow
+    positions.each_with_index do |move, index| # omg this is using each perfectly, because if it doesn't return inside this helper method it'll just return what was passed to it as is that's what .each is good for - either doing some random action for each enumeration or even more ideally just returning a different value if something inside is different or returning the whole thing if not fucking incredible
+        piece = @board.grid[move[0]][move[1]]
+        if !piece.is_a?(NullPiece) # only get the moves before the first blocking piece is found, immediately return once/if a non NullPiece is found in the path # if the current position is not a null piece, then return this with a truncated version of the array
+            piece.color == self.color ? (return positions.slice(0...index)) : (return positions.slice(0..index)) # check if the piece is of the same color or not - if it is of the same color, then don't include it in possible moves, if not of the same color, include it in the possible moves since you can capture it. Normally you use @color vs self.color but in this case it does seem to be more readable and make more sense to run self.color since you already have an attr_getter for it why not. And perfect use case for a protected method if you didn't need the color anywhere else let's see :) you might not let's do it just because protected methods are so cool # GOD THIS SHIT WORKS SO FUCKING GOOD AHHHHHHH
+        end
     end
 end
 
 module Stepable
-    def moves
-
+    def moves # not yet tested confirm this works later
+        offsets = move_diffs # right instead of using compact you should just do a select on the output of the map that's the better way to do it. Good to learn .compact though even though it's a hilarious code smell lol your diagonal_slide and straight_slide are the most complex examples of code smells for sure if you've ever seen any lol so many chains - chains are code smells
+        raw_move_pos = offsets.map { |offset| [offset, @pos].transpose.map(&:sum) } # oh god your hilarious code smells lmao. This fucking transposes [offset] and [@pos] so that the offset and the row and the column are aligned, then it fucking returns the sum of each of those two transpositions as the new position for each offset passed in that's then returned as the new array of raw moves that are the position + the offset for each position, which are all the positions not sanitized to see if they're within bounds which is what the select will do heh
+        raw_move_pos.select do |p| # this will just return to def moves all the positions that are valid in that they are not negative positions off the map and in that they do not hit a piece that is of its own color
+            if (p[0] >= 0) && (p[0] < 7) && (p[1] >= 0) && (p[1] < 7)
+                piece = @board.grid[p[0]][p[1]]
+                true if piece.is_a?(NullPiece) || piece.color != self.color # if the position is valid *and* there is either no piece at the current position or the piece at the current position is of the opposite color, then return true, else return false fucking love it
+            end # awesome no explicit false needed this if will just return the piece or nil if the position is out of bounds and so the select doesn't select it love it only selects true explicitly love it
+        end
     end
 end
 
@@ -56,6 +66,9 @@ class Piece
     end
 
     def to_s; colorizer(@symbol) end # hmm I wonder if you can colorize symbols we'll find out I guess lol othwerise just convert it to a string wow this diagram thing is super helpful actually lmao not that much to write at all fucking love it
+
+    protected
+    attr_reader :color
 
     private
     def colorizer(piece) # great OOP principles a parent class method awesome factored out that all the children classes use love it
@@ -72,9 +85,11 @@ class Pawn < Piece
 end
 
 class King < Piece
-    def initialize(color, board, pos); super; @symbol = :K end
+    include Stepable
 
+    def initialize(color, board, pos); super; @symbol = :K end
     def move_diffs
+        [[-1, -1], [0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0]] # in clockwise order from top left, all the offsets of where the piece can move way easier than these sliding pieces man lmao trivial so lucky to be getting through this stuff love doing the hard stuff first in the morning when it was hard. Can't wait to have this great dinner with Mai tonight and look all nice for it and all that :)
     end
 end
 
@@ -102,9 +117,11 @@ class Bishop < Piece
 end
 
 class Knight < Piece
-    def initialize(color, board, pos); super; @symbol = :N end
+    include Stepable
 
+    def initialize(color, board, pos); super; @symbol = :N end
     def move_diffs
+        [[-2, -1], [-1, -2], [1, -2], [2, -1], [2, 1], [1, 2], [-1, 2], [-2, 1]] # omfg exactly perfect character count what a miracle
     end
 end
 
