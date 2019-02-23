@@ -1,4 +1,3 @@
-require 'colorize'
 require 'singleton' # right need to require it nice
 require 'byebug'
 
@@ -71,7 +70,7 @@ class Piece
 
     private
     def colorizer(piece) # great OOP principles a parent class method awesome factored out that all the children classes use love it
-        (@color == :white) ? piece.to_s.colorize(:white) : piece.to_s.colorize(:blue) # if the piece is white, print it as blue, otherwise print it as yellow lol # yep need to turn the symbol into a string before running colorize on it but this works great fuck yeah all greatly refactored so glad the setting the back row thing worked so fine lol
+        (@color == :white) ? piece.to_s.colorize(:white) : piece.to_s.colorize(:cyan) # if the piece is white, print it as blue, otherwise print it as yellow lol # yep need to turn the symbol into a string before running colorize on it but this works great fuck yeah all greatly refactored so glad the setting the back row thing worked so fine lol
     end
 end
 

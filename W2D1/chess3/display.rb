@@ -1,4 +1,5 @@
 require 'colorize'
+require 'rainbow' # fucking colorize is a shitty gem lmao try this one instead lol
 require_relative 'board'
 require_relative 'cursor'
 
@@ -18,9 +19,9 @@ class Display
         @board.grid.each_with_index do |row, row_i|
             row.each_with_index do |col, col_i|
                 if all_even?(row_i, col_i) || all_odd?(row_i, col_i) # the two cases where the board is white is when either both row and col are even or both are odd, amazing, quite elegant
-                    print_piece(col, row_i, col_i, :white)
+                    print_piece(col, row_i, col_i, :blue)
                 else
-                    print_piece(col, row_i, col_i, :light_blue)
+                    print_piece(col, row_i, col_i, :black)
                 end
             end
             puts # make a new line after each row
