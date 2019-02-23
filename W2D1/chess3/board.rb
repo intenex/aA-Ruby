@@ -28,8 +28,25 @@ class Board # getting very good at this love it just fucking dive in and crush i
             raise ArgumentError.new("The selected piece cannot move to that position. Try again.")
         else # if no errors, then replace the current start position with the NullPiece no matter what since if it's an empty space you're putting a NullPiece there, and if it's not an empty space well, you're still capturing the piece so not swapping them awesome
             @grid[s_row][s_col], @grid[e_row][e_col] = NullPiece.instance, piece # swap the two positions with a parallel assignment - later raise an error if the piece cannot be moved there with an InvalidPositionError or something and then handle it elsewhere. See if this piece swap works now amazing
-            piece.pos[0], piece.pos[1] = e_row, e_col # must update the piece's position after moving otherwise it still thinks it's at the original position # hilariously this shortsteps you needing an attr_accessor for Piece.pos because you aren't changing the assignment just each individual element lmao so bad though should just make an attr_accessor to make it more readable but this is just so cool but yeah will lead to more confusion around why things are the way they are later probably, but that's what your billions of comments are for, crazy that this game is coming along so well, literally cannot believe you forgot you made this method lol
+            piece.pos = end_pos # OMG THE OLD VERSION OF THIS TOTALLY FUCKED YOU UP LOL IT TURNED OUT TO ACTUALLY BITE YOU IN THE ASS LOLOLOL because you were fucking playing with attr_reader/fire and wanted to do the trolly piece.pos[0], piece.pos[1] = e_row, e_col instead of just the totally fucking reasonable reassignment of piece.pos = end_pos with an attr_accessor you didn't reassign it and just changed the pointer of the old position which totally fucked up the board when you were running checkmate? when valid_moves? dupes the board yet you had the pointer to the same position and that totally fucked shit up lmfao let's fix this now dying thank god your debugging skills are god and you figured this out so quickly shockingly LOL had it been a while before you saw your code though would have been hard I think # must update the piece's position after moving otherwise it still thinks it's at the original position # hilariously this shortsteps you needing an attr_accessor for Piece.pos because you aren't changing the assignment just each individual element lmao so bad though should just make an attr_accessor to make it more readable but this is just so cool but yeah will lead to more confusion around why things are the way they are later probably, but that's what your billions of comments are for, crazy that this game is coming along so well, literally cannot believe you forgot you made this method lol
         end
+    end
+
+    def move_piece!(start_pos, end_pos) # for Piece#valid_moves to see if a move would leave a player in check
+        s_row, s_col = start_pos
+        e_row, e_col = end_pos
+        piece = @grid[s_row][s_col]
+        if piece.is_a?(NullPiece)
+            nil # just don't do anything if it's a NullPiece
+        elsif !piece.moves.include?(end_pos)
+            raise ArgumentError.new("The selected piece cannot move to that position. Try again.")
+        else
+            @grid[s_row][s_col], @grid[e_row][e_col] = NullPiece.instance, piece
+            piece.pos = end_pos # reassign this thing entirely to a new pointer so that when you dup the board in Piece#valid_moves it doesn't totally fuck you up lmfao dying
+        end
+    end
+
+    def m_piece_helper(start_pos, end_pos)
     end
 
     def dup # whew think this finally works great lol
@@ -40,8 +57,8 @@ class Board # getting very good at this love it just fucking dive in and crush i
                 if old_piece.is_a?(NullPiece) # if it's a NullPiece just return it as is otherwise create the new one
                     new_piece = old_piece # same as calling NullPiece.instance again, just another NullPiece
                 else
-                    new_piece = old_piece.clone # not 100% sure on the differences between clone and dup yet but clone seems safer to preserve the singleton state of NullPiece at least
-                    new_piece.board = new_board
+                    new_piece = old_piece.clone # not 100% sure on all the differences between clone and dup yet but clone is totally fine, dup should be too though
+                    new_piece.board = new_board # note that you could want to do new_piece.pos = old_piece.pos.dup as well to be safe which would protect you from the stupid move_piece! move where you did piece.pos[0], piece.pos[1] = e_row, e_col instead of piece.pos = end_pos lmao but doing that above should be fine too we'll see, anyway just the most hilarious thing that you fucking did that but super lucky that you actually understand pointers quite well and can sort through this well. Super lucky with that for sure.
                     new_piece
                 end
             end
@@ -61,9 +78,8 @@ class Board # getting very good at this love it just fucking dive in and crush i
         @grid.any? { |row| row.any? { |piece| (piece.moves.include?(king_pos)) && (piece.color != color) } } # return the result of this double nested any of which the innermost returns any value other than false or nil - note that, it doesn't only return true if any value inside returns true, just if it returns anything besides false or nil, interesting. Interesting design and very important to read the documentation for everything in depth. And then if the innermost any? returns true then the outermost any? returns true then the whole method returns true, otherwise the whole thing returns false heh awesome. Very Ruby specific things. Will need to learn how to do these in other languages for sure though thankfully most things are the same.
     end
 
-    def checkmate?(color)
-        # write an enumerator that checks if any of :color player's pieces have any #valid_moves, if not then in check, like something like this
-        !@grid.any? { |row| row.any? { |piece| (!piece.valid_moves.empty?) && (piece.color == color) } } # then the ! changes the return boolean value so hopefully this works if #valid_moves works as you think it might lol and it's specific to some check function thing --> I guess maybe valid_moves might change with a conditional if check is activated to only see positions that can protect the king that would be interesting
+    def checkmate?(color) # write an enumerator that checks if any of :color player's pieces have any #valid_moves, if not then in check, like something like this
+        !@grid.any? { |row| row.any? { |piece| (!piece.valid_moves.empty?) && (piece.color == color) } } # basically check if any move of the same color as the color being checked for checkmate has any valid moves, aka moves that after moving don't leave the king in check - if not, then the game is over awesome heh # then the ! changes the return boolean value so hopefully this works if #valid_moves works as you think it might lol and it's specific to some check function thing --> I guess maybe valid_moves might change with a conditional if check is activated to only see positions that can protect the king that would be interesting
     end
 
     private # these shouldn't be called by anything else, only in initialize

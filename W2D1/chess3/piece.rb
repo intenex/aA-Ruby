@@ -58,8 +58,8 @@ module Stepable
 end
 
 class Piece
-    attr_reader :color, :pos
-    attr_accessor :board
+    attr_reader :color
+    attr_accessor :board, :pos
 
     def initialize(color, board, pos)
         @color = color
@@ -69,7 +69,15 @@ class Piece
 
     def to_s; @symbol.to_s end # hmm I wonder if you can colorize symbols we'll find out I guess lol othwerise just convert it to a string wow this diagram thing is super helpful actually lmao not that much to write at all fucking love it
 
-    def valid_moves # do this method with the board#dup and all that and check if in check
+    def valid_moves # do this method with the board#dup and all that and check if in check. Hah, it is indeed very straightforward lol
+        all_moves = moves
+        all_moves.reject { |move| move_into_check?(move) } # damn code is easy to write when it's good this should just check if a move leaves you in check and if so reject all the moves for which this is true
+    end
+
+    def move_into_check?(end_pos) # wow that was easy just actually do the thing and it's not that bad lol when you're properly motivated love life
+        dup_board = @board.dup # duplicate the board so you don't't fuck up the current board state by actually performing the move
+        dup_board.move_piece!(@pos, end_pos)
+        dup_board.in_check?(@color)
     end
 
 end
