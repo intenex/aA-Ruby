@@ -58,7 +58,8 @@ module Stepable
 end
 
 class Piece
-    attr_reader :pos, :color
+    attr_reader :color, :pos
+    attr_accessor :board
 
     def initialize(color, board, pos)
         @color = color

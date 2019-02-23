@@ -6,7 +6,7 @@ require 'byebug' # byebug finds every bug in literally seconds lol so insane you
 class Board # getting very good at this love it just fucking dive in and crush it don't ever get discouraged by large projects you know that by now man being well rested is so fucking good, no distractions just killing it
     # include Singleton # should only be one of these --> nvm fuck this no idea how to use it yet save it for later lol
 
-    attr_reader :grid # only the board itself should move pieces on the board, display should just display them obviously, so only a reader needed here
+    attr_accessor :grid # only the board itself should move pieces on the board, display should just display them obviously, so only a reader needed here
 
     def initialize
         @grid = Array.new(8) { Array.new(8) } # an 8 x 8 chess grid
@@ -30,6 +30,23 @@ class Board # getting very good at this love it just fucking dive in and crush i
             @grid[s_row][s_col], @grid[e_row][e_col] = NullPiece.instance, piece # swap the two positions with a parallel assignment - later raise an error if the piece cannot be moved there with an InvalidPositionError or something and then handle it elsewhere. See if this piece swap works now amazing
             piece.pos[0], piece.pos[1] = e_row, e_col # must update the piece's position after moving otherwise it still thinks it's at the original position # hilariously this shortsteps you needing an attr_accessor for Piece.pos because you aren't changing the assignment just each individual element lmao so bad though should just make an attr_accessor to make it more readable but this is just so cool but yeah will lead to more confusion around why things are the way they are later probably, but that's what your billions of comments are for, crazy that this game is coming along so well, literally cannot believe you forgot you made this method lol
         end
+    end
+
+    def dup # whew think this finally works great lol
+        new_board = Board.new
+        new_board.grid.map!.with_index do |row, row_i| # mutate the old array to be all these returns
+            row.map.with_index do |col, col_i| # don't need to mutate this one since it'll be mutated above with the return from this anyway
+                old_piece = @grid[row_i][col_i]
+                if old_piece.is_a?(NullPiece) # if it's a NullPiece just return it as is otherwise create the new one
+                    new_piece = old_piece # same as calling NullPiece.instance again, just another NullPiece
+                else
+                    new_piece = old_piece.clone # not 100% sure on the differences between clone and dup yet but clone seems safer to preserve the singleton state of NullPiece at least
+                    new_piece.board = new_board
+                    new_piece
+                end
+            end
+        end
+        new_board
     end
 
     def valid_pos?(pos)

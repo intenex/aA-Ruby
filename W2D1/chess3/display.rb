@@ -1,4 +1,4 @@
-require 'paint' # rainbow was okay but man paint is glorious with true color support - need to run on iTerm2 though VSCode doesn't have true color support and strangely the pawn unicode doesn't work great on iTerm2 is some other hyperrealistic pawn will need to change it up lol
+require 'paint' # rainbow was okay but man paint is glorious with true color support - need to run on iTerm2 though VSCode doesn't have true color support and strangely the pawn unicode doesn't work great on iTerm2 is some other hyperrealistic pawn will need to change it up lol weird the black pawn just doesn't work the white one does it's too hollow sadly but better than nothing guess it'll do for now
 require_relative 'board'
 require_relative 'cursor'
 
@@ -28,6 +28,7 @@ class Display
         nil # so it doesn't return the whole board just a placeholder while you play with this thing
     end
 
+    # all the epic helper methods for the board rendering logic damn chess is a much more complex game than any game before lmfao
     def all_even?(row, col); (row % 2 == 0) && (col % 2 == 0) end # for printing background square colors
     def all_odd?(row, col); (row % 2 == 1) && (col % 2 == 1) end
     def cursor?(row, col); @cursor.cursor_pos == [row, col] end # check if the cursor is on the current position or not
