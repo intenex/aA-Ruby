@@ -50,7 +50,7 @@ module Stepable
         offsets = move_diffs # right instead of using compact you should just do a select on the output of the map that's the better way to do it. Good to learn .compact though even though it's a hilarious code smell lol your diagonal_slide and straight_slide are the most complex examples of code smells for sure if you've ever seen any lol so many chains - chains are code smells
         raw_move_pos = offsets.map { |offset| [offset, @pos].transpose.map(&:sum) } # oh god your hilarious code smells lmao. This fucking transposes [offset] and [@pos] so that the offset and the row and the column are aligned, then it fucking returns the sum of each of those two transpositions as the new position for each offset passed in that's then returned as the new array of raw moves that are the position + the offset for each position, which are all the positions not sanitized to see if they're within bounds which is what the select will do heh
         raw_move_pos.select do |p| # this will just return to def moves all the positions that are valid in that they are not negative positions off the map and in that they do not hit a piece that is of its own color
-            if (p[0] >= 0) && (p[0] < 7) && (p[1] >= 0) && (p[1] < 7)
+            if (p[0] >= 0) && (p[0] <= 7) && (p[1] >= 0) && (p[1] <= 7) # right should be <= 7 heh made that mistake wow so many things to watch out for in this code pretty nuts for sure
                 piece = @board.grid[p[0]][p[1]]
                 true if piece.is_a?(NullPiece) || piece.color != self.color # if the position is valid *and* there is either no piece at the current position or the piece at the current position is of the opposite color, then return true, else return false fucking love it
             end # awesome no explicit false needed this if will just return the piece or nil if the position is out of bounds and so the select doesn't select it love it only selects true explicitly love it
@@ -76,21 +76,58 @@ class Piece
     end
 end
 
+# oh fuck you forgot it gets the double jump at the beginning if it's on the start row! Heh amazing lmao pawns are the coolest so much exceptionary behavior to build in crazyt hat they expect people to do this stuff really does take a normal person 18 hours lmao amazing so happy doing this work so fun --> seek to understand the UML for sure so many working pieces to throw together love it
 class Pawn < Piece # ah an interesting piece to move! goes down if black, goes up if white. Also can only attack sideways. No sense implementing all this for now since need to understand the battle mechanism first so let's go there first to see. Just checks for now
     def initialize(color, board, pos); super; @symbol = :P end
 
-    def move_dirs
+    def moves # moving forward if not blocked by a piece, moving to each side if can capture a piece. Wow this is actually complicated enough to require all the helper methods amazing lol
+        possible_moves = Array.new
+        new_row = @pos[0] + forward_dir # the new forward move direction. Oh just make your code clear for god's sake lmao
+        if new_row >= 0 && new_row <= 7 # if the new row is within bounds do the rest otherwise if it's not in bounds just skip it all
+            f_steps, s_attacks = forward_steps(new_row), side_attacks(new_row)
+            possible_moves += f_steps if !f_steps.empty? # if not empty, add it in. So much inefficiency in this code but I guess it is clear man
+            possible_moves += s_attacks if !s_attacks.empty? # add whatever is returned by either of these as all the possible moves ahh now these helper methods make way more sense nice
+            possible_moves
+        else # else if the new row is not in bounds return an empty array
+            []
+        end
     end
 
     private
     def forward_dir
-        (self.color == :white) ? 1 : -1 # if the thing moves up or down --> if it's white, it moves up, if it's black, it moves down
+        (self.color == :white) ? -1 : 1 # if the thing moves up or down --> if it's white, it moves up, so -1, if it's black, it moves down, so +1 heh got this backwards great testing lmao
     end
 
-    def forward_steps
+    def at_start_row?
+        (self.color == :white) ? (start_row = 6) : (start_row = 1) # if it's white, the start row is 6, else it's 1
+        @pos[0] == start_row # if the row of the piece is at the start row then it is indeed at the start row otherwise it's not
     end
 
-    def side_attacks
+    # NB - the shovel operator is correct here to create nested arrays which is what you want to add them together above love it
+    def forward_steps(new_row) # ahhh all the logic to see if this should be added or not should be in here awesome, yeah helper methods *are* supposed to be like this right to better help modularize things nice
+        f_steps = Array.new
+        one_step = [new_row, @pos[1]] 
+        two_step_row = new_row + forward_dir # if it can jump you've gotta increment this by another step lol can't believe you forgot this about pawns wow
+        if (two_step_row >= 0) && (two_step_row <= 7)
+            (f_steps << [two_step_row, @pos[1]]) if at_start_row? # if the pawn is at the start step then add this new step if it's valid otherwise don't note can't do self.at_start_row? because this is invalid
+        end
+        f_steps << one_step if @board.grid[new_row][@pos[1]].is_a?(NullPiece) # only allow this move if the new row is in bounds and there is no piece in that position
+        f_steps
+    end
+
+    def side_attacks(new_row) # god the rescue...debugger...end block is so brilliant lmao and helps you catch bugs in literal seconds lmao sooo fucking good
+        s_attacks = Array.new
+        left = [new_row, (@pos[1]-1)] if ((@pos[1]-1 >= 0) && (@pos[1]-1 <= 7)) # the left side attack
+        right = [new_row, (@pos[1]+1)] if ((@pos[1]+1 >= 0) && (@pos[1]+1 <= 7)) # the right side attack, damn you love parentheses to keep things clear lol
+        if left # if this exists and isn't nil, it will be if the thing above didn't execute, must be more elegant code but whatever this works you have been converted to the straightforward non-elegant code side for now hmm
+            l_piece = @board.grid[left[0]][left[1]]
+            (s_attacks << left) if (!l_piece.is_a?(NullPiece) && (l_piece.color != self.color)) # this is a valid move if the piece exists and is of the opposite color # good to have parentheses for this purpose for sure
+        end
+        if right # could factor this out too but fuck it who cares lol
+            r_piece = @board.grid[right[0]][right[1]]
+            (s_attacks << right) if (!r_piece.is_a?(NullPiece) && (r_piece.color != self.color))
+        end
+        s_attacks
     end
 end
 
@@ -138,8 +175,7 @@ end
 class NullPiece < Piece # hmm Singleton interesting look into that later you'll need to take out these to_s's sigh
     include Singleton
 
-    def initialize; @symbol = :- end # they say make sure to read your color here but can't see how this could have a color since there's only one NullPiece ever hmm
+    def initialize; @color = :none; @symbol = :- end # they say make sure to read your color here but can't see how this could have a color since there's only one NullPiece ever hmm # give it a fake dummy color so that the in_check(color) and checkmate?(color) methods work in enumerating everything; easier than accounting for it independently there, similar to the dummy #moves method, which seems like what the UML is suggesting you should have
 
-    def moves
-    end
+    def moves; [] end # just return an empty array always
 end

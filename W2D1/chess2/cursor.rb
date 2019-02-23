@@ -79,11 +79,19 @@ class Cursor
     return input
   end
 
+  # always write out all the steps of a large problem so you can tackle it effectively for sure, you obviously have to do this stuff, so just do it lol, really crazy they don't seem to give you more direction about it though like they walk through a bunch of stuff then just skip huge sections
+  # to handle selecting and moving a piece, there must be one selected piece
+  # to deselect a piece and reselect another, you must deselect on the selected piece
+  # to move somewhere else, you must check if the move is a valid move for the given piece
+  # if it is a valid move, 
+
   def handle_key(key)
     case key # whoah *that's* how it works right say what we're casing is the variable key which is what was passed in amazing. case is just a conditional like an if/else just simplified syntactic sugar, switch statements same thing, just specifies in all the different cases what to do but same as an if/else for sure https://www.rubyguides.com/2015/10/ruby-case/
     when :return, :space # if key = :return or :space, return the cursor pos
       row, col = @cursor_pos
-      @board.grid[row][col].is_a?(NullPiece) ? nil : toggle_selected # if the current position is a NullPiece then don't do anything, otherwise if it's a piece, toggle selected --> you'll need to make this way more robust later in ensuring that it's only the specific piece that's selected that is currently on cursor_pos, etc., but fuck it for now let's see what the rest of making this game entails first then you can fix all the little odds and ends later :)
+      if !@board.grid[row][col].is_a?(NullPiece)
+        toggle_selected # if the current position is a NullPiece then don't do anything, otherwise if it's a piece, toggle selected --> you'll need to make this way more robust later in ensuring that it's only the specific piece that's selected that is currently on cursor_pos, etc., but fuck it for now let's see what the rest of making this game entails first then you can fix all the little odds and ends later :)
+      end
       @cursor_pos
     when :left, :right, :up, :down
       update_pos(MOVES[key]) # MOVES is an array with symbols as the keys love it
