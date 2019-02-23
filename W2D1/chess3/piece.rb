@@ -69,6 +69,9 @@ class Piece
 
     def to_s; @symbol.to_s end # hmm I wonder if you can colorize symbols we'll find out I guess lol othwerise just convert it to a string wow this diagram thing is super helpful actually lmao not that much to write at all fucking love it
 
+    def valid_moves # do this method with the board#dup and all that and check if in check
+    end
+
 end
 
 # oh fuck you forgot it gets the double jump at the beginning if it's on the start row! Heh amazing lmao pawns are the coolest so much exceptionary behavior to build in crazyt hat they expect people to do this stuff really does take a normal person 18 hours lmao amazing so happy doing this work so fun --> seek to understand the UML for sure so many working pieces to throw together love it
