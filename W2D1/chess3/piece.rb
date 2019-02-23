@@ -71,14 +71,13 @@ class Piece
 
     private
     def colorizer(piece) # great OOP principles a parent class method awesome factored out that all the children classes use love it
-        return piece.to_s.colorize(:light_cyan) if piece == :- # if the piece is a NullPiece return this color otherwise return the color of the side the piece is of, white or black. Works great love it
         (@color == :white) ? piece.to_s.colorize(:white) : piece.to_s.colorize(:blue) # if the piece is white, print it as blue, otherwise print it as yellow lol # yep need to turn the symbol into a string before running colorize on it but this works great fuck yeah all greatly refactored so glad the setting the back row thing worked so fine lol
     end
 end
 
 # oh fuck you forgot it gets the double jump at the beginning if it's on the start row! Heh amazing lmao pawns are the coolest so much exceptionary behavior to build in crazyt hat they expect people to do this stuff really does take a normal person 18 hours lmao amazing so happy doing this work so fun --> seek to understand the UML for sure so many working pieces to throw together love it
 class Pawn < Piece # ah an interesting piece to move! goes down if black, goes up if white. Also can only attack sideways. No sense implementing all this for now since need to understand the battle mechanism first so let's go there first to see. Just checks for now
-    def initialize(color, board, pos); super; @symbol = :P end
+    def initialize(color, board, pos); super; @symbol = :♟ end
 
     def moves # moving forward if not blocked by a piece, moving to each side if can capture a piece. Wow this is actually complicated enough to require all the helper methods amazing lol
         possible_moves = Array.new
@@ -134,7 +133,7 @@ end
 class King < Piece
     include Stepable
 
-    def initialize(color, board, pos); super; @symbol = :K end
+    def initialize(color, board, pos); super; @symbol = :♚ end
     def move_diffs
         [[-1, -1], [0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0]] # in clockwise order from top left, all the offsets of where the piece can move way easier than these sliding pieces man lmao trivial so lucky to be getting through this stuff love doing the hard stuff first in the morning when it was hard. Can't wait to have this great dinner with Mai tonight and look all nice for it and all that :)
     end
@@ -143,14 +142,14 @@ end
 class Queen < Piece
     include Slidable
 
-    def initialize(color, board, pos); super; @symbol = :Q end
+    def initialize(color, board, pos); super; @symbol = :♛ end
     def move_dirs; [:straight, :diagonal] end # for the Slidable module --> I feel like these should be attribute variables hmm they say to do it like this I guess we'll see if there's a reason for it...
 end
 
 class Rook < Piece
     include Slidable
 
-    def initialize(color, board, pos); super; @symbol = :R end
+    def initialize(color, board, pos); super; @symbol = :♜ end
 
     def move_dirs; [:straight] end
 end
@@ -158,7 +157,7 @@ end
 class Bishop < Piece
     include Slidable
 
-    def initialize(color, board, pos); super; @symbol = :B end
+    def initialize(color, board, pos); super; @symbol = :♝ end
 
     def move_dirs; [:diagonal] end
 end
@@ -166,7 +165,7 @@ end
 class Knight < Piece
     include Stepable
 
-    def initialize(color, board, pos); super; @symbol = :N end
+    def initialize(color, board, pos); super; @symbol = :♞ end
     def move_diffs
         [[-2, -1], [-1, -2], [1, -2], [2, -1], [2, 1], [1, 2], [-1, 2], [-2, 1]] # omfg exactly perfect character count what a miracle
     end
@@ -175,7 +174,7 @@ end
 class NullPiece < Piece # hmm Singleton interesting look into that later you'll need to take out these to_s's sigh
     include Singleton
 
-    def initialize; @color = :none; @symbol = :- end # they say make sure to read your color here but can't see how this could have a color since there's only one NullPiece ever hmm # give it a fake dummy color so that the in_check(color) and checkmate?(color) methods work in enumerating everything; easier than accounting for it independently there, similar to the dummy #moves method, which seems like what the UML is suggesting you should have
+    def initialize; @color = :none; @symbol = :" " end # they say make sure to read your color here but can't see how this could have a color since there's only one NullPiece ever hmm # give it a fake dummy color so that the in_check(color) and checkmate?(color) methods work in enumerating everything; easier than accounting for it independently there, similar to the dummy #moves method, which seems like what the UML is suggesting you should have
 
     def moves; [] end # just return an empty array always
 end
