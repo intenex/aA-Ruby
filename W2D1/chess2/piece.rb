@@ -134,7 +134,7 @@ end
 class King < Piece
     include Stepable
 
-    def initialize(color, board, pos); super; @symbol = :K end
+    def initialize(color, board, pos); super; @symbol = ♔ end
     def move_diffs
         [[-1, -1], [0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0]] # in clockwise order from top left, all the offsets of where the piece can move way easier than these sliding pieces man lmao trivial so lucky to be getting through this stuff love doing the hard stuff first in the morning when it was hard. Can't wait to have this great dinner with Mai tonight and look all nice for it and all that :)
     end
