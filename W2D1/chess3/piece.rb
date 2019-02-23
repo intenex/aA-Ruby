@@ -72,7 +72,7 @@ end
 
 # oh fuck you forgot it gets the double jump at the beginning if it's on the start row! Heh amazing lmao pawns are the coolest so much exceptionary behavior to build in crazyt hat they expect people to do this stuff really does take a normal person 18 hours lmao amazing so happy doing this work so fun --> seek to understand the UML for sure so many working pieces to throw together love it
 class Pawn < Piece # ah an interesting piece to move! goes down if black, goes up if white. Also can only attack sideways. No sense implementing all this for now since need to understand the battle mechanism first so let's go there first to see. Just checks for now
-    def initialize(color, board, pos); super; @symbol = :♟ end
+    def initialize(color, board, pos); super; @symbol = :♙ end
 
     def moves # moving forward if not blocked by a piece, moving to each side if can capture a piece. Wow this is actually complicated enough to require all the helper methods amazing lol
         possible_moves = Array.new
