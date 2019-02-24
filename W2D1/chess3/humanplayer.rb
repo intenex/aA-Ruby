@@ -21,7 +21,7 @@ class HumanPlayer
         @display.cursor.start_pos = Array.new
         @display.cursor.end_pos = Array.new # reset these so this thing can run again later
         @display.board.move_piece(start_pos, end_pos) # heh love it this actually works super well can't wait fuck how they designed the code god knows how it's supposed to work this should be fine though lol
-    rescue => e # if any of the wrong move exceptions come up handle it and retry love it
+    rescue ArgumentError => e # if any of the wrong move exceptions come up handle it and retry love it
         puts e
         sleep(1) # so they can read that error message love it
         retry # if the end position was invalid then do this whole baby over again
