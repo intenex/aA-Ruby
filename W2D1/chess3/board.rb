@@ -28,7 +28,7 @@ class Board # getting very good at this love it just fucking dive in and crush i
             raise ArgumentError.new("The selected piece cannot move to that position. Try again.")
         elsif !piece.valid_moves.include?(end_pos) # love it awesome test this
             raise ArgumentError.new("That move would leave you in check! Try again.")
-        elsif piece.is_a?(King) && !piece.moved && piece.castle_pos.include?(end_pos) # if the piece is a King and it has never moved and it is attempting to move to one of its castle positions then it must be attempting to castle
+        elsif piece.is_a?(King) && piece.castle_pos.include?(end_pos) # if the piece is a King (note - don't need to check if it hasn't already moved because that check is already handled in Piece where it only appends castling moves as valid if the King has never moved love it) nd it is attempting to move to one of its castle positions then it must be attempting to castle
             castle(piece, start_pos, end_pos) # unlike the pawn_promotion don't rescue here, you want to rescue the pawn promotion here since you don't want them to put in another move, just to enter a right promotion value, here you want the error to actually bubble up to the HumanPlayer and for them to select another move since if it's an invalid move it'll always be invalid if you keep retrying just here so they need to select another move
         elsif piece.is_a?(Pawn) && ((end_pos[0] == 0) || (end_pos[0] == 7)) # if the pawn is upgrading into a full piece amazing and castling
             begin
