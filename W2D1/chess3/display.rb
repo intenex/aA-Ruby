@@ -3,7 +3,7 @@ require_relative 'board'
 require_relative 'cursor'
 
 class Display
-    attr_reader :board # to get to call board methods hopefully lol like move_piece
+    attr_reader :board, :cursor # to get to call board methods hopefully lol like move_piece
 
     def initialize(board)
         @board = board

@@ -11,7 +11,7 @@ class HumanPlayer
     def make_move(board)
         system('clear')
         self.render
-        @cursor.get_input # when you process this input make sure that the player can only select and move a piece of their color
+        @display.cursor.get_input # when you process this input make sure that the player can only select and move a piece of their color
     rescue => e # if any of the wrong move exceptions come up handle it and retry love it
         puts e
         retry
