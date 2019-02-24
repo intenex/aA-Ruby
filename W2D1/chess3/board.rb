@@ -26,6 +26,8 @@ class Board # getting very good at this love it just fucking dive in and crush i
             raise ArgumentError.new("There is no piece at that start position. Try again.") # handle this exception with a retry in the method that calls this method
         elsif !piece.moves.include?(end_pos) # if the moves the piece can move to don't include the end_pos then you can't move there so raise an error # wow modularity and good methods make this so simple incredible
             raise ArgumentError.new("The selected piece cannot move to that position. Try again.")
+        elsif !piece.valid_moves.include?(end_pos) # love it awesome test this
+            raise ArgumentError.new("That move would leave you in check! Try again.")
         else # if no errors, then replace the current start position with the NullPiece no matter what since if it's an empty space you're putting a NullPiece there, and if it's not an empty space well, you're still capturing the piece so not swapping them awesome
             @grid[s_row][s_col], @grid[e_row][e_col] = NullPiece.instance, piece # swap the two positions with a parallel assignment - later raise an error if the piece cannot be moved there with an InvalidPositionError or something and then handle it elsewhere. See if this piece swap works now amazing
             piece.pos = end_pos # OMG THE OLD VERSION OF THIS TOTALLY FUCKED YOU UP LOL IT TURNED OUT TO ACTUALLY BITE YOU IN THE ASS LOLOLOL because you were fucking playing with attr_reader/fire and wanted to do the trolly piece.pos[0], piece.pos[1] = e_row, e_col instead of just the totally fucking reasonable reassignment of piece.pos = end_pos with an attr_accessor you didn't reassign it and just changed the pointer of the old position which totally fucked up the board when you were running checkmate? when valid_moves? dupes the board yet you had the pointer to the same position and that totally fucked shit up lmfao let's fix this now dying thank god your debugging skills are god and you figured this out so quickly shockingly LOL had it been a while before you saw your code though would have been hard I think # must update the piece's position after moving otherwise it still thinks it's at the original position # hilariously this shortsteps you needing an attr_accessor for Piece.pos because you aren't changing the assignment just each individual element lmao so bad though should just make an attr_accessor to make it more readable but this is just so cool but yeah will lead to more confusion around why things are the way they are later probably, but that's what your billions of comments are for, crazy that this game is coming along so well, literally cannot believe you forgot you made this method lol
@@ -36,14 +38,10 @@ class Board # getting very good at this love it just fucking dive in and crush i
         s_row, s_col = start_pos
         e_row, e_col = end_pos
         piece = @grid[s_row][s_col]
-        if piece.is_a?(NullPiece)
-            nil # just don't do anything if it's a NullPiece
-        elsif !piece.moves.include?(end_pos)
-            raise ArgumentError.new("The selected piece cannot move to that position. Try again.")
-        else
+        if !piece.is_a?(NullPiece) # just don't do anything if it's a NullPiece since this is used by checkmate? which enumerates over every piece including NullPieces and simulates moving them important that NullPieces are accounted for here and just silently pass instead of raising an exception --> this thing will automatically evaluate to nil for NullPieces and just skip over it I believe
             @grid[s_row][s_col], @grid[e_row][e_col] = NullPiece.instance, piece
             piece.pos = end_pos # reassign this thing entirely to a new pointer so that when you dup the board in Piece#valid_moves it doesn't totally fuck you up lmfao dying
-        end
+        end # don't need the elsif "!piece.valid_moves.include?(end_pos)" as it should never be triggered because you're only iterating over positions that are *in* piece.moves lol in #valid_moves which is the only method that calls this method
     end
 
     def m_piece_helper(start_pos, end_pos)
@@ -77,7 +75,7 @@ class Board # getting very good at this love it just fucking dive in and crush i
         @grid.each { |row| row.each { |piece| (king_pos = piece.pos) if (piece.is_a?(King) && piece.color == color) } } # I think eaches work like this we'll see lol a nested each may not, yeah it doesn't fix it for now and do it later. This is poor code writing figure out a better way
         @grid.any? { |row| row.any? { |piece| (piece.moves.include?(king_pos)) && (piece.color != color) } } # return the result of this double nested any of which the innermost returns any value other than false or nil - note that, it doesn't only return true if any value inside returns true, just if it returns anything besides false or nil, interesting. Interesting design and very important to read the documentation for everything in depth. And then if the innermost any? returns true then the outermost any? returns true then the whole method returns true, otherwise the whole thing returns false heh awesome. Very Ruby specific things. Will need to learn how to do these in other languages for sure though thankfully most things are the same.
     end
-    # god byebug is god
+    
     def checkmate?(color) # write an enumerator that checks if any of :color player's pieces have any #valid_moves, if not then in check, like something like this
         !@grid.any? { |row| row.any? { |piece| !piece.valid_moves.empty? && (piece.color == color) } } # basically check if any move of the same color as the color being checked for checkmate has any valid moves, aka moves that after moving don't leave the king in check - if not, then the game is over awesome heh # then the ! changes the return boolean value so hopefully this works if #valid_moves works as you think it might lol and it's specific to some check function thing --> I guess maybe valid_moves might change with a conditional if check is activated to only see positions that can protect the king that would be interesting
     end
