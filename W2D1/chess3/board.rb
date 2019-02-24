@@ -90,6 +90,7 @@ class Board # getting very good at this love it just fucking dive in and crush i
     def castle(piece, start_pos, end_pos) # ugh fucking amazing that you have the #in_check? method and that was already created method decomposition for modularity in reusing code for everything is the greatest thing ever man
         raise ArgumentError.new("You cannot castle out of check. Try again.") if in_check?(piece.color)
         castle_side = piece.castle_pos.index(end_pos) # find which position you're castling to to know which pieces to change
+        raise ArgumentError.new("You cannot castle through an attacked position. Try again.") if piece.move_into_check?(piece.rook_end_pos[castle_side]) # the rook's end position is the position that the King skips to move into its final position - if moving into this position would leave the King in check, the move isn't valid. Having modularized methods are so insanely great for checking all of this man so incredible you'd already written this non-insignificantly complex method and it was already decomposed into such a wonderfully repurposable helper method method decomposition and helper methods really are the greatest things ever you never know when you'll want to reuse one of them for something else and it's a breeze when your code is factored correctly incredible
         s_row, s_col = start_pos
         e_row, e_col = end_pos # alternatively piece.castle_pos[castle_side]
         r_s_row, r_s_col = piece.rook_start_pos[castle_side]
