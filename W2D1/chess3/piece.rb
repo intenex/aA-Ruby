@@ -1,5 +1,4 @@
 require 'singleton' # right need to require it nice
-require 'byebug'
 
 # wow think the moving things are working flawlessly so nuts lol
 

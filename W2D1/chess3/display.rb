@@ -10,9 +10,6 @@ class Display
         @cursor = Cursor.new([0,0], @board) # they literally do tell you exactly what to do lol
     end
 
-    def inspect # just silence it for now lol
-    end
-
     # refactored the fuck out of this thing like a boss lol god refactoring is good
     def render
         @board.grid.each_with_index do |row, row_i|
@@ -39,11 +36,4 @@ class Display
         print Paint["#{piece.to_s} ", p_color, bg_color] # boom a single print line this is correctly factored code fucking amazing
     end
 
-    def make_move # to be later refactored out into the Player class awesome
-        while true # never end this loop; obviously fix it to while !game_over? later lol man y'all really are learning how to make all the terminal games lmao
-            system('clear')
-            self.render
-            @cursor.get_input
-        end
-    end
 end

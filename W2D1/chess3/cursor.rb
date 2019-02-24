@@ -1,7 +1,6 @@
 # The cursor manages user input, according to which it updates its @cursor_pos. The display will render the square at @cursor_pos in a different color. Awesome
 
 require "io/console"
-require "byebug"
 
 KEYMAP = {
   " " => :space,
@@ -36,16 +35,19 @@ MOVES = {
 class Cursor
 
   attr_reader :cursor_pos, :board, :selected
+  attr_accessor :start_pos, :end_pos
 
   def initialize(cursor_pos, board)
     @cursor_pos = cursor_pos
     @board = board
     @selected = false # change this to true if a piece is selected --> make sure later you can only select your own pieces and whatnot
+    @start_pos = Array.new
+    @end_pos = Array.new
   end
 
-  def get_input
+  def get_input(color)
     key = KEYMAP[read_char]
-    handle_key(key)
+    handle_key(key, color)
   end
 
   private # ah nice they already made it all private sweet
@@ -85,12 +87,16 @@ class Cursor
   # to move somewhere else, you must check if the move is a valid move for the given piece
   # if it is a valid move, 
 
-  def handle_key(key)
+  def handle_key(key, color) # really don't see how they do the key handling thing but this should work I guess
     case key # whoah *that's* how it works right say what we're casing is the variable key which is what was passed in amazing. case is just a conditional like an if/else just simplified syntactic sugar, switch statements same thing, just specifies in all the different cases what to do but same as an if/else for sure https://www.rubyguides.com/2015/10/ruby-case/
     when :return, :space # if key = :return or :space, return the cursor pos
       row, col = @cursor_pos
-      if !@board.grid[row][col].is_a?(NullPiece)
-        toggle_selected # if the current position is a NullPiece then don't do anything, otherwise if it's a piece, toggle selected --> you'll need to make this way more robust later in ensuring that it's only the specific piece that's selected that is currently on cursor_pos, etc., but fuck it for now let's see what the rest of making this game entails first then you can fix all the little odds and ends later :)
+      if @board.grid[row][col].color == color # if the color of the piece selected is of the 
+        @selected = true
+        @start_pos = @cursor_pos
+      elsif (@board.grid[row][col].color != color) && @selected # if a piece is selected and the move position is not of the same color as the player's color, meaning it is either an enemy piece or an empty NullPiece with color :none, then allow the move, since you can never capture your own pieces or move on top of them, and so if they select a piece of the same color, reselect to that color, otherwise attempt the move, fucking love this logic
+        @end_pos = @cursor_pos
+        @selected = false
       end
       @cursor_pos
     when :left, :right, :up, :down
@@ -99,10 +105,6 @@ class Cursor
     when :ctrl_c
       Process.exit(0) # http://ruby-doc.org/core-2.2.0/Process.html#method-c-exit # omg this is amazing lmao it literally just terminates the Ruby script by raising the SystemExit exception - you can literally catch this exception and prevent the exit if you want LOL so amazing the *function* is to raise a terminal exception wow lol
     end
-  end
-
-  def toggle_selected
-    @selected ? (@selected = false) : (@selected = true) # if selected is true, make it false, else, make it true
   end
 
   def update_pos(diff)

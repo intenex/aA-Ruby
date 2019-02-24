@@ -9,11 +9,21 @@ class HumanPlayer
     end
 
     def make_move(board)
-        system('clear')
-        self.render
-        @display.cursor.get_input # when you process this input make sure that the player can only select and move a piece of their color
+        while @display.cursor.end_pos.empty? # while there's no end position, keep running this thing, better than the way you had it before
+            system('clear')
+            @display.render
+            puts "Current player: #{@color}"
+            puts "Current selected piece: #{@display.cursor.start_pos}" if @display.cursor.selected # if there's a selected piece, print what piece is selected so they know, awesome
+            @display.cursor.get_input(@color) # when you process this input make sure that the player can only select and move a piece of their color
+        end
+        start_pos = @display.cursor.start_pos
+        end_pos = @display.cursor.end_pos
+        @display.cursor.start_pos = Array.new
+        @display.cursor.end_pos = Array.new # reset these so this thing can run again later
+        @display.board.move_piece(start_pos, end_pos) # heh love it this actually works super well can't wait fuck how they designed the code god knows how it's supposed to work this should be fine though lol
     rescue => e # if any of the wrong move exceptions come up handle it and retry love it
         puts e
-        retry
+        sleep(1) # so they can read that error message love it
+        retry # if the end position was invalid then do this whole baby over again
     end
 end

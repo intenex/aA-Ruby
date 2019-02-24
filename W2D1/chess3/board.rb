@@ -1,5 +1,5 @@
 require_relative 'piece'
-require 'byebug' # byebug finds every bug in literally seconds lol so insane you're so lucky to love this stuff *and* be rather good at it and to especially be good at debugging really was worth getting really good at no question can identify every bug so quickly now
+# byebug finds every bug in literally seconds lol so insane you're so lucky to love this stuff *and* be rather good at it and to especially be good at debugging really was worth getting really good at no question can identify every bug so quickly now
 # 2.5 hours to finish part 1 with all the extra bonus ends and pieces and really taking your time to dive into everything well love it
 # last thing you need to do in part 2 is to get the #checkmate? method working but yeah you're fucking lit to move on fucking awesome
 
