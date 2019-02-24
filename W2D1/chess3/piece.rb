@@ -1,6 +1,12 @@
 require 'singleton' # right need to require it nice
 
-# wow think the moving things are working flawlessly so nuts lol
+# things to do for castling to work -->
+# Put the move in moves for kings if they haven't moved before *and* everything is empty space between them and the rook on either side that they're moving to
+# then when the move is performed in board make sure that the Rook on the side they're moving to also hasn't moved before
+# make sure that they can't do the move if they are currently in check too
+
+# for en passant
+# Fucking love it you’re actually going to get castling to work and then it’s just en passant but that can definitely be saved for later since that’s a deterrent move anyway and not a real move and so people wouldn’t do it if they didn’t know you didn’t have that functionality and thought pieces could actually move like that lol and you can always put it in later it’s not *the* hardest thing to implement actually eh you might as well do it just need a method to know when a piece is performing a double jump and flag something so that on the next turn after a double jump any pawn that can capture that piece can do an en passant once that one turn flag is on love it
 
 module Slidable # see if you need an getter method to read the current position and all that
     # @@HORIZONTAL_DIRS = Array.new # wtf are these supposed to be lol --> ooh that's smart the way they had you do it would be just saving an array of offsets duh then putting those in lmao oh well too late for that now, should have realized that lol, but still weird this seems like it would be a little harder, it would be like 4 different directions, wow she's doing so well with the popup so proud and happy for her so great aww
@@ -44,7 +50,7 @@ def check_blocking_pieces(positions) # works fucking brilliantly love it and tes
 end
 
 module Stepable
-    def moves # not yet tested confirm this works later
+    def moves
         offsets = move_diffs # right instead of using compact you should just do a select on the output of the map that's the better way to do it. Good to learn .compact though even though it's a hilarious code smell lol your diagonal_slide and straight_slide are the most complex examples of code smells for sure if you've ever seen any lol so many chains - chains are code smells
         raw_move_pos = offsets.map { |offset| [offset, @pos].transpose.map(&:sum) } # oh god your hilarious code smells lmao. This fucking transposes [offset] and [@pos] so that the offset and the row and the column are aligned, then it fucking returns the sum of each of those two transpositions as the new position for each offset passed in that's then returned as the new array of raw moves that are the position + the offset for each position, which are all the positions not sanitized to see if they're within bounds which is what the select will do heh
         raw_move_pos.select do |p| # this will just return to def moves all the positions that are valid in that they are not negative positions off the map and in that they do not hit a piece that is of its own color
@@ -53,6 +59,7 @@ module Stepable
                 true if piece.is_a?(NullPiece) || piece.color != self.color # if the position is valid *and* there is either no piece at the current position or the piece at the current position is of the opposite color, then return true, else return false fucking love it
             end # awesome no explicit false needed this if will just return the piece or nil if the position is out of bounds and so the select doesn't select it love it only selects true explicitly love it
         end
+        
     end
 end
 
@@ -139,7 +146,9 @@ end
 class King < Piece
     include Stepable
 
-    def initialize(color, board, pos); super; @symbol = :♚ end
+    attr_accessor :moved
+
+    def initialize(color, board, pos); super; @symbol = :♚; @moved = false end
     def move_diffs
         [[-1, -1], [0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0]] # in clockwise order from top left, all the offsets of where the piece can move way easier than these sliding pieces man lmao trivial so lucky to be getting through this stuff love doing the hard stuff first in the morning when it was hard. Can't wait to have this great dinner with Mai tonight and look all nice for it and all that :)
     end
@@ -155,7 +164,9 @@ end
 class Rook < Piece
     include Slidable
 
-    def initialize(color, board, pos); super; @symbol = :♜ end
+    attr_accessor :moved
+
+    def initialize(color, board, pos); super; @symbol = :♜; @moved = false end
 
     def move_dirs; [:straight] end
 end

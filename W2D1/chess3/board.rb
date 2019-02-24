@@ -36,6 +36,7 @@ class Board # getting very good at this love it just fucking dive in and crush i
                 retry
             end
         else # if no errors, then replace the current start position with the NullPiece no matter what since if it's an empty space you're putting a NullPiece there, and if it's not an empty space well, you're still capturing the piece so not swapping them awesome
+            (piece.moved == true) if ((piece.is_a?(King) || piece.is_a?(Rook)) && (piece.moved == false)) # if you're moving either the King or the Rook and they haven't been moved before set their moved flag to true for castling purposes
             @grid[s_row][s_col], @grid[e_row][e_col] = NullPiece.instance, piece # swap the two positions with a parallel assignment - later raise an error if the piece cannot be moved there with an InvalidPositionError or something and then handle it elsewhere. See if this piece swap works now amazing
             piece.pos = end_pos # OMG THE OLD VERSION OF THIS TOTALLY FUCKED YOU UP LOL IT TURNED OUT TO ACTUALLY BITE YOU IN THE ASS LOLOLOL because you were fucking playing with attr_reader/fire and wanted to do the trolly piece.pos[0], piece.pos[1] = e_row, e_col instead of just the totally fucking reasonable reassignment of piece.pos = end_pos with an attr_accessor you didn't reassign it and just changed the pointer of the old position which totally fucked up the board when you were running checkmate? when valid_moves? dupes the board yet you had the pointer to the same position and that totally fucked shit up lmfao let's fix this now dying thank god your debugging skills are god and you figured this out so quickly shockingly LOL had it been a while before you saw your code though would have been hard I think # must update the piece's position after moving otherwise it still thinks it's at the original position # hilariously this shortsteps you needing an attr_accessor for Piece.pos because you aren't changing the assignment just each individual element lmao so bad though should just make an attr_accessor to make it more readable but this is just so cool but yeah will lead to more confusion around why things are the way they are later probably, but that's what your billions of comments are for, crazy that this game is coming along so well, literally cannot believe you forgot you made this method lol
         end
@@ -91,15 +92,15 @@ class Board # getting very good at this love it just fucking dive in and crush i
         s_row, s_col = start_pos
         e_row, e_col = end_pos
         puts "Congratulations! Which piece would you like to promote to?\nQ for Queen, R for Rook, B for Bishop, and N for Knight."
-        input = gets.chomp
+        input = gets.chomp.downcase
         case input # fucking perfect love it really learning this stuff well in application so great and you absolutely can figure out all the features and functionality yourself now so amazing really am learning a lot
-        when "Q"
+        when "q"
             @grid[s_row][s_col], @grid[e_row][e_col] = NullPiece.instance, Queen.new(piece.color, self, end_pos) # make the color the same as the color of the current pawn, pass the board, and pass the current position
-        when "R"
+        when "r"
             @grid[s_row][s_col], @grid[e_row][e_col] = NullPiece.instance, Rook.new(piece.color, self, end_pos)
-        when "B"
+        when "b"
             @grid[s_row][s_col], @grid[e_row][e_col] = NullPiece.instance, Bishop.new(piece.color, self, end_pos)
-        when "N"
+        when "n"
             @grid[s_row][s_col], @grid[e_row][e_col] = NullPiece.instance, Knight.new(piece.color, self, end_pos)
         else
             raise ArgumentError.new("That was not a valid promotion piece. Please try again.")
