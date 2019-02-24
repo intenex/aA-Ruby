@@ -53,14 +53,29 @@ module Stepable
     def moves
         offsets = move_diffs # right instead of using compact you should just do a select on the output of the map that's the better way to do it. Good to learn .compact though even though it's a hilarious code smell lol your diagonal_slide and straight_slide are the most complex examples of code smells for sure if you've ever seen any lol so many chains - chains are code smells
         raw_move_pos = offsets.map { |offset| [offset, @pos].transpose.map(&:sum) } # oh god your hilarious code smells lmao. This fucking transposes [offset] and [@pos] so that the offset and the row and the column are aligned, then it fucking returns the sum of each of those two transpositions as the new position for each offset passed in that's then returned as the new array of raw moves that are the position + the offset for each position, which are all the positions not sanitized to see if they're within bounds which is what the select will do heh
-        raw_move_pos.select do |p| # this will just return to def moves all the positions that are valid in that they are not negative positions off the map and in that they do not hit a piece that is of its own color
+        valid_pos = raw_move_pos.select do |p| # this will just return to def moves all the positions that are valid in that they are not negative positions off the map and in that they do not hit a piece that is of its own color
             if (p[0] >= 0) && (p[0] <= 7) && (p[1] >= 0) && (p[1] <= 7) # right should be <= 7 heh made that mistake wow so many things to watch out for in this code pretty nuts for sure
                 piece = @board.grid[p[0]][p[1]]
                 true if piece.is_a?(NullPiece) || piece.color != self.color # if the position is valid *and* there is either no piece at the current position or the piece at the current position is of the opposite color, then return true, else return false fucking love it
             end # awesome no explicit false needed this if will just return the piece or nil if the position is out of bounds and so the select doesn't select it love it only selects true explicitly love it
         end
-        
+        if self.is_a?(King) && !self.moved # check for potential castling moves if self is a king and hasn't moved. Remember to check in board if the king is in check and raise an exception if so to say you can't castle out of check.
+            queen_offsets = [[0, -1], [0, -2], [0, -3], [0, -4]] # check that the first positions [0...-1] are all empty and then check that [-1], the rook, is first a rook and hasn't moved
+            king_offsets = [[0, 1], [0, 2], [0, 3]]
+            valid_pos << @castle_pos[0] if check_offsets(queen_offsets) # add the queen castle position (the first in the @castle_pos index repertoire, alteratively can do [@pos[0], @pos[1]-2] which would reference the same thing) into valid moves if this is a valid move
+            valid_pos << @castle_pos[1] if check_offsets(king_offsets) # add the king castle position into valid moves if this is a valid move
+        end
+        valid_pos
     end
+
+    def check_offsets(offsets)
+        offset_pos = offsets.map { |offset| [offset, @pos].transpose.map(&:sum) } # your working memory allows you to just grasp and comprehend more complex things so you don't have to simplify them more and can still understand them well which is fortunate just make sure this holds true over time and you still understand this code much later not when it's just fresh in your memory
+        offsets_empty = offset_pos[0...-1].all? { |position| (row, col = position); @board.grid[row][col].is_a?(NullPiece) } # check that every piece between the king and the rook is empty
+        rook_row, rook_col = offset_pos[-1] # get the row and column of the rook which is the last offset_pos
+        maybe_rook = @board.grid[rook_row][rook_col]
+        offsets_empty && maybe_rook.is_a?(Rook) && !maybe_rook.moved # return true only if all the pieces in between the king and the rook are empty and the rook is intact and hasn't moved fucking love it
+    end
+
 end
 
 class Piece
@@ -147,11 +162,27 @@ class King < Piece
     include Stepable
 
     attr_accessor :moved
+    attr_reader :castle_pos, :rook_start_pos, :rook_end_pos
 
-    def initialize(color, board, pos); super; @symbol = :♚; @moved = false end
+    def initialize(color, board, pos)
+        super
+        @symbol = :♚
+        @moved = false
+        if color == :white
+            @castle_pos = [[7, 2], [7, 6]] # hardcode the two castle positions to easily check later awesome
+            @rook_start_pos = [[7, 0], [7,7]] # this is just laziness definitely an easier way to factor this out lol or just hardcode it on the spot
+            @rook_end_pos = [[7, 3], [7, 5]]
+        else
+            @castle_pos = [[0, 2], [0, 6]]
+            @rook_start_pos = [[0, 0], [0, 7]]
+            @rook_end_pos = [[0, 3], [0, 5]]
+        end
+    end
+
     def move_diffs
         [[-1, -1], [0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0]] # in clockwise order from top left, all the offsets of where the piece can move way easier than these sliding pieces man lmao trivial so lucky to be getting through this stuff love doing the hard stuff first in the morning when it was hard. Can't wait to have this great dinner with Mai tonight and look all nice for it and all that :)
     end
+
 end
 
 class Queen < Piece

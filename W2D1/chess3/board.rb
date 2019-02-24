@@ -28,6 +28,8 @@ class Board # getting very good at this love it just fucking dive in and crush i
             raise ArgumentError.new("The selected piece cannot move to that position. Try again.")
         elsif !piece.valid_moves.include?(end_pos) # love it awesome test this
             raise ArgumentError.new("That move would leave you in check! Try again.")
+        elsif piece.is_a?(King) && !piece.moved && piece.castle_pos.include?(end_pos) # if the piece is a King and it has never moved and it is attempting to move to one of its castle positions then it must be attempting to castle
+            castle(piece, start_pos, end_pos) # unlike the pawn_promotion don't rescue here, you want to rescue the pawn promotion here since you don't want them to put in another move, just to enter a right promotion value, here you want the error to actually bubble up to the HumanPlayer and for them to select another move since if it's an invalid move it'll always be invalid if you keep retrying just here so they need to select another move
         elsif piece.is_a?(Pawn) && ((end_pos[0] == 0) || (end_pos[0] == 7)) # if the pawn is upgrading into a full piece amazing and castling
             begin
                 pawn_promote(piece, start_pos, end_pos)
@@ -36,7 +38,7 @@ class Board # getting very good at this love it just fucking dive in and crush i
                 retry
             end
         else # if no errors, then replace the current start position with the NullPiece no matter what since if it's an empty space you're putting a NullPiece there, and if it's not an empty space well, you're still capturing the piece so not swapping them awesome
-            (piece.moved == true) if ((piece.is_a?(King) || piece.is_a?(Rook)) && (piece.moved == false)) # if you're moving either the King or the Rook and they haven't been moved before set their moved flag to true for castling purposes
+            (piece.moved = true) if ((piece.is_a?(King) || piece.is_a?(Rook)) && !piece.moved) # if you're moving either the King or the Rook and they haven't been moved before set their moved flag to true for castling purposes
             @grid[s_row][s_col], @grid[e_row][e_col] = NullPiece.instance, piece # swap the two positions with a parallel assignment - later raise an error if the piece cannot be moved there with an InvalidPositionError or something and then handle it elsewhere. See if this piece swap works now amazing
             piece.pos = end_pos # OMG THE OLD VERSION OF THIS TOTALLY FUCKED YOU UP LOL IT TURNED OUT TO ACTUALLY BITE YOU IN THE ASS LOLOLOL because you were fucking playing with attr_reader/fire and wanted to do the trolly piece.pos[0], piece.pos[1] = e_row, e_col instead of just the totally fucking reasonable reassignment of piece.pos = end_pos with an attr_accessor you didn't reassign it and just changed the pointer of the old position which totally fucked up the board when you were running checkmate? when valid_moves? dupes the board yet you had the pointer to the same position and that totally fucked shit up lmfao let's fix this now dying thank god your debugging skills are god and you figured this out so quickly shockingly LOL had it been a while before you saw your code though would have been hard I think # must update the piece's position after moving otherwise it still thinks it's at the original position # hilariously this shortsteps you needing an attr_accessor for Piece.pos because you aren't changing the assignment just each individual element lmao so bad though should just make an attr_accessor to make it more readable but this is just so cool but yeah will lead to more confusion around why things are the way they are later probably, but that's what your billions of comments are for, crazy that this game is coming along so well, literally cannot believe you forgot you made this method lol
         end
@@ -50,9 +52,6 @@ class Board # getting very good at this love it just fucking dive in and crush i
             @grid[s_row][s_col], @grid[e_row][e_col] = NullPiece.instance, piece
             piece.pos = end_pos # reassign this thing entirely to a new pointer so that when you dup the board in Piece#valid_moves it doesn't totally fuck you up lmfao dying
         end # don't need the elsif "!piece.valid_moves.include?(end_pos)" as it should never be triggered because you're only iterating over positions that are *in* piece.moves lol in #valid_moves which is the only method that calls this method
-    end
-
-    def m_piece_helper(start_pos, end_pos)
     end
 
     def dup # whew think this finally works great lol
@@ -77,7 +76,7 @@ class Board # getting very good at this love it just fucking dive in and crush i
         row >= 0 && row < 8 && col >= 0 && col < 8 # return the result of this lol if it's true then return true else false see if it works wow you love writing code on your own actually better than pair programming you think better by yourself for sure not someone who concentrates or can function well pair programming yet at least. You need time to be able to reflect on your own. Hmm.
     end
 
-    # omfg briefly tested and it WORKS LOL modular coding holy fuck and method breaking actually works learn how to make modular methods way better but my god this is incredible
+    # omfg briefly tested and it WORKS LOL modular coding holy fuck and method decomposition actually works learn how to make modular methods way better but my god this is incredible
     def in_check?(color)
         king_pos = [] # may not need this if the variable assignment can just happen for the first time in the line below check it later
         @grid.each { |row| row.each { |piece| (king_pos = piece.pos) if (piece.is_a?(King) && piece.color == color) } } # I think eaches work like this we'll see lol a nested each may not, yeah it doesn't fix it for now and do it later. This is poor code writing figure out a better way
@@ -86,6 +85,20 @@ class Board # getting very good at this love it just fucking dive in and crush i
     
     def checkmate?(color) # write an enumerator that checks if any of :color player's pieces have any #valid_moves, if not then in check, like something like this
         !@grid.any? { |row| row.any? { |piece| !piece.valid_moves.empty? && (piece.color == color) } } # basically check if any move of the same color as the color being checked for checkmate has any valid moves, aka moves that after moving don't leave the king in check - if not, then the game is over awesome heh # then the ! changes the return boolean value so hopefully this works if #valid_moves works as you think it might lol and it's specific to some check function thing --> I guess maybe valid_moves might change with a conditional if check is activated to only see positions that can protect the king that would be interesting
+    end
+
+    def castle(piece, start_pos, end_pos) # ugh fucking amazing that you have the #in_check? method and that was already created method decomposition for modularity in reusing code for everything is the greatest thing ever man
+        raise ArgumentError.new("You cannot castle out of check. Try again.") if in_check?(piece.color)
+        castle_side = piece.castle_pos.index(end_pos) # find which position you're castling to to know which pieces to change
+        s_row, s_col = start_pos
+        e_row, e_col = end_pos # alternatively piece.castle_pos[castle_side]
+        r_s_row, r_s_col = piece.rook_start_pos[castle_side]
+        r_e_row, r_e_col = piece.rook_end_pos[castle_side]
+        rook = @grid[r_s_row][r_s_col]
+        @grid[s_row][s_col], @grid[e_row][e_col] = NullPiece.instance, piece # swapping the king and the 
+        @grid[r_s_row][r_s_col], @grid[r_e_row][r_e_col] = NullPiece.instance, rook
+        piece.pos = end_pos
+        rook.pos = piece.rook_end_pos[castle_side] # update the piece positions accordingly
     end
 
     def pawn_promote(piece, start_pos, end_pos)
