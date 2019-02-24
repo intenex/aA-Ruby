@@ -32,7 +32,12 @@ class Display
     def prnt_cursor; @cursor.selected ? "#E56373" : "#FFD768" end # if selected, return one color, else return the other, this actually is better code all this refactoring is great lmao
     def piece_color(piece); ((piece.color == :white) ? "#FFEED5" : "#063848") end # basically the colorizer method in piece before but now have to do it all here since Rainbow works differently from colorizer and can't chain like that. This chooses which color to show for white and black respectively
     def print_piece(piece, row_i, col_i, p_color, bg_color)
-        (p_color = prnt_cursor) if cursor?(row_i, col_i) # fuck yes let's refactor this even better, this changes the print color if the current position is the cursor position and two more choices on whether or not the cursor is selected which is exactly as the code should be fucking love it such good refactoring lol
+        if cursor?(row_i, col_i) # fuck yes let's refactor this even better, this changes the print color if the current position is the cursor position and two more choices on whether or not the cursor is selected which is exactly as the code should be fucking love it such good refactoring lol
+            p_color = prnt_cursor
+            if piece.is_a?(NullPiece) # if the cursor is currently over a NullPiece, if the cursor is selected, display the piece currently selected, otherwise display just a really fucking cool Khmer Unicode circle lol https://en.wikipedia.org/wiki/Khmer_(Unicode_block)
+                @cursor.selected ? (piece = @board.grid[@cursor.start_pos[0]][@cursor.start_pos[1]]) : (piece = :៙)
+            end
+        end
         print Paint["#{piece.to_s} ", p_color, bg_color] # boom a single print line this is correctly factored code fucking amazing
     end
 
