@@ -106,11 +106,11 @@ class Board # getting very good at this love it just fucking dive in and crush i
     # tested conditions so far --> correct draw for King vs King, for Black King + Black Knight + White King, for White King + White Knight + Black King, one white square bishop on each side, 5 total black squared bishops, three black, two white, fuck yes
     def draw? # all conditions here: http://www.e4ec.org/immr.html. Just three basic conditions - only kings left, only one knight on one side left, or only bishops of any number on either side on the same color square are all draws
         draw = false
-        if !any_piece?(:Queen) && !any_piece?(:Rook) && !any_piece?(:Bishop) && !any_piece?(:Knight) && !any_piece(:Pawn) # if there are no pieces but kings left, that's insufficient material condition #1
+        if !any_piece?(:Queen) && !any_piece?(:Rook) && !any_piece?(:Bishop) && !any_piece?(:Knight) && !any_piece?(:Pawn) # if there are no pieces but kings left, that's insufficient material condition #1
             draw = true
-        elsif !any_piece?(:Queen) && !any_piece?(:Rook) && !any_piece?(:Bishop) && !any_piece(:Pawn) && (((how_many_color?(:Knight, :white) == 1) && (how_many_color?(:Knight, :black) == 0)) || ((how_many_color?(:Knight, :black) == 1) && (how_many_color?(:Knight, :white) == 0))) # if there are no pieces except one knight on one side then that's insufficient material condition #2
+        elsif !any_piece?(:Queen) && !any_piece?(:Rook) && !any_piece?(:Bishop) && !any_piece?(:Pawn) && (((how_many_color?(:Knight, :white) == 1) && (how_many_color?(:Knight, :black) == 0)) || ((how_many_color?(:Knight, :black) == 1) && (how_many_color?(:Knight, :white) == 0))) # if there are no pieces except one knight on one side then that's insufficient material condition #2
             draw = true
-        elsif !any_piece?(:Queen) && !any_piece?(:Rook) && !any_piece(:Knight) && !any_piece(:Pawn)
+        elsif !any_piece?(:Queen) && !any_piece?(:Rook) && !any_piece?(:Knight) && !any_piece?(:Pawn)
             draw = true if ((any_bishops_color?(:white) && !any_bishops_color?(:black)) || (any_bishops_color?(:black) && !any_bishops_color?(:white))) # if there are only either white square bishops or black square bishops then it's a draw 
         end
         draw
