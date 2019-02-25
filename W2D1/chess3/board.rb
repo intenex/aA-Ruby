@@ -101,7 +101,7 @@ class Board # getting very good at this love it just fucking dive in and crush i
     end
 
     def stalemate?(color)
-        !@grid.any? { |row| row.any? { |piece| !piece.valid_moves.empty? && (piece.color == color) } }
+        (!@grid.any? { |row| row.any? { |piece| !piece.valid_moves.empty? && (piece.color == color) } }) && !in_check?(color) # if the piece is *not* in check and there are no valid moves then not a stalemate
     end
 
     def castle(piece, start_pos, end_pos) # ugh fucking amazing that you have the #in_check? method and that was already created method decomposition for modularity in reusing code for everything is the greatest thing ever man
