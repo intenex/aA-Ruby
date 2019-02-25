@@ -46,7 +46,8 @@ class Game # crazy that these definitions are just constants and objects in of t
     def save_game # yep this is the place to write these commands fucking amazing --> raise an exception to pull the game out to this state at the cursor input level fucking love it
         puts "Please enter the filename you would like to save to:"
         filename = gets.chomp.downcase # only save lowercase and load lowercase to make it easy
-        IO.write(filename, self.to_yaml)
+        saved_game = Marshal.dump(self) # holy fucking shit this worked even just natively with the fucking NullPiece Singleton object holy fucking shit as per https://ruby-doc.org/stdlib-1.9.3/libdoc/singleton/rdoc/Singleton.html all state is gone aka all instance variables and taint state but I don't think those matter anyway holy fucking shit it just fucking works
+        IO.write(filename, saved_game)
         puts "Game successfully saved! Continuing on..."
         sleep(1)
         self.play
@@ -55,8 +56,10 @@ class Game # crazy that these definitions are just constants and objects in of t
     def load_game
         puts "Please enter the filename you would like to load from:"
         filename = gets.chomp.downcase
-        loaded_file = YAML::load(IO.read(filename))
+        loaded_file = Marshal.load(IO.read(filename)) # the docs for Marshal say to pass it "an IO instance or an object that responds to #to_str" so this seems like an IO instance https://ruby-doc.org/core-2.2.0/Marshal.html#method-c-load so glad you learned Marshal way better and more correct than yaml and is the native Ruby way to save objects in bytestreams so fucking great
         if loaded_file.is_a?(Game)
+            puts "Game successfully loaded! Beginning play now..."
+            sleep(1)
             loaded_file.play # start running a nested play from that point in the game fucking love it lol, this preserves the current player value so things should work appropriately
         else
             raise ArgumentError.new("Loaded file is not a valid Game instance.")
