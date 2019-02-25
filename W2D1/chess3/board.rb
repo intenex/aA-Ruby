@@ -1,4 +1,5 @@
 require_relative 'piece'
+require 'yaml'
 # byebug finds every bug in literally seconds lol so insane you're so lucky to love this stuff *and* be rather good at it and to especially be good at debugging really was worth getting really good at no question can identify every bug so quickly now
 # 2.5 hours to finish part 1 with all the extra bonus ends and pieces and really taking your time to dive into everything well love it
 # last thing you need to do in part 2 is to get the #checkmate? method working but yeah you're fucking lit to move on fucking awesome
@@ -131,12 +132,6 @@ class Board # getting very good at this love it just fucking dive in and crush i
         else
             raise ArgumentError.new("That was not a valid promotion piece. Please try again.")
         end
-    end
-    
-    def save_game
-    end
-
-    def load_game
     end
 
     private # these shouldn't be called by anything else, only in initialize

@@ -89,6 +89,12 @@ class Cursor
   # to move somewhere else, you must check if the move is a valid move for the given piece
   # if it is a valid move, 
 
+  class SaveGameEscape < StandardError # just a way to bubble up the error call love it heh
+  end
+
+  class LoadGameEscape < StandardError
+  end
+
   def handle_key(key, color) # really don't see how they do the key handling thing but this should work I guess
     case key # whoah *that's* how it works right say what we're casing is the variable key which is what was passed in amazing. case is just a conditional like an if/else just simplified syntactic sugar, switch statements same thing, just specifies in all the different cases what to do but same as an if/else for sure https://www.rubyguides.com/2015/10/ruby-case/
     when :return, :space # if key = :return or :space, return the cursor pos
@@ -105,9 +111,9 @@ class Cursor
       update_pos(MOVES[key]) # MOVES is an array with symbols as the keys love it
       nil # return nil after calling @update_pos
     when :ctrl_s
-      @board.save_game
+      raise TypeError
     when :ctrl_l
-      @board.load_game
+      raise NameError
     when :ctrl_c
       Process.exit(0) # http://ruby-doc.org/core-2.2.0/Process.html#method-c-exit # omg this is amazing lmao it literally just terminates the Ruby script by raising the SystemExit exception - you can literally catch this exception and prevent the exit if you want LOL so amazing the *function* is to raise a terminal exception wow lol
     end

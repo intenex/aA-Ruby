@@ -228,4 +228,5 @@ class NullPiece < Piece # hmm Singleton interesting look into that later you'll 
     def initialize; @color = :none; @symbol = :" " end # they say make sure to read your color here but can't see how this could have a color since there's only one NullPiece ever hmm # give it a fake dummy color so that the in_check(color) and checkmate?(color) methods work in enumerating everything; easier than accounting for it independently there, similar to the dummy #moves method, which seems like what the UML is suggesting you should have
 
     def moves; [] end # just return an empty array always
+    
 end
