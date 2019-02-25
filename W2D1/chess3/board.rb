@@ -103,7 +103,7 @@ class Board # getting very good at this love it just fucking dive in and crush i
         (!@grid.any? { |row| row.any? { |piece| !piece.valid_moves.empty? && (piece.color == color) } }) && !in_check?(color) # if the piece is *not* in check and there are no valid moves then not a stalemate
     end
 
-    # tested conditions so far --> correct draw for King vs King, for Black King + Black Knight + White King, for White King + White Knight + Black King, one white square bishop on each side, 5 total black squared bishops, three black, two white, fuck yes
+    # tested conditions so far --> correct draw for King vs King, for Black King + Black Knight + White King, for White King + White Knight + Black King, one white square bishop on each side, 5 total black squared bishops, three black, two white, one black bishop promoted from a pawn for white and no pieces for black, instant insufficient material draw once the pawn was promoted to a bishop, awesome
     def draw? # all conditions here: http://www.e4ec.org/immr.html. Just three basic conditions - only kings left, only one knight on one side left, or only bishops of any number on either side on the same color square are all draws
         draw = false
         if !any_piece?(:Queen) && !any_piece?(:Rook) && !any_piece?(:Bishop) && !any_piece?(:Knight) && !any_piece?(:Pawn) # if there are no pieces but kings left, that's insufficient material condition #1
