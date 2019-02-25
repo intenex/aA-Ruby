@@ -1,5 +1,4 @@
 require_relative 'piece'
-require 'byebug'
 # byebug finds every bug in literally seconds lol so insane you're so lucky to love this stuff *and* be rather good at it and to especially be good at debugging really was worth getting really good at no question can identify every bug so quickly now
 # 2.5 hours to finish part 1 with all the extra bonus ends and pieces and really taking your time to dive into everything well love it
 # last thing you need to do in part 2 is to get the #checkmate? method working but yeah you're fucking lit to move on fucking awesome
@@ -104,7 +103,7 @@ class Board # getting very good at this love it just fucking dive in and crush i
         (!@grid.any? { |row| row.any? { |piece| !piece.valid_moves.empty? && (piece.color == color) } }) && !in_check?(color) # if the piece is *not* in check and there are no valid moves then not a stalemate
     end
 
-    # need to test all of this
+    # tested conditions so far --> correct draw for King vs King, for Black King + Black Knight + White King, for White King + White Knight + Black King, one white square bishop on each side, 5 total black squared bishops, three black, two white, fuck yes
     def draw? # all conditions here: http://www.e4ec.org/immr.html. Just three basic conditions - only kings left, only one knight on one side left, or only bishops of any number on either side on the same color square are all draws
         draw = false
         if !any_piece?(:Queen) && !any_piece?(:Rook) && !any_piece?(:Bishop) && !any_piece?(:Knight) && !any_piece(:Pawn) # if there are no pieces but kings left, that's insufficient material condition #1
@@ -112,7 +111,7 @@ class Board # getting very good at this love it just fucking dive in and crush i
         elsif !any_piece?(:Queen) && !any_piece?(:Rook) && !any_piece?(:Bishop) && !any_piece(:Pawn) && (((how_many_color?(:Knight, :white) == 1) && (how_many_color?(:Knight, :black) == 0)) || ((how_many_color?(:Knight, :black) == 1) && (how_many_color?(:Knight, :white) == 0))) # if there are no pieces except one knight on one side then that's insufficient material condition #2
             draw = true
         elsif !any_piece?(:Queen) && !any_piece?(:Rook) && !any_piece(:Knight) && !any_piece(:Pawn)
-            draw = true if (any_bishops_color?(:white) && !any_bishops_color?(:black)) || (any_bishops_color?(:black) && !any_bishops_color?(:white)) # if there are only either white square bishops or black square bishops then it's a draw 
+            draw = true if ((any_bishops_color?(:white) && !any_bishops_color?(:black)) || (any_bishops_color?(:black) && !any_bishops_color?(:white))) # if there are only either white square bishops or black square bishops then it's a draw 
         end
         draw
     end
