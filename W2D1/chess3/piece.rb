@@ -138,7 +138,7 @@ class Pawn < Piece # ah an interesting piece to move! goes down if black, goes u
         one_step = [new_row, @pos[1]] 
         two_step_row = new_row + forward_dir # if it can jump you've gotta increment this by another step lol can't believe you forgot this about pawns wow
         if (two_step_row >= 0) && (two_step_row <= 7) # ah lmfao didn't fucking check if it's a NullPiece there or not LOL amazing bug catching god debugger is god mode
-            (f_steps << [two_step_row, @pos[1]]) if (at_start_row? && @board.grid[two_step_row][@pos[1]].is_a?(NullPiece)) # if the pawn is at the start step then add this new step if it's valid otherwise don't note can't do self.at_start_row? because this is invalid
+            (f_steps << [two_step_row, @pos[1]]) if (at_start_row? && @board.grid[two_step_row][@pos[1]].is_a?(NullPiece) && @board.grid[new_row][@pos[1]].is_a?(NullPiece)) # if the pawn is at the start step then add this new step if it's valid otherwise don't note can't do self.at_start_row? because this is invalid. # also added another check here wow so many things to watch out for you can't double step past a square that's occupied by another piece so have to check that the one step piece is also a NullPiece amazing catch man so much to catch lol
         end
         f_steps << one_step if @board.grid[new_row][@pos[1]].is_a?(NullPiece) # only allow this move if the new row is in bounds and there is no piece in that position
         f_steps
