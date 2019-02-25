@@ -14,6 +14,20 @@ class WordChainer
         @word_chain = Array.new
     end
 
+    def adjacent_words_regex(word)
+        words_with_same_length = @dictionary.select {|w| w.length == word.length}
+        adjacents = Array.new
+        word.length.times do |increment|
+            adjacents += words_with_same_length.select do |n_word|
+                placeholder = word.dup
+                placeholder[increment] = "*"
+                split_word = placeholder.split("*")
+                /#{split_word[0]}[a-z]#{split_word[1]}/.match(n_word)
+            end
+        end
+        adjacents.reject { |w| w == word }
+    end
+
     # so good to know how to do this love it really getting better at this stuff even when tired love life
     # works flawlessly first try love it you def know what you're doing now
     def adjacent_words(word)
