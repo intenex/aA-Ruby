@@ -23,6 +23,8 @@ KEYMAP = {
   "\177" => :backspace,
   "\004" => :delete,
   "\u0003" => :ctrl_c,
+  "\u0013" => :ctrl_s, # heh fucking brilliant you just captured and read the input yourself to see what this would return easier than googling for it
+  "\f" => :ctrl_l # not really sure why this is \f but eh whatever still don't know how to google for it but this is awesome
 }
 
 MOVES = {
@@ -102,6 +104,10 @@ class Cursor
     when :left, :right, :up, :down
       update_pos(MOVES[key]) # MOVES is an array with symbols as the keys love it
       nil # return nil after calling @update_pos
+    when :ctrl_s
+      @board.save_game
+    when :ctrl_l
+      @board.load_game
     when :ctrl_c
       Process.exit(0) # http://ruby-doc.org/core-2.2.0/Process.html#method-c-exit # omg this is amazing lmao it literally just terminates the Ruby script by raising the SystemExit exception - you can literally catch this exception and prevent the exit if you want LOL so amazing the *function* is to raise a terminal exception wow lol
     end

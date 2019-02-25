@@ -132,6 +132,12 @@ class Board # getting very good at this love it just fucking dive in and crush i
             raise ArgumentError.new("That was not a valid promotion piece. Please try again.")
         end
     end
+    
+    def save_game
+    end
+
+    def load_game
+    end
 
     private # these shouldn't be called by anything else, only in initialize
 

@@ -10,6 +10,7 @@ class Game # crazy that these definitions are just constants and objects in of t
     end
 
     def play
+        puts "Welcome to chess! At any point, press ctrl-s to save your game, or ctrl-l to load a saved game."
         while !@board.checkmate?(:white) && !@board.checkmate?(:black) # so great to know how to write code love life
             @players[@current_player].make_move(@board)
             (@current_player == :white) ? (@current_player = :black) : (@current_player = :white) # if current player is white then make the next player black otherwise make it white
