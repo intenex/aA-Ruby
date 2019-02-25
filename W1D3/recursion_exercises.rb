@@ -176,7 +176,7 @@ def bsearch(arr, target)
         bsearch(arr[0...(arr.length/2)], target)
     else
         if bsearch(arr[(arr.length/2)...arr.length], target) # if this exists and isn't nil
-            arr.length/2 + bsearch(arr[(arr.length/2)...arr.length], target) # holy fuck this code actually worked wtf lmao just added the length of the index that the thing would start on if you didn't reomve all those elements and it...just worked too tired to really read too much into it but lucky that it worked, I guess lol
+            arr.length/2 + bsearch(arr[(arr.length/2)...arr.length], target) # holy fuck this code actually worked wtf lmao just added the length of the index that the thing would start on if you didn't remove all those elements and it...just worked too tired to really read too much into it but lucky that it worked, I guess lol
         else # otherwise it was nil in the end so don't return arr.length/2 lol just return nil
             nil
         end
