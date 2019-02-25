@@ -8,8 +8,9 @@ class Game # crazy that these definitions are just constants and objects in of t
         @display = Display.new(@board)
         @players = { :white => HumanPlayer.new(:white, @display), :black => HumanPlayer.new(:black, @display) } # a hash where the key is the symbol and the value is the instance of that player
         @current_player = :white # check that this is right later. Start with white of course
-        puts "Welcome to chess! At any point,\npress ctrl-s to save your game,\nor ctrl-l to load a saved game.\nPress ctrl-c to exit." # initialization message so it doesn't show up again when the game is played
-        sleep(3)
+        system('clear')
+        puts "Welcome to chess! At any point,\npress ctrl-s to save your game,\nor ctrl-l to load a saved game.\nPress ctrl-c to exit.\nPress any key to continue." # initialization message so it doesn't show up again when the game is played
+        @display.cursor.read_char # just lets the player enter any key to move forward in the game
     end
 
     def play

@@ -52,8 +52,6 @@ class Cursor
     handle_key(key, color)
   end
 
-  private # ah nice they already made it all private sweet
-
   def read_char
     STDIN.echo = false # stops the console from printing return values # whoah this is awesome love it
 
@@ -96,11 +94,16 @@ class Cursor
   class LoadGameEscape < StandardError
   end
 
+  private # ah nice they already made it all private sweet
+
   def handle_key(key, color) # really don't see how they do the key handling thing but this should work I guess
     case key # whoah *that's* how it works right say what we're casing is the variable key which is what was passed in amazing. case is just a conditional like an if/else just simplified syntactic sugar, switch statements same thing, just specifies in all the different cases what to do but same as an if/else for sure https://www.rubyguides.com/2015/10/ruby-case/
     when :return, :space # if key = :return or :space, return the cursor pos
       row, col = @cursor_pos
-      if @board.grid[row][col].color == color # if the color of the piece selected is of the 
+      if @selected && (@start_pos == @cursor_pos) # if a piece is already selected deselect it here
+        @selected = false
+        @start_pos = Array.new
+      elsif @board.grid[row][col].color == color # if the color of the piece selected is of the 
         @selected = true
         @start_pos = @cursor_pos
       elsif (@board.grid[row][col].color != color) && @selected # if a piece is selected and the move position is not of the same color as the player's color, meaning it is either an enemy piece or an empty NullPiece with color :none, then allow the move, since you can never capture your own pieces or move on top of them, and so if they select a piece of the same color, reselect to that color, otherwise attempt the move, fucking love this logic
