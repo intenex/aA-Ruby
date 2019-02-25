@@ -105,7 +105,9 @@ end
 
 # oh fuck you forgot it gets the double jump at the beginning if it's on the start row! Heh amazing lmao pawns are the coolest so much exceptionary behavior to build in crazyt hat they expect people to do this stuff really does take a normal person 18 hours lmao amazing so happy doing this work so fun --> seek to understand the UML for sure so many working pieces to throw together love it
 class Pawn < Piece # ah an interesting piece to move! goes down if black, goes up if white. Also can only attack sideways. No sense implementing all this for now since need to understand the battle mechanism first so let's go there first to see. Just checks for now
-    def initialize(color, board, pos); super; @symbol = :♙ end
+    attr_accessor :moved
+    
+    def initialize(color, board, pos); super; @symbol = :♙; @moved = false end
 
     def moves # moving forward if not blocked by a piece, moving to each side if can capture a piece. Wow this is actually complicated enough to require all the helper methods amazing lol
         possible_moves = Array.new
@@ -146,13 +148,14 @@ class Pawn < Piece # ah an interesting piece to move! goes down if black, goes u
         s_attacks = Array.new
         left = [new_row, (@pos[1]-1)] if ((@pos[1]-1 >= 0) && (@pos[1]-1 <= 7)) # the left side attack
         right = [new_row, (@pos[1]+1)] if ((@pos[1]+1 >= 0) && (@pos[1]+1 <= 7)) # the right side attack, damn you love parentheses to keep things clear lol
+        (en_passant_pawn = @board.grid[@board.en_passant[0][0]][@board.en_passant[0][1]]) if !@board.en_passant.empty? # if there is an en_passant piece, set it as a shortcut so you don't have to do crazy long writing to get the piece later
         if left # if this exists and isn't nil, it will be if the thing above didn't execute, must be more elegant code but whatever this works you have been converted to the straightforward non-elegant code side for now hmm
             l_piece = @board.grid[left[0]][left[1]]
-            (s_attacks << left) if (!l_piece.is_a?(NullPiece) && (l_piece.color != self.color)) # this is a valid move if the piece exists and is of the opposite color # good to have parentheses for this purpose for sure
+            (s_attacks << left) if (!l_piece.is_a?(NullPiece) && (l_piece.color != self.color)) || ((@board.en_passant[1] == left) && (en_passant_pawn.color != self.color)) # this is a valid move if the piece exists and is of the opposite color *OR* if the en_passant flag has been triggered and the en_passant capture position equals the left capture position here fucking love it # good to have parentheses for this purpose for sure
         end
         if right # could factor this out too but fuck it who cares lol
             r_piece = @board.grid[right[0]][right[1]]
-            (s_attacks << right) if (!r_piece.is_a?(NullPiece) && (r_piece.color != self.color))
+            (s_attacks << right) if (!r_piece.is_a?(NullPiece) && (r_piece.color != self.color)) || ((@board.en_passant[1] == right) && (en_passant_pawn.color != self.color)) # note that this is safer than @board.en_passant.include?(right) because that would potentially get the position where the Pawn is right now instead of where the capture position should be, and while that *should* be fine anyway as long as you're checking colors are opposing so you don't accidentally allow a piece of the same color to capture one of its own pawns that just moved two steps by accident love it great catch
         end
         s_attacks
     end
