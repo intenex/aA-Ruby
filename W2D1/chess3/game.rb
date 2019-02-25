@@ -28,6 +28,7 @@ class Game # crazy that these definitions are just constants and objects in of t
         puts "Black has been checkmated! Congratulations, white." if @board.checkmate?(:black)
         puts "White can no longer move and the game is stalemated!" if @board.stalemate?(:white)
         puts "Black can no longer move and the game is stalemated!" if @board.stalemate?(:black)
+        puts "There is insufficient material to mate and the game is drawn." if @board.draw?
     rescue Cursor::SaveGameEscape # since the SaveGameEscape exception was defined specifically under the Cursor class, it's a specific exception *to* that class and you have to preface calling the constant with Cursor::SaveGameEscape (the double colon :: is a namespace resolver for constants, which makes sense, since constants are accessible everywhere so it's hyper important that they're namespaced to avoid collisions https://stackoverflow.com/questions/3009477/what-is-rubys-double-colon)
         begin
             save_game
@@ -51,7 +52,7 @@ class Game # crazy that these definitions are just constants and objects in of t
     end
 
     def game_over?
-        @board.checkmate?(:white) || @board.checkmate?(:black) || @board.stalemate?(:white) || @board.stalemate?(:black)
+        @board.checkmate?(:white) || @board.checkmate?(:black) || @board.stalemate?(:white) || @board.stalemate?(:black) || @board.draw? # game is over if there is a checkmate, a stalemate, or a draw
     end
 
     class GameReturnEscape < StandardError

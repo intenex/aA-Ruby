@@ -100,8 +100,34 @@ class Board # getting very good at this love it just fucking dive in and crush i
         (!@grid.any? { |row| row.any? { |piece| !piece.valid_moves.empty? && (piece.color == color) } }) && in_check?(color) # note need to check that the king is actually in check too otherwise it's a stalemate technically # basically check if any move of the same color as the color being checked for checkmate has any valid moves, aka moves that after moving don't leave the king in check - if not, then the game is over awesome heh # then the ! changes the return boolean value so hopefully this works if #valid_moves works as you think it might lol and it's specific to some check function thing --> I guess maybe valid_moves might change with a conditional if check is activated to only see positions that can protect the king that would be interesting
     end
 
-    def stalemate?(color)
+    def stalemate?(color) # so lucky that this is so easy to check for because again your code is so well decomposed and that this actually helped you find the nuance in your checkmate rule amazing that you keep finding these things and fortifying your code so great
         (!@grid.any? { |row| row.any? { |piece| !piece.valid_moves.empty? && (piece.color == color) } }) && !in_check?(color) # if the piece is *not* in check and there are no valid moves then not a stalemate
+    end
+
+    def draw? # all conditions here: http://www.e4ec.org/immr.html. Just three basic conditions - only kings left, only one knight on one side left, or only bishops of any number on either side on the same color square are all draws
+        draw = false
+        if !any_piece?(:Queen) && !any_piece?(:Rook) && !any_piece?(:Bishop) && !any_piece?(:Knight) && !any_piece(:Pawn) # if there are no pieces but kings left, that's insufficient material condition #1
+            draw = true
+        elsif !any_piece?(:Queen) && !any_piece?(:Rook) && !any_piece?(:Bishop) && !any_piece(:Pawn) && (((how_many_color?(:Knight, :white) == 1) && (how_many_color?(:Knight, :black) == 0)) || ((how_many_color?(:Knight, :black) == 1) && (how_many_color?(:Knight, :white) == 0))) # if there are no pieces except one knight on one side then that's insufficient material condition #2
+            draw = true
+        elsif !any_piece?(:Queen) && !any_piece?(:Rook) && !any_piece(:Knight) && !any_piece(:Pawn)
+            draw = true if (any_bishops_color?(:white) && !any_bishops_color?(:black)) || (any_bishops_color?(:black) && !any_bishops_color?(:white)) # if there are only either white square bishops or black square bishops then it's a draw 
+        end
+        draw
+    end
+
+    def any_piece?(type) # for all pieces
+        @grid.any? { |row| row.any? { |piece| piece.is_a?(Object.const_get(type)) } }
+    end
+
+    def how_many_color?(type, color) # for a specific color
+        counter = 0
+        @grid.each { |row| row.each { |piece| counter += 1 if (piece.is_a?(Object.const_get(type)) && (piece.color == color)) } } # a check to see if any pieces of the given type and color exist
+        counter
+    end
+
+    def any_bishops_color?(b_color)
+        @grid.any? { |row| row.any? { |piece| (piece.is_a?(Bishop) && (piece.b_color == b_color)) } } # if there are any bishops of that color square
     end
 
     def castle(piece, start_pos, end_pos) # ugh fucking amazing that you have the #in_check? method and that was already created method decomposition for modularity in reusing code for everything is the greatest thing ever man

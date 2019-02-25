@@ -208,7 +208,17 @@ end
 class Bishop < Piece
     include Slidable
 
-    def initialize(color, board, pos); super; @symbol = :♝ end
+    attr_reader :b_color
+
+    def initialize(color, board, pos)
+        super
+        @symbol = :♝
+        if @pos[0] == 0 # if starting on the top 0th row (black or a promoted white pawn, hence why you need to account for this like this totally nuts lol just for draw accounting so insane the exceptions in chess lol so cool that you're actually accounting for everything)
+            (@pos[1] % 2 == 0) ? (@b_color = :white) : (@b_color = :black) # if the bishop is on an even square, then it is white, otherwise it is black
+        else # else it must be on the bottom 7th row, aka white or a promoted black pawn, where all even squares are black fucking awesome
+            (@pos[1] % 2 == 0) ? (@b_color = :black) : (@b_color = :white)
+        end
+    end
 
     def move_dirs; [:diagonal] end
 end
