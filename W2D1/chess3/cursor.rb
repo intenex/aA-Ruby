@@ -87,9 +87,10 @@ class Cursor
   # to handle selecting and moving a piece, there must be one selected piece
   # to deselect a piece and reselect another, you must deselect on the selected piece
   # to move somewhere else, you must check if the move is a valid move for the given piece
-  # if it is a valid move, 
+  # if it is a valid move
 
-  class SaveGameEscape < StandardError # just a way to bubble up the error call love it heh
+  # SUPER IMPORTANT NOTE --> WHEN YOU DEFINE CUSTOM ERRORS INSIDE A CLASS LIKE THIS IT SPECIFICALLY ONLY WORKS FOR THAT CLASS, as in if you want to rescue this error you have to write rescue Cursor::SaveGameEscape, not just SaveGameEscape, because the exception is specifically a constant of the Cursor class amazing to learn as per https://blog.appsignal.com/2018/07/03/custom-exceptions-in-ruby.html such a great resource man
+  class SaveGameEscape < StandardError # just a way to bubble up the error call to Game where this is handled in #play.
   end
 
   class LoadGameEscape < StandardError
@@ -111,9 +112,9 @@ class Cursor
       update_pos(MOVES[key]) # MOVES is an array with symbols as the keys love it
       nil # return nil after calling @update_pos
     when :ctrl_s
-      raise TypeError
+      raise SaveGameEscape
     when :ctrl_l
-      raise NameError
+      raise LoadGameEscape
     when :ctrl_c
       Process.exit(0) # http://ruby-doc.org/core-2.2.0/Process.html#method-c-exit # omg this is amazing lmao it literally just terminates the Ruby script by raising the SystemExit exception - you can literally catch this exception and prevent the exit if you want LOL so amazing the *function* is to raise a terminal exception wow lol
     end
