@@ -120,6 +120,8 @@ class Cursor
       raise LoadGameEscape
     when :ctrl_c
       Process.exit(0) # http://ruby-doc.org/core-2.2.0/Process.html#method-c-exit # omg this is amazing lmao it literally just terminates the Ruby script by raising the SystemExit exception - you can literally catch this exception and prevent the exit if you want LOL so amazing the *function* is to raise a terminal exception wow lol
+    when :tab
+      (Paint.mode == 256) ? (Paint.mode = 0xFFFFFF) : (Paint.mode = 256) # toggle between the two modes on tab
     end
   end
 

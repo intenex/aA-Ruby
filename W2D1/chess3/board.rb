@@ -104,6 +104,7 @@ class Board # getting very good at this love it just fucking dive in and crush i
         (!@grid.any? { |row| row.any? { |piece| !piece.valid_moves.empty? && (piece.color == color) } }) && !in_check?(color) # if the piece is *not* in check and there are no valid moves then not a stalemate
     end
 
+    # need to test all of this
     def draw? # all conditions here: http://www.e4ec.org/immr.html. Just three basic conditions - only kings left, only one knight on one side left, or only bishops of any number on either side on the same color square are all draws
         draw = false
         if !any_piece?(:Queen) && !any_piece?(:Rook) && !any_piece?(:Bishop) && !any_piece?(:Knight) && !any_piece(:Pawn) # if there are no pieces but kings left, that's insufficient material condition #1
