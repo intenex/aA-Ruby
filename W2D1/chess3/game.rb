@@ -18,13 +18,16 @@ class Game # crazy that these definitions are just constants and objects in of t
     end
 
     def play
-        while !@board.checkmate?(:white) && !@board.checkmate?(:black) # so great to know how to write code love life
+        while !game_over? # so great to know how to write code love life
             @players[@current_player].make_move(@board)
             (@current_player == :white) ? (@current_player = :black) : (@current_player = :white) # if current player is white then make the next player black otherwise make it white
         end
         system('clear')
         @display.render # do a final display of the end game love it
-        @board.checkmate?(:white) ? (puts "White has been checkmated! Congratulations, black.") : (puts "Black has been checkmated! Congratulations, white.")
+        puts "White has been checkmated! Congratulations, black." if @board.checkmate?(:white)
+        puts "Black has been checkmated! Congratulations, white." if @board.checkmate?(:black)
+        puts "White can no longer move and the game is stalemated!" if @board.stalemate?(:white)
+        puts "Black can no longer move and the game is stalemated!" if @board.stalemate?(:black)
     rescue Cursor::SaveGameEscape # since the SaveGameEscape exception was defined specifically under the Cursor class, it's a specific exception *to* that class and you have to preface calling the constant with Cursor::SaveGameEscape (the double colon :: is a namespace resolver for constants, which makes sense, since constants are accessible everywhere so it's hyper important that they're namespaced to avoid collisions https://stackoverflow.com/questions/3009477/what-is-rubys-double-colon)
         begin
             save_game
@@ -45,6 +48,10 @@ class Game # crazy that these definitions are just constants and objects in of t
             sleep(1)
             retry
         end
+    end
+
+    def game_over?
+        @board.checkmate?(:white) || @board.checkmate?(:black) || @board.stalemate?(:white) || @board.stalemate?(:black)
     end
 
     class GameReturnEscape < StandardError

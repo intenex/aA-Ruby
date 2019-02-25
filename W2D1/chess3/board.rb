@@ -97,7 +97,11 @@ class Board # getting very good at this love it just fucking dive in and crush i
     end
     
     def checkmate?(color) # write an enumerator that checks if any of :color player's pieces have any #valid_moves, if not then in check, like something like this
-        !@grid.any? { |row| row.any? { |piece| !piece.valid_moves.empty? && (piece.color == color) } } # basically check if any move of the same color as the color being checked for checkmate has any valid moves, aka moves that after moving don't leave the king in check - if not, then the game is over awesome heh # then the ! changes the return boolean value so hopefully this works if #valid_moves works as you think it might lol and it's specific to some check function thing --> I guess maybe valid_moves might change with a conditional if check is activated to only see positions that can protect the king that would be interesting
+        (!@grid.any? { |row| row.any? { |piece| !piece.valid_moves.empty? && (piece.color == color) } }) && in_check?(color) # note need to check that the king is actually in check too otherwise it's a stalemate technically # basically check if any move of the same color as the color being checked for checkmate has any valid moves, aka moves that after moving don't leave the king in check - if not, then the game is over awesome heh # then the ! changes the return boolean value so hopefully this works if #valid_moves works as you think it might lol and it's specific to some check function thing --> I guess maybe valid_moves might change with a conditional if check is activated to only see positions that can protect the king that would be interesting
+    end
+
+    def stalemate?(color)
+        !@grid.any? { |row| row.any? { |piece| !piece.valid_moves.empty? && (piece.color == color) } }
     end
 
     def castle(piece, start_pos, end_pos) # ugh fucking amazing that you have the #in_check? method and that was already created method decomposition for modularity in reusing code for everything is the greatest thing ever man
