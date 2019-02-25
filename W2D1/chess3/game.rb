@@ -9,6 +9,10 @@ class Game # crazy that these definitions are just constants and objects in of t
         @players = { :white => HumanPlayer.new(:white, @display), :black => HumanPlayer.new(:black, @display) } # a hash where the key is the symbol and the value is the instance of that player
         @current_player = :white # check that this is right later. Start with white of course
         system('clear')
+        if %x( printenv TERM_PROGRAM ).chomp != "iTerm.app" # only iTerm2 displays true colors so far as you can tell so otherwise set to 256 colors unless you find other true color terminals --> printenv TERM_PROGRAM is a shell command that returns the name of the terminal app currently running, and you run shell commands in Ruby with the %x() shorthand which is pretty amazing as per https://stackoverflow.com/questions/2232/calling-shell-commands-from-ruby and printenv here https://www.computerhope.com/unix/printenv.htm thank god Paint has the 256 mode
+            puts "Sadly, it appears you are not running iTerm2, and so\ndo not have true color support. For best results,\nplease run in iTerm2. Reverting to 256 color mode...\n\n"
+            Paint.mode = 256
+        end
         puts "Welcome to chess! At any point,\npress ctrl-s to save your game,\nor ctrl-l to load a saved game.\nPress ctrl-c to exit.\nPress any key to continue." # initialization message so it doesn't show up again when the game is played
         @display.cursor.read_char # just lets the player enter any key to move forward in the game
     end
