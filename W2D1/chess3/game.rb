@@ -55,6 +55,14 @@ class Game # crazy that these definitions are just constants and objects in of t
         @board.checkmate?(:white) || @board.checkmate?(:black) || @board.stalemate?(:white) || @board.stalemate?(:black) || @board.draw? # game is over if there is a checkmate, a stalemate, or a draw
     end
 
+    def game_over_reason # refactor play out into this later
+        return "White has been checkmated! Congratulations, black." if @board.checkmate?(:white)
+        return "Black has been checkmated! Congratulations, white." if @board.checkmate?(:black)
+        return "White can no longer move and the game is stalemated!" if @board.stalemate?(:white)
+        return "Black can no longer move and the game is stalemated!" if @board.stalemate?(:black)
+        return "There is insufficient material to mate and the game is drawn." if @board.draw?
+    end
+
     class GameReturnEscape < StandardError
     end
 
