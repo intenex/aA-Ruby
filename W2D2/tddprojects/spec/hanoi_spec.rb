@@ -1,15 +1,15 @@
 require 'hanoi'
 
 describe Hanoi do
-    subject(:hanoi) { Hanoi.new(4) }
+    subject(:hanoi) { Hanoi.new(3) }
 
     describe "#initialize" do
         it "accepts a 'size' and populates pile1 with 'size' number of disks" do
-            expect(hanoi.pile1.length).to be(4)
+            expect(hanoi.pile1.length).to be(3)
         end
 
         it 'sets each element of pile1 to an incrementally increasing number' do
-            expect(hanoi.pile1).to eq([1, 2, 3, 4])
+            expect(hanoi.pile1).to eq([1, 2, 3])
         end
 
         it 'sets pile2 to an empty array' do
@@ -62,7 +62,18 @@ describe Hanoi do
 
     describe "#won?" do
         it 'returns true if pile3 contains all the discs in order' do
-            expect(hanoi.pile3).to eq([1, 2, 3, 4])
+            hanoi.move(1, 3)
+            hanoi.move(1, 2)
+            hanoi.move(3, 2)
+            hanoi.move(1, 3)
+            hanoi.move(3, 1)
+            hanoi.move(2, 3)
+            hanoi.move(1, 3)
+            expect(hanoi.won).to be(true)
+        end
+
+        it 'returns false if pile3 does not contain all the discs in order' do
+            expect(hanoi.won).to be(false)
         end
     end
 end

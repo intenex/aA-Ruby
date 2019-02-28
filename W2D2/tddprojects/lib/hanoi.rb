@@ -15,5 +15,6 @@ class Hanoi # oh thank god this is way easier lmao than solving the acutal tower
     end
 
     def won?
+        @pile3 = (1..size).to_a
     end
 end
