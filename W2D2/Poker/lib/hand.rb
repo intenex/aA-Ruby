@@ -5,7 +5,8 @@ class Hand
         @cards = Array.new
     end
 
-
-
+    def add_card(card)
+        @cards << card
+    end
 
 end
