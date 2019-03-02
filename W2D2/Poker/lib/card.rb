@@ -9,10 +9,10 @@ class Card
     def to_s # add in paint later to colorize these cards too by suit get 4 different colors instead of 2 lol
         case @value
         when 2..10; card_num = @value.to_s
-        when 1; card_num = :A
         when 11; card_num = :J
         when 12; card_num = :Q
         when 13; card_num = :K
+        when 14; card_num = :A
         end
         case @suit
         when :spades; suit_sym = :♠
