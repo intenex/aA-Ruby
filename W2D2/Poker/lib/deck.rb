@@ -9,7 +9,7 @@ class Deck
     
     private
     def create_cards # this is the private method - we test the @cards but not this private method to create all the cards
-        suits = [:♠, :♥, :♦, :♣] # would be easier if you made these all words and just changed their symbols to unicode lol but pretty amazing this just works lol
+        suits = [:spades, :hearts, :diamonds, :clubs] # would be easier if you made these all words and just changed their symbols to unicode lol but pretty amazing this just works lol
         cards = suits.map { |suit| (1..13).map { |value| Card.new(suit, value) } }.flatten # wow you can do a straightup map on this amazing
         cards.shuffle!
     end
