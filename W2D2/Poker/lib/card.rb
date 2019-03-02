@@ -6,7 +6,7 @@ class Card
         @value = value
     end
 
-    def to_s
+    def to_s # add in paint later to colorize these cards too by suit get 4 different colors instead of 2 lol
         case @value
         when 2..9
             card_num = @value.to_s
