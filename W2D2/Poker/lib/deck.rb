@@ -1,5 +1,16 @@
 class Deck
+    attr_reader :cards
+
     def initialize
-        
+        @cards = create_cards
+    end
+
+    def shuffle_deck!; @cards.shuffle! end # update omg amazingly it works with just @cards so @cards must indeed be syntactic sugar for self.cards somehow look more into it hmmm or rather deck.cards returns @cards actually so it's the same thing yeah okay interesting that's more likely wow totally nuts and amazing # I believe you may need to do this to do the rspec but see if you can do it just calling @cards we'll see. See if shuffle! works on this since you aren't reassigning it think you should have an attr_reader on @cards not an accessor and all the methods to remove cards and whatnot should be done here in deck
+    
+    private
+    def create_cards # this is the private method - we test the @cards but not this private method to create all the cards
+        suits = [:♠, :♥, :♦, :♣] # would be easier if you made these all words and just changed their symbols to unicode lol but pretty amazing this just works lol
+        cards = suits.map { |suit| (1..13).map { |value| Card.new(suit, value) } }.flatten # wow you can do a straightup map on this amazing
+        cards.shuffle!
     end
 end
