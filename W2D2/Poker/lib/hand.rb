@@ -35,9 +35,11 @@ class Hand
     end
 
     # amazing you literally figured out the logic for everything except straight, flush, and straight_flush already so great and after that just need to do the exceedingly simple kicker logic and you're fucking done
+    # calculate if all the hands have the same symbol, use the same helper method as flush? probably
+    # then if they do, calculate if it's a straight too, as in all the cards have values in sequential order, use the helper method from straight?
+
     def straight_flush?(hand) # just do the suit_counter thing and then check if all are of the same suit and then call the straight helper method and make sure it's all of that same helper method too love it
-        # calculate if all the hands have the same symbol, use the same helper method as flush? probably
-        # then if they do, calculate if it's a straight too, as in all the cards have values in sequential order, use the helper method from straight?
+        
     end
 
     def four_kind?(hand)
@@ -64,11 +66,21 @@ class Hand
         end
     end
 
+    # then get the value of the smallest card (the first one, values[0] and then enumerate over all of them until values[-1] or values[4] and make sure they all increment by 1, if they do return the whole array thing if not return nil)
+    # put all this in a helper method so you can use it for the straight flush determination too love it
+
     # just sort all the hand.card values then check that they increment by one but be sure to to include ace as a 1 here because I think A2345 counts but not 100% sure that's the one edge case to consider though man so amazing you're so lucky that these solutions just come so easily to you when you think about them for a while obviously your brain has learned patterns for thinking about this stuff and that's all there is to it so learn all the patterns and that's all that intelligence is fucking love it so much just keep learning all the patterns you can voraciously so fucking lucky
     def straight?(hand)
         values = hand.cards.map { |card| card.value }.sort # sort so that you can make sure these are all in ascending order with one value difference between all the values
-        # then get the value of the smallest card (the first one, values[0] and then enumerate over all of them until values[-1] or values[4] and make sure they all increment by 1, if they do return the whole array thing if not return nil)
-        # put all this in a helper method so you can use it for the straight flush determination too love it
+        if values[0] != 2 # if it doesn't start at 2, since an ace can technically be a 1 as well in which case make sure that the high card is actually a 5, not the ace
+            if (0..4).all? { |index| values[index] == (values[0] + index) } # this should ensure that they all increment, since values[0] will be say 4, then it'll be 4 == 4, then values[1] == 5, etc, from 0 1 2 3 4 love it
+                [:straight, values[-1]] # no kickers, and the top card is the last card in values love it
+            end
+        else # else if values[0] is indeed a 2, then check just from 2 3 4 5 and then check that there's an Ace, aka a 14, and if so list 5 as the high end great to catch this edge case
+            if ((0..3).all? { |index| values[index] == (2 + index) }) && (values[-1] == 14) # if 2 3 4 5 are all present and a 14 Ace is present, then this is also the low end straight not as many exceptions as chess thankfully but still a fair bit lol
+                [:straight, 5] # the highest value is just 5 so just hardcode that in there why not lol
+            end
+        end
     end
 
     def three_kind?(hand)
