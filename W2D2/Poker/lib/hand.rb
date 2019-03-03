@@ -22,8 +22,8 @@ class Hand
         elsif hand1_value[1] != hand2_value[1] # basically if the hand_ranks are equal, then see if the top card for each rank is equal too, if not then return the one with the highest top card, if they are equal, then go and compare each kicker in turn until all up-to-4 kickers have been evaluated lol. For a high card kind of thing all 4 kickers would play I think lol
             return hand1_value[1] > hand2_value[1] ? hand1 : hand2 # this is why having these as strict values is helpful ah and as aces are always the highest in this game and don't count as 1 for anything start at 2..14 vs 1..13 nice
         elsif hand1_value[2] && hand2_value[2] # if there are any kickers for the rank in question
-            if kicker(hand1_value[2], hand2_value[2]) != 0 # this returns either 1, for the first argument, -1 for the second, or 0 for a tie, so if the first hand wins, it'll be 1, otherwise -1, just like the spaceship operator (though that does this in reverse, but same thing -1 if a is smaller than b, which is the same as saying 1 if a is larger than b, which is what you want here, so same thing)
-                return kicker(hand1_value[2], hand2_value[2]) > 0 ? hand1 : hand2 # if it's 1, then hand1 is larger, if it's -1, then hand2 was larger, so return either of those
+            if kickers(hand1_value[2], hand2_value[2]) != 0 # this returns either 1, for the first argument, -1 for the second, or 0 for a tie, so if the first hand wins, it'll be 1, otherwise -1, just like the spaceship operator (though that does this in reverse, but same thing -1 if a is smaller than b, which is the same as saying 1 if a is larger than b, which is what you want here, so same thing)
+                return kickers(hand1_value[2], hand2_value[2]) > 0 ? hand1 : hand2 # if it's 1, then hand1 is larger, if it's -1, then hand2 was larger, so return either of those
             end
         end
         # don't need an explicit nil here - if none of the ifs return anything then it'll evaluate to nil by default and that will be the result here --> so you can do a check like 'if winning_hand; #add_pot(winning_hand); else; #split_pot end' fucking love it really getting this code well super lucky that you retain and remember it all so well and are indeed pushing forward today super lucky
@@ -69,7 +69,7 @@ class Hand
         value_counter = how_many_value?(hand)
         if value_counter.values.one?(3) # include also works here but one works just as fine so why not
             kickers = hand.cards.map { |card| card.value if (card.value != value_counter.key(3)) }.compact.sort.reverse
-            [:three_kind, value_counter.key(3), kickers]
+            [:three_kind, value_counter.key(3), kickers] # omg .key(value) is 100% the right notation fuck yeah not having internet and coding is the greatest thing ever so fucking happy with this
         end
     end
 
@@ -119,9 +119,13 @@ class Hand
     # would beat the 3 3 with a kicker A so enumerate on each element of the array in order and assume that the arrays will
     # be of the same length bc they should be if it ever gets to comparing kickers since both hands will be of the same
     # type of hand rank and consequently have the same # of kickers love it
-    
-    def kicker(hand1_kickers, hand2_kickers) # each of these is an array of all the kicker cards in order --> kickers are only evaluated on their values so that's good to know, ah except for a full house where it's evaluated on the pair but still there since it's a pair just whichever pair is higher wins so that's good should be a way to do that love it
-        
+
+    def kickers(hand1_kickers, hand2_kickers) # each of these is an array of all the kicker cards in order --> kickers are only evaluated on their values so that's good to know, ah except for a full house where it's evaluated on the pair but still there since it's a pair just whichever pair is higher wins so that's good should be a way to do that love it
+        length = hand1_kickers.length # since they're both the same length
+        (0...length).each do |index| # with length being anything from 1 to 4, so this will do anything from 0 to 0 1 2 3
+            return hand1_kickers[index] <=> hand2_kickers[index] if hand1_kickers[index] != hand2_kickers[index] # # fucking awesome!!! finally a fucking good use of the spaceship operator!!! this returns 1 if hand1 is greater than hand2 and -1 if hand2 is great so great # if they are not equal return something otherwise just continue with the progression fucking love this
+        end
+        0 # return 0 if nothing else was returned this means everything was perfectly equal
     end
 end
 
