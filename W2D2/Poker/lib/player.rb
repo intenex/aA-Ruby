@@ -3,12 +3,14 @@
 # before play begins, an ante is added to the pot
 
 class Player
-    attr_accessor :pot
-    attr_reader :hand
+    attr_accessor :chips
+    attr_reader :hand, :pot
 
-    def initialize(starting_pot, deck) # initialized with a starting pot amount nice
+    def initialize(name, game, deck, starting_chips) # initialized with a starting pot amount nice
+        @name = name
         @hand = Hand.new(self)
-        @pot = starting_pot
+        @chips = starting_chips
+        @game = game
         @deck = deck # so you can draw cards from the deck and add them to the hand, this should be passed from game love it all coming together so well getting through the card logic was the only hard part so great now all the little ends and pieces
     end
 
@@ -26,9 +28,10 @@ class Player
         when "r"
             puts "How much would you like to raise?"
             raise_amt = gets.chomp.to_i
-            if raise_amt < @pot
-                @pot -= raise_amt
-                # increase the game pot amount accordingly
+            if (raise_amt + @game.current_bet) < @chips
+                @game.current_bet += raise_amt # could refactor that into a game method too which would be slightly more accurate likely in good class delineation
+                @chips -= @game.current_bet
+                @game.pot += @game.current_bet
             else
                 raise ArgumentError.new("That was not a valid amount to raise. Try again.")
             end
