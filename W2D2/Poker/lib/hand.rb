@@ -34,35 +34,52 @@ class Hand
         straight_flush?(hand) || four_kind?(hand) || full_house?(hand) || flush?(hand) || straight?(hand) || three_kind?(hand) || two_pair?(hand) || one_pair?(hand) || high_card?(hand) # omfg you can just chain link these until one is found like (nil || false || nil || nil || true) will return true it will either go until it finds a true value and return the first true value or return the last value found amazing
     end
 
+    # amazing you literally figured out the logic for everything except straight, flush, and straight_flush already so great and after that just need to do the exceedingly simple kicker logic and you're fucking done
     def straight_flush?(hand)
         # calculate if all the hands have the same symbol, use the same helper method as flush? probably
         # then if they do, calculate if it's a straight too, as in all the cards have values in sequential order, use the helper method from straight?
     end
 
     def four_kind?(hand)
-        value_counter = how_many?(hand)
+        value_counter = how_many_value?(hand)
+        if value_counter.values.one?(4)
+            kicker = hand.cards.map { |card| card.value if card.value != value_counter.key(4) }.compact # no need to sort since again only one of these lol
+            [:four_kind, value_counter.key(4), kicker]
+        end
     end
 
     def full_house?(hand)
+        value_counter = how_many_value?(hand)
+        if value_counter.values.one?(3) && value_counter.values.one?(2) # if one three of a kind and one two pair, fucking love it, amazing this logic works so well actually for all the hands lol so insane you're almost done with all of these and they seem pretty fucking flawless to you so far
+            [:full_house, value_counter.key(3), value_counter.key(2)] # just one kicker which is the second pair to check if the first one isn't sufficient to win it love it, technically all of these could have been compared in the kicker array but this just makes it a little more explicit in the logic super great love it
+        end
     end
 
     def flush?(hand)
+        suit_counter = how_many_suit?(hand)
+        if suit_counter.values.one?(5) # or if suit_counter.length == 1 lol
+            # identify the high card, then all the rest are kickers
+        end
     end
 
     def straight?(hand)
     end
 
     def three_kind?(hand)
-        value_counter = how_many?(hand)
+        value_counter = how_many_value?(hand)
+        if value_counter.values.one?(3) # include also works here but one works just as fine so why not
+            kickers = hand.cards.map { |card| card.value if (card.value != value_counter.key(3)) }.compact.sort.reverse
+            [:three_kind, value_counter.key(3), kickers]
+        end
     end
 
     # check that there are two values in the hash that equal a counter of 2 then return the top of those pairs as the top card value, then the second as a kicker along with all the other kickers, but the first kicker in the array, and then have the kicker array specifically compare based on cards in order love it in the array that way the cards don't have to be in order in the array in terms of value and the kicker doesn't just compare to see the highest card value out of all the kickers, it compares [0] with [0] and works that way since [0] in some times is the second pair and a 4 4 pair would go ahead of a K kicker card and beat a 2 2 pair with a K kicker
     def two_pair?(hand)
-        value_counter = how_many?(hand)
+        value_counter = how_many_value?(hand)
         pairs = value_counter.select { |k, v| v == 2 } # think hashes work like this literally just working off memory for all of these but pseudocode is good enough and this really tests memory fucking love it actually
         if pairs.length == 2 # edit just checked this totally works so great lol | not sure hashes have a length thing in which case do pairs.keys.length or pairs.values.length, but # this returns true only if two pairs were found
             pair_values = pairs.keys.sort.reverse # this gets the values of both pairs which are the ones not to select for kickers EXCEPT the lesser of the two should be the first kicker so much logic fucking love it just have to pump with your working memory so lucky to be able to do all this shit. sort and reverse will put these in order automatically too so fucking great
-            kickers = hand.cards.map { |card| card.value if (card.value != pair_values[0] && card.value != pair_values[1]) } # no need to sort and reverse on this one since there should only be one real kicker card lol amazing though you've learned the trouble with not putting safety code in like this it will likely break sigh lol at least you thought of it love that you're crushing this so easily fucking great
+            kickers = hand.cards.map { |card| card.value if (card.value != pair_values[0] && card.value != pair_values[1]) }.compact # don't forget the compact to get rid of all the nil returns! amazing that you remembered this truly great # love that you're totally back with being focused with your code love it can't wait for the bootcamp and to really go through it so great # no need to sort and reverse on this one since there should only be one real kicker card lol amazing though you've learned the trouble with not putting safety code in like this it will likely break sigh lol at least you thought of it love that you're crushing this so easily fucking great
             kickers.unshift(pair_values[1]) # this should be the first kicker card fucking love this shit
             [:two_pair, pair_values[0], kickers]
         end
@@ -70,34 +87,41 @@ class Hand
     
     # check if there are any values in the hash that equal 2 and specifically that there's only one value that has a pair since you probably should return nil if it's technically a two pair or something
     def one_pair?(hand)
-        value_counter = how_many?(hand)
-        if value_counter.values.one?(2) # check that this returns only one found pair with two matching values otherwise it returns nil because this if didn't match anything fucking love it
-            kickers = hand.cards.map { |card| card.value if (card.value != value_counter.key(2)) }.sort.reverse # only return the card values because that's all that's important, and only those that aren't part of that pair love it, then sort by those values and return them in reverse order heh amazing
+        value_counter = how_many_value?(hand)
+        if value_counter.values.one?(2) # check that this returns only one found pair with two matching values otherwise it returns nil because this if didn't match anything fucking love it. This is the only one that really does this check though your high_card and your three_kind skip it so even a full_house would return a true value for a three_kind and every hand will return one for high_card but should be fine love this shit because of the ordering of your or statement so great
+            kickers = hand.cards.map { |card| card.value if (card.value != value_counter.key(2)) }.compact.sort.reverse # only return the card values because that's all that's important, and only those that aren't part of that pair love it, then sort by those values and return them in reverse order heh amazing
             [:one_pair, value_counter.key(2), kickers] # check this value_counter.key(2) syntax later to make sure this gets the card.value since no internet here rn
         end
     end
 
     def high_card?(hand) # the only one with no if statement because this should always return something and it's easiest to do it this way
         high_card = hand.cards.max_by { |card| card.value }
-        hand.cards.delete(high_card) # let's see if it's still recorded as a high_card if you delete it hmm
+        hand.cards.delete(high_card) # let's see if it's still recorded as a high_card if you delete it hmm this is just different code for this high card so great that there are so many ways to do everything and you practice doing them all love it
         kickers = hand.cards.sort_by { |card| card.value }.reverse # this will return the lowest value cards first I think so you reverse it to get the highest love it
         [:high_card, high_card.value, kickers] # this is the array to return - the comparison of the high card is the value of the high_card, and then all the kickers in order, and the type returned is :high_card, love this shit can't wait to see this all come together so glad you're coding
     end
 
-    def how_many?(hand) # returns a hash counting each of the values
+    def how_many_value?(hand) # returns a hash counting each of the values
         value_counter = Hash.new(0)
         hand.cards.each { |card| value_counter[card.value] += 1 }
         value_counter
     end
 
+    def how_many_suit?(hand) # fucking love it coming together so well
+    end
+
+    # iterate hand1_kickers.length times since both will be of the same length of kickers so either is fine love it
+    
+    # remember you have to compare each element of the array against the corresponding index in the other array, since
+    # not all of these cards are actually kickers and are sometimes the second pair, as in two pair or in a full house,
+    # and so the first element [0] in each array here will be the representative card from that second pair and so even
+    # if it's lower than the kicker cards like a 4 4 vs a 3 3 and they have kickers like J and A, the 4 4 with a kicker J
+    # would beat the 3 3 with a kicker A so enumerate on each element of the array in order and assume that the arrays will
+    # be of the same length bc they should be if it ever gets to comparing kickers since both hands will be of the same
+    # type of hand rank and consequently have the same # of kickers love it
+    
     def kicker(hand1_kickers, hand2_kickers) # each of these is an array of all the kicker cards in order --> kickers are only evaluated on their values so that's good to know, ah except for a full house where it's evaluated on the pair but still there since it's a pair just whichever pair is higher wins so that's good should be a way to do that love it
-        # remember you have to compare each element of the array against the corresponding index in the other array, since
-        # not all of these cards are actually kickers and are sometimes the second pair, as in two pair or in a full house,
-        # and so the first element [0] in each array here will be the representative card from that second pair and so even
-        # if it's lower than the kicker cards like a 4 4 vs a 3 3 and they have kickers like J and A, the 4 4 with a kicker J
-        # would beat the 3 3 with a kicker A so enumerate on each element of the array in order and assume that the arrays will
-        # be of the same length bc they should be if it ever gets to comparing kickers since both hands will be of the same
-        # type of hand rank and consequently have the same # of kickers love it
+        
     end
 end
 
