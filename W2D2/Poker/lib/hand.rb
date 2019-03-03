@@ -38,8 +38,11 @@ class Hand
     # calculate if all the hands have the same symbol, use the same helper method as flush? probably
     # then if they do, calculate if it's a straight too, as in all the cards have values in sequential order, use the helper method from straight?
 
+    # damn so easy in the end fucking love this
     def straight_flush?(hand) # just do the suit_counter thing and then check if all are of the same suit and then call the straight helper method and make sure it's all of that same helper method too love it
-        
+        flush = flush?(hand)
+        straight = straight?(hand)
+        [:straight_flush, straight[1]] if (straight && flush) # if straight and flush both return values (the arrays) and aren't nil then you're a straight flush amazing, and carry over the top card from straight since that covers the edge case of an A2345 straight flush which loses to 23456 straight flush I think fuck yeah ah fuck you forgot about that case let's cover that edge case too lol
     end
 
     def four_kind?(hand)
