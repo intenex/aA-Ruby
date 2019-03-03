@@ -35,7 +35,7 @@ class Hand
     end
 
     # amazing you literally figured out the logic for everything except straight, flush, and straight_flush already so great and after that just need to do the exceedingly simple kicker logic and you're fucking done
-    def straight_flush?(hand)
+    def straight_flush?(hand) # just do the suit_counter thing and then check if all are of the same suit and then call the straight helper method and make sure it's all of that same helper method too love it
         # calculate if all the hands have the same symbol, use the same helper method as flush? probably
         # then if they do, calculate if it's a straight too, as in all the cards have values in sequential order, use the helper method from straight?
     end
@@ -55,14 +55,20 @@ class Hand
         end
     end
 
-    def flush?(hand)
+    def flush?(hand) # this is fun you really enjoy doing all these lol so great
         suit_counter = how_many_suit?(hand)
         if suit_counter.values.one?(5) # or if suit_counter.length == 1 lol
-            # identify the high card, then all the rest are kickers
+            kickers = hand.cards.map { |card| card.value }.sort.reverse # identify the high card, then all the rest are kickers --> so fucking easy when you're motivated to work through all the code and not distracted it's 100% all about distractions talking to people is such a crazy distraction definitely just avoid doing that and pummel forward with your code for sure. Other people are only helpful to keep competitive pressure on so you can pummel ahead with things, but not to talk to them, hence coworking should be ideal, we'll see how it goes. Just learn to not be addicted to talking to people in groups such a terrible waste of time this is so much better. You get really fixated on the thing that you're into and ignore all other groups and people and things that aren't in that realm though super interesting, from random groups like fucking Darkness Rises to this coding group and all that and ignoring everything else, so interesting and weird
+            top_card = kickers.shift # remove the top card from kickers and return that in the array by itself as the top card to measure against
+            [:flush, top_card, kickers]
         end
     end
 
+    # just sort all the hand.card values then check that they increment by one but be sure to to include ace as a 1 here because I think A2345 counts but not 100% sure that's the one edge case to consider though man so amazing you're so lucky that these solutions just come so easily to you when you think about them for a while obviously your brain has learned patterns for thinking about this stuff and that's all there is to it so learn all the patterns and that's all that intelligence is fucking love it so much just keep learning all the patterns you can voraciously so fucking lucky
     def straight?(hand)
+        values = hand.cards.map { |card| card.value }.sort # sort so that you can make sure these are all in ascending order with one value difference between all the values
+        # then get the value of the smallest card (the first one, values[0] and then enumerate over all of them until values[-1] or values[4] and make sure they all increment by 1, if they do return the whole array thing if not return nil)
+        # put all this in a helper method so you can use it for the straight flush determination too love it
     end
 
     def three_kind?(hand)
