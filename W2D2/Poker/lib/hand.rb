@@ -60,9 +60,11 @@ class Hand
     def two_pair?(hand)
         value_counter = how_many?(hand)
         pairs = value_counter.select { |k, v| v == 2 } # think hashes work like this literally just working off memory for all of these but pseudocode is good enough and this really tests memory fucking love it actually
-        if pairs.length == 2 # not sure hashes have a length thing in which case do pairs.keys.length or pairs.values.length, but # this returns true only if two pairs were found
+        if pairs.length == 2 # edit just checked this totally works so great lol | not sure hashes have a length thing in which case do pairs.keys.length or pairs.values.length, but # this returns true only if two pairs were found
             pair_values = pairs.keys.sort.reverse # this gets the values of both pairs which are the ones not to select for kickers EXCEPT the lesser of the two should be the first kicker so much logic fucking love it just have to pump with your working memory so lucky to be able to do all this shit. sort and reverse will put these in order automatically too so fucking great
-
+            kickers = hand.cards.map { |card| card.value if (card.value != pair_values[0] && card.value != pair_values[1]) } # no need to sort and reverse on this one since there should only be one real kicker card lol amazing though you've learned the trouble with not putting safety code in like this it will likely break sigh lol at least you thought of it love that you're crushing this so easily fucking great
+            kickers.unshift(pair_values[1]) # this should be the first kicker card fucking love this shit
+            [:two_pair, pair_values[0], kickers]
         end
     end
     
@@ -70,12 +72,12 @@ class Hand
     def one_pair?(hand)
         value_counter = how_many?(hand)
         if value_counter.values.one?(2) # check that this returns only one found pair with two matching values otherwise it returns nil because this if didn't match anything fucking love it
-            kickers = hand.cards.select { |card| card.value != value_counter.key(2) }.sort_by { |card| card.value }.reverse # select all the cards that aren't part of that pair love it, then sort by those values and return them in reverse order heh amazing
+            kickers = hand.cards.map { |card| card.value if (card.value != value_counter.key(2)) }.sort.reverse # only return the card values because that's all that's important, and only those that aren't part of that pair love it, then sort by those values and return them in reverse order heh amazing
             [:one_pair, value_counter.key(2), kickers] # check this value_counter.key(2) syntax later to make sure this gets the card.value since no internet here rn
         end
     end
 
-    def high_card?(hand)
+    def high_card?(hand) # the only one with no if statement because this should always return something and it's easiest to do it this way
         high_card = hand.cards.max_by { |card| card.value }
         hand.cards.delete(high_card) # let's see if it's still recorded as a high_card if you delete it hmm
         kickers = hand.cards.sort_by { |card| card.value }.reverse # this will return the lowest value cards first I think so you reverse it to get the highest love it
