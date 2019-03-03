@@ -40,6 +40,7 @@ class Hand
     end
 
     def four_kind?(hand)
+        value_counter = how_many?(hand)
     end
 
     def full_house?(hand)
@@ -52,19 +53,24 @@ class Hand
     end
 
     def three_kind?(hand)
-        value_counter = 
+        value_counter = how_many?(hand)
     end
 
+    # check that there are two values in the hash that equal a counter of 2 then return the top of those pairs as the top card value, then the second as a kicker along with all the other kickers, but the first kicker in the array, and then have the kicker array specifically compare based on cards in order love it in the array that way the cards don't have to be in order in the array in terms of value and the kicker doesn't just compare to see the highest card value out of all the kickers, it compares [0] with [0] and works that way since [0] in some times is the second pair and a 4 4 pair would go ahead of a K kicker card and beat a 2 2 pair with a K kicker
     def two_pair?(hand)
-        value_counter = Hash.new(0)
-        hand.cards.each { |card| value_counter[card.value] += 1 }
-        # check that there are two values in the hash that equal a counter of 2 then return the top of those pairs as the top card value, then the second as a kicker along with all the other kickers, but the first kicker in the array, and then have the kicker array specifically compare based on cards in order love it in the array that way the cards don't have to be in order in the array in terms of value and the kicker doesn't just compare to see the highest card value out of all the kickers, it compares [0] with [0] and works that way since [0] in some times is the second pair and a 4 4 pair would go ahead of a K kicker card and beat a 2 2 pair with a K kicker
+        value_counter = how_many?(hand)
+        pairs = value_counter.select { |k, v| v == 2 } # think hashes work like this literally just working off memory for all of these but pseudocode is good enough and this really tests memory fucking love it actually
+        if pairs.length == 2 # not sure hashes have a length thing in which case do pairs.keys.length or pairs.values.length, but # this returns true only if two pairs were found
+        end
     end
     
+    # check if there are any values in the hash that equal 2 and specifically that there's only one value that has a pair since you probably should return nil if it's technically a two pair or something
     def one_pair?(hand)
-        value_counter = Hash.new(0)
-        hand.cards.each { |card| value_counter[card.value] += 1 }
-        # check if there are any values in the hash that equal 2 and specifically that there's only one value that has a pair since you probably should return nil if it's technically a two pair or something
+        value_counter = how_many?(hand)
+        if value_counter.values.one?(2) # check that this returns only one found pair with two matching values otherwise it returns nil because this if didn't match anything fucking love it
+            kickers = hand.cards.select { |card| card.value != value_counter.key(2) }.sort_by { |card| card.value }.reverse # select all the cards that aren't part of that pair love it, then sort by those values and return them in reverse order heh amazing
+            [:one_pair, value_counter.key(2), kickers] # check this value_counter.key(2) syntax later to make sure this gets the card.value since no internet here rn
+        end
     end
 
     def high_card?(hand)
@@ -72,6 +78,12 @@ class Hand
         hand.cards.delete(high_card) # let's see if it's still recorded as a high_card if you delete it hmm
         kickers = hand.cards.sort_by { |card| card.value }.reverse # this will return the lowest value cards first I think so you reverse it to get the highest love it
         [:high_card, high_card.value, kickers] # this is the array to return - the comparison of the high card is the value of the high_card, and then all the kickers in order, and the type returned is :high_card, love this shit can't wait to see this all come together so glad you're coding
+    end
+
+    def how_many?(hand) # returns a hash counting each of the values
+        value_counter = Hash.new(0)
+        hand.cards.each { |card| value_counter[card.value] += 1 }
+        value_counter
     end
 
     def kicker(hand1_kickers, hand2_kickers) # each of these is an array of all the kicker cards in order --> kickers are only evaluated on their values so that's good to know, ah except for a full house where it's evaluated on the pair but still there since it's a pair just whichever pair is higher wins so that's good should be a way to do that love it
