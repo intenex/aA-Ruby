@@ -35,8 +35,8 @@ class Hand
     end
 
     def straight_flush?(hand)
-        # calculate if all the hands have the same symbol
-
+        # calculate if all the hands have the same symbol, use the same helper method as flush? probably
+        # then if they do, calculate if it's a straight too, as in all the cards have values in sequential order, use the helper method from straight?
     end
 
     def four_kind?(hand)
@@ -61,9 +61,13 @@ class Hand
     end
 
     def high_card?(hand)
+        high_card = hand.cards.max_by { |card| card.value }
+        hand.cards.delete(high_card) # let's see if it's still recorded as a high_card if you delete it hmm
+        kickers = hand.cards.sort_by { |card| card.value }.reverse # this will return the lowest value cards first I think so you reverse it to get the highest love it
+        [:high_card, high_card.value, kickers] # this is the array to return - the comparison of the high card is the value of the high_card, and then all the kickers in order, and the type returned is :high_card, love this shit can't wait to see this all come together so glad you're coding
     end
 
-    def kicker(hand1_kickers, hand2_kickers) # each of these is an array of all the kicker cards in order
+    def kicker(hand1_kickers, hand2_kickers) # each of these is an array of all the kicker cards in order --> kickers are only evaluated on their values so that's good to know, ah except for a full house where it's evaluated on the pair but still there since it's a pair just whichever pair is higher wins so that's good should be a way to do that love it
     end
 end
 
