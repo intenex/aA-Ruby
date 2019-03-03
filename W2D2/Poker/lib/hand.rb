@@ -75,14 +75,12 @@ class Hand
     # just sort all the hand.card values then check that they increment by one but be sure to to include ace as a 1 here because I think A2345 counts but not 100% sure that's the one edge case to consider though man so amazing you're so lucky that these solutions just come so easily to you when you think about them for a while obviously your brain has learned patterns for thinking about this stuff and that's all there is to it so learn all the patterns and that's all that intelligence is fucking love it so much just keep learning all the patterns you can voraciously so fucking lucky
     def straight?(hand)
         values = hand.cards.map { |card| card.value }.sort # sort so that you can make sure these are all in ascending order with one value difference between all the values
-        if values[0] != 2 # if it doesn't start at 2, since an ace can technically be a 1 as well in which case make sure that the high card is actually a 5, not the ace
+        if (values[0] != 2) || (values[0] == 2 && values[-1] == 6) # update - have to put in the edge case to account for the straight of 23456 lol good edge case catching whew # if it doesn't start at 2, since an ace can technically be a 1 as well in which case make sure that the high card is actually a 5, not the ace
             if (0..4).all? { |index| values[index] == (values[0] + index) } # this should ensure that they all increment, since values[0] will be say 4, then it'll be 4 == 4, then values[1] == 5, etc, from 0 1 2 3 4 love it
                 [:straight, values[-1]] # no kickers, and the top card is the last card in values love it
             end
-        elsif values[0] == 2 # else if values[0] is indeed a 2, then check just from 2 3 4 5 and then check that there's an Ace, aka a 14, and if so list 5 as the high end great to catch this edge case
-            if ((0..3).all? { |index| values[index] == (2 + index) }) && (values[-1] == 14) # if 2 3 4 5 are all present and a 14 Ace is present, then this is also the low end straight not as many exceptions as chess thankfully but still a fair bit lol
-                [:straight, 5] # the highest value is just 5 so just hardcode that in there why not lol
-            end
+        elsif (values[0] == 2) && (values[-1] == 5) # just make this explicit why not # else if values[0] is indeed a 2, then check just from 2 3 4 5 and then check that there's an Ace, aka a 14, and if so list 5 as the high end great to catch this edge case
+            [:straight, 5] if (((0..3).all? { |index| values[index] == (2 + index) }) && (values[-1] == 14)) # if 2 3 4 5 are all present and a 14 Ace is present, then this is also the low end straight not as many exceptions as chess thankfully but still a fair bit lol # # the highest value is just 5 so just hardcode that in there why not lol
         end
     end
 
