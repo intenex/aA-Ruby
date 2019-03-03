@@ -61,6 +61,8 @@ class Hand
         value_counter = how_many?(hand)
         pairs = value_counter.select { |k, v| v == 2 } # think hashes work like this literally just working off memory for all of these but pseudocode is good enough and this really tests memory fucking love it actually
         if pairs.length == 2 # not sure hashes have a length thing in which case do pairs.keys.length or pairs.values.length, but # this returns true only if two pairs were found
+            pair_values = pairs.keys.sort.reverse # this gets the values of both pairs which are the ones not to select for kickers EXCEPT the lesser of the two should be the first kicker so much logic fucking love it just have to pump with your working memory so lucky to be able to do all this shit. sort and reverse will put these in order automatically too so fucking great
+
         end
     end
     
