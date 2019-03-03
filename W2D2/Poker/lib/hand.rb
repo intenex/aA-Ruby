@@ -45,7 +45,7 @@ class Hand
         [:straight_flush, straight[1]] if (straight && flush) # if straight and flush both return values (the arrays) and aren't nil then you're a straight flush amazing, and carry over the top card from straight since that covers the edge case of an A2345 straight flush which loses to 23456 straight flush I think fuck yeah ah fuck you forgot about that case let's cover that edge case too lol
     end
 
-    def four_kind?(hand)
+    def four_kind?(hand) # also patently impossible for a kicker to be necessary here lol since there are only 4 of any one kind of card lol
         value_counter = how_many_value?(hand)
         if value_counter.values.one?(4)
             kicker = hand.cards.map { |card| card.value if card.value != value_counter.key(4) }.compact # no need to sort since again only one of these lol
@@ -53,7 +53,7 @@ class Hand
         end
     end
 
-    def full_house?(hand)
+    def full_house?(hand) # ah right there's no possible chance that two people have a full house with the same winning 3 of a kind in 5 card draw since only one deck so impossible to have 6 of a single kind of card awesome so the rest is unnecessary logic but still dope
         value_counter = how_many_value?(hand)
         if value_counter.values.one?(3) && value_counter.values.one?(2) # if one three of a kind and one two pair, fucking love it, amazing this logic works so well actually for all the hands lol so insane you're almost done with all of these and they seem pretty fucking flawless to you so far
             [:full_house, value_counter.key(3), value_counter.key(2)] # just one kicker which is the second pair to check if the first one isn't sufficient to win it love it, technically all of these could have been compared in the kicker array but this just makes it a little more explicit in the logic super great love it
