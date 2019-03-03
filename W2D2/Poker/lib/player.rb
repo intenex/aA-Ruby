@@ -6,9 +6,10 @@ class Player
     attr_accessor :pot
     attr_reader :hand
 
-    def initialize(starting_pot) # initialized with a starting pot amount nice
+    def initialize(starting_pot, deck) # initialized with a starting pot amount nice
         @hand = Hand.new(self)
         @pot = starting_pot
+        @deck = deck # so you can draw cards from the deck and add them to the hand, this should be passed from game love it all coming together so well getting through the card logic was the only hard part so great now all the little ends and pieces
     end
 
     # either fold, check (see the bet), or raise
@@ -39,6 +40,44 @@ class Player
         retry
     end
 
+    def discard
+        puts "Would you like to discard any cards? Y/N"
+        answer = gets.chomp.downcase
+        case answer
+        when "y"
+            c = @hand.cards.sort_by { |card| card.value }
+            puts "Choose up to three cards to discard like so: 1 2 3
+            1: #{c[0].to_s}, 2: #{c[1].to_s}, 3: #{c[2].to_s}, 4: #{c[3].to_s}, 5: #{c[4].to_s}"
+            chosen_cards = gets.chomp.split.map(&:to_i)
+            if chosen_cards.length > 3 || chosen_cards.length == 0
+                raise ArgumentError.new("Choose between 1-3 cards. Try again.")
+            elsif !chosen_cards.all? { |num| num <= 5 && num > 0 } # if not all the cards are between 1 and 5
+                raise ArgumentError.new("Those numbers were out of bounds. Try again.")
+            elsif chosen_cards.detect { |num| chosen_cards.count(num) > 1 } # if this isn't nil it means it found some number that was repeated more than once amazing #detect method look into this more for sure https://stackoverflow.com/questions/8921999/ruby-how-to-find-and-return-a-duplicate-value-in-array
+                raise ArgumentError.new("No duplicate choices, please. Try again.")
+            else # if all those pass then should be good to go lol
+                chosen_cards.each { |card| @hand.cards.delete(card) } # delete each card that was chosen from the hand
+                chosen_cards.length.times { @hand.cards << @deck.get_card } # shovel in a card from the @deck.get_card method which should get a card from the top of the deck and return it and delete it love it (pop)
+                c = @hand.cards.sort_by { |card| card.value } # get the new cards think this is necessary who knows
+                puts "#{chosen_cards.length} new cards added successfully. Your new hand is:
+                1: #{c[0].to_s}, 2: #{c[1].to_s}, 3: #{c[2].to_s}, 4: #{c[3].to_s}, 5: #{c[4].to_s}"
+                sleep(2)
+            end
+        when "n"
+            puts "No cards discarded. Moving on..."
+            sleep(1)
+        else
+            raise ArgumentError.new("That was not a valid entry. Try again.")
+        end
+    rescue => e
+        puts e
+        retry
+    end
+
     # discard method --> this happens after betting, all the players get to decide what to discard and whatnot
     # discarded cards don't get reshuffled back in, they're set aside until all cards are drawn through in which case the cards reset fucking love it
+
+    # at the end of each game or when cards run out, the deck is reshuffled
+
+    # if all players check during the first round of betting, the dealer moves to the next player and another ante is added by each player awesome
 end

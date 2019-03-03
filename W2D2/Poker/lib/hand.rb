@@ -1,13 +1,9 @@
 class Hand
-    attr_reader :cards
+    attr_accessor :cards
 
     def initialize(player)
         @cards = Array.new
         @player = player
-    end
-
-    def add_card(card)
-        @cards << card
     end
 
     # https://www.adda52.com/poker/poker-rules/cash-game-rules/tie-breaker-rules --> all the tie breaker rules fucking love it
