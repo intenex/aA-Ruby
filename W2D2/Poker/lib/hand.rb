@@ -52,12 +52,19 @@ class Hand
     end
 
     def three_kind?(hand)
+        value_counter = 
     end
 
     def two_pair?(hand)
+        value_counter = Hash.new(0)
+        hand.cards.each { |card| value_counter[card.value] += 1 }
+        # check that there are two values in the hash that equal a counter of 2 then return the top of those pairs as the top card value, then the second as a kicker along with all the other kickers, but the first kicker in the array, and then have the kicker array specifically compare based on cards in order love it in the array that way the cards don't have to be in order in the array in terms of value and the kicker doesn't just compare to see the highest card value out of all the kickers, it compares [0] with [0] and works that way since [0] in some times is the second pair and a 4 4 pair would go ahead of a K kicker card and beat a 2 2 pair with a K kicker
     end
     
     def one_pair?(hand)
+        value_counter = Hash.new(0)
+        hand.cards.each { |card| value_counter[card.value] += 1 }
+        # check if there are any values in the hash that equal 2 and specifically that there's only one value that has a pair since you probably should return nil if it's technically a two pair or something
     end
 
     def high_card?(hand)
@@ -68,6 +75,13 @@ class Hand
     end
 
     def kicker(hand1_kickers, hand2_kickers) # each of these is an array of all the kicker cards in order --> kickers are only evaluated on their values so that's good to know, ah except for a full house where it's evaluated on the pair but still there since it's a pair just whichever pair is higher wins so that's good should be a way to do that love it
+        # remember you have to compare each element of the array against the corresponding index in the other array, since
+        # not all of these cards are actually kickers and are sometimes the second pair, as in two pair or in a full house,
+        # and so the first element [0] in each array here will be the representative card from that second pair and so even
+        # if it's lower than the kicker cards like a 4 4 vs a 3 3 and they have kickers like J and A, the 4 4 with a kicker J
+        # would beat the 3 3 with a kicker A so enumerate on each element of the array in order and assume that the arrays will
+        # be of the same length bc they should be if it ever gets to comparing kickers since both hands will be of the same
+        # type of hand rank and consequently have the same # of kickers love it
     end
 end
 
