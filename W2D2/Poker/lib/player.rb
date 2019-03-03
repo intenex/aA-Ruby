@@ -56,7 +56,7 @@ class Player
             elsif chosen_cards.detect { |num| chosen_cards.count(num) > 1 } # if this isn't nil it means it found some number that was repeated more than once amazing #detect method look into this more for sure https://stackoverflow.com/questions/8921999/ruby-how-to-find-and-return-a-duplicate-value-in-array
                 raise ArgumentError.new("No duplicate choices, please. Try again.")
             else # if all those pass then should be good to go lol
-                chosen_cards.each { |card| @hand.cards.delete(card) } # delete each card that was chosen from the hand
+                chosen_cards.each { |card| @deck.discards << @hand.cards.delete(card) } # delete each card that was chosen from the hand, and shovel it into the discard pile of the @deck lol
                 chosen_cards.length.times { @hand.cards << @deck.get_card } # shovel in a card from the @deck.get_card method which should get a card from the top of the deck and return it and delete it love it (pop)
                 c = @hand.cards.sort_by { |card| card.value } # get the new cards think this is necessary who knows
                 puts "#{chosen_cards.length} new cards added successfully. Your new hand is:
