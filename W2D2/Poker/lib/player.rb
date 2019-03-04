@@ -4,7 +4,7 @@
 
 class Player
     attr_accessor :chips
-    attr_reader :hand, :pot
+    attr_reader :hand, :pot, :name
 
     def initialize(name, game, deck, starting_chips) # initialized with a starting pot amount nice
         @name = name

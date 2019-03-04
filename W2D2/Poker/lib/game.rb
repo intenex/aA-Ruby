@@ -13,8 +13,15 @@ class Game
     end
 
     def play_game
-        until game_over?
-        end
+        play_round until game_over?
+        winning_player = @players.select { |player| player.chips != 0 }.compact # select the one player who has non-zero chips and compact it down so you remove all the nils lol
+        puts "The game is over! #{winning_player[0].name} wins!" # this gets the one array element in winning_player which I think needs to be called with [0] but we'll see lol test it
+    end
+
+    # give each player cards
+    # then
+    def play_round
+        active_players = @players.select { |player| player.chips != 0 }.compact # instead of removing the players when they run out of cards you do this maybe it's better to just remove the players lol oh well
     end
 
     def game_over?
