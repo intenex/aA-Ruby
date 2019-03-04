@@ -1,3 +1,6 @@
+require 'player'
+require 'deck'
+
 # don't forget to account for the ante at one point too
 # your game is way over-engineered for edge cases that can never realistically happen because there are only 2 turns because you didn't realize that about five card draw
 # it is indeed way easier to just play a game you actually know lol
