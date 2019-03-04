@@ -8,8 +8,8 @@ class Game
         @players = players.map { |player_name| Player.new(player_name, @deck, 1000) } # starting chips of 1000 per player
         @current_bet = 0
         @pot = 0
-        @dealer = player[0]
-        @current_player = player[1] # starts as the player next to the dealer then increments and then both dealer and player shift forward one at the reset of each turn
+        @dealer = 0
+        @current_player = players[1] # starts as the player next to the dealer then increments and then both dealer and player shift forward one at the reset of each turn
     end
 
     def play_game
@@ -19,9 +19,12 @@ class Game
     end
 
     # give each player cards
-    # then
+    # then start with the current player, go around until the betting stops, give the pot to whoever wins it
+    # then reset the cards (put every card in each player's hand in the discard pile, set each player's hand to an empty array, call deck#reset_deck)
+    # then increment the dealer and the current_player to players[dealer + 1] and that's it love it heh
     def play_round
         active_players = @players.select { |player| player.chips != 0 }.compact # instead of removing the players when they run out of cards you do this maybe it's better to just remove the players lol oh well
+        
     end
 
     def game_over?
