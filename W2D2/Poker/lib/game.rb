@@ -44,10 +44,12 @@ class Game
         @current_player = (@dealer + 1) % new_remaining_players.length # this also goes one forward from the new dealer to start over again hilariously lol think this is right though not up to date on your poker nuances like you are on chess but this should definitely be good enough love it
     end
 
-    def play_turn(players)
+    def play_turn(players) # this should return all the players left in the round after the turn
+        
     end
 
     def discard_cards(players)
+        players.each { |player| player.discard }
     end
 
     def showdown(final_players)
