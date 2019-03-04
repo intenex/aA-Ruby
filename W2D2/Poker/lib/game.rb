@@ -58,7 +58,7 @@ class Game
     end
 
     def reset_round
-        active_players.each { |player| player.reset_hand; player.folded = false } # this is the only time all players have their hands reset maybe you should do it when they fold and put their cards back in the discard pile then but this should work fine # reset folded
+        active_players.each { |player| player.reset_hand; player.folded = false; player.side_pot = nil } # this is the only time all players have their hands reset maybe you should do it when they fold and put their cards back in the discard pile then but this should work fine # reset folded # just in case reset the side_pot too because why not just to be safe and avoid edge cases since you've already learned that lesson
         @deck.reset_deck
         new_remaining_players = @players.select { |player| player.chips != 0 }.compact # okay you're doing this enough that you really should just fucking move everyone into a new array when they leave the game let's do that later sigh
         @current_bet = 0
@@ -74,8 +74,37 @@ class Game
         players.each { |player| player.discard }
     end
 
-    def showdown(final_players)
+    # account for any possible side pots here
+    # basically if the winning player has a side pot, check for that
+    # and if so only give them the total amount of the side pot times
+    # all the players at showdown and then the rest of the pot is split
+    # amongst the next largest winner
 
+    # you're really close to making this all work now so my best suggestion is to not take into account side pots for now and get the code all working at its basic state then slowly incorporate side pot logic or just move the fuck on because you did all the work now pretty much as long as it works move on for now and come back to this shit lol
+    def showdown(final_players)
+        hand1 = final_players.pop.hand # crazy method chaining lmao chaining an instance method of the element you just popped out to assign let's see if this works lol Ruby is an insane language
+        hand2 = final_players.pop.hand
+        last_hand = hand1 # for when there is no winner in the logic below super nuts
+        # okay your winning_hand method is SUPER weird because the guidelines led you astray ugh
+        winner = hand1.winning_hand(hand1, hand2)
+        until final_players.empty? # until this is true
+            if winner # if this isn't nil then continue lol
+                next_hand = final_players.pop.hand 
+                last_hand = winner # update the last hand if there is a winner for use when there isn't a winner
+                winner = winner.winning_hand(winner, next_hand)
+            else
+                next_hand = final_players.pop.hand
+                winner = last_hand.winning_hand(last_hand, next_hand) # use whichever hand was set as the last_hand when there isn't a winner - this was either the hand1 that was set in the very beginning or the last winner when there was actually a winner before the last draw
+            end
+        end
+        if winner # if there is a winner after all the hands are evaluated
+            # check if the winner has a side pot if not just give them all the money
+            # if they have a side pot...good luck figuring that shit out and make the calls to find the next player to award all the money too lol so much logic here man so close to the finish line
+        else
+            # if there was no winner then split pot between last_hand and next_hand, which were the last two to draw, AND POSSIBLY ALL THE OTHER PEOPLE WHO DREW BEFORE LOL so much to keep track of as edge cases jfc
+            # check if either drawer has a side pot if so this is very tricky to calculate actually, I believe they get everything in the pot split minus however much more the other person has bet than them, which that person gets back in full --> but how to calculate how much more one person has bet than another? damn. Fuck side pots are hard to calculate actually lol https://www.pokerlistings.com/rules-for-poker-all-in-situations-poker-side-pot-calculator
+            # if no side pot, just split the pot perfectly evenly between both players
+        end
     end
 
     def pay_ante(players)

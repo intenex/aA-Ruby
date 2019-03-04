@@ -9,7 +9,7 @@ class Hand
     # https://www.adda52.com/poker/poker-rules/cash-game-rules/tie-breaker-rules --> all the tie breaker rules fucking love it
     # need a hand_rank, then compare highest_card, then compare kickers, and split pot if still a tie after that
     # hand_value[0] is the hand_rank, hand_value[1] is the top card for that rank, hand_value[2] stores all the kicker cards
-    def winning_hand(hand1, hand2)
+    def winning_hand(hand1, hand2) # make this a class method to be easily accessible I think but damn then it can't access instance methods I think ah well
         hand_rank = { :high_card => 0, :one_pair => 1, :two_pair => 2, :three_kind => 3, :straight => 4, :flush => 5, :full_house => 6, :four_kind => 7, :straight_flush => 8 }
         hand1_value = rank_hand(hand1)
         hand2_value = rank_hand(hand2)

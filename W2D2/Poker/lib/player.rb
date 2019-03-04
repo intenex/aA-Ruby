@@ -10,7 +10,7 @@ class Player
         @name = name
         @hand = Hand.new(self)
         @chips = starting_chips
-        @side_pot = 0
+        @side_pot = nil # if this is active and not nil that means they're all in
         @folded = false
         @game = game
         @deck = deck # so you can draw cards from the deck and add them to the hand, this should be passed from game love it all coming together so well getting through the card logic was the only hard part so great now all the little ends and pieces
@@ -23,7 +23,8 @@ class Player
 
     # either fold, check (see the bet), or raise
     def get_move # damn getting so good at all this shit lol
-        puts "Would you like to [f]old, [c]heck/[c]all, or [r]aise?"
+        return if @side_pot # if the side_pot is not nil then this player doesn't 
+        puts "Your turn, #{name}!\nWould you like to [f]old, [c]heck/[c]all, or [r]aise?"
         answer = gets.chomp.downcase
         case answer
         when "f"
@@ -51,7 +52,7 @@ class Player
     end
 
     def discard
-        puts "Would you like to discard any cards #{@name}? Y/N"
+        puts "Your turn, #{@name}!\nWould you like to discard any cards? Y/N"
         answer = gets.chomp.downcase
         case answer
         when "y"
