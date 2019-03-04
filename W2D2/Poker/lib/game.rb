@@ -45,7 +45,7 @@ class Game
     end
 
     def play_turn(players) # this should return all the players left in the round after the turn
-        
+        players.each { |player| player.get_move }
     end
 
     def discard_cards(players)
@@ -53,6 +53,7 @@ class Game
     end
 
     def showdown(final_players)
+
     end
 
     def game_over?
