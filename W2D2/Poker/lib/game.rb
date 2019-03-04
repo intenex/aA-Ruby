@@ -1,5 +1,5 @@
-require 'player'
-require 'deck'
+require_relative 'player'
+require_relative 'deck'
 
 # don't forget to account for the ante at one point too
 # your game is way over-engineered for edge cases that can never realistically happen because there are only 2 turns because you didn't realize that about five card draw
@@ -12,7 +12,7 @@ class Game
 
     def initialize(*players)
         @deck = Deck.new
-        @players = players.map { |player_name| Player.new(player_name, @deck, 1000) } # starting chips of 1000 per player
+        @players = players.map { |player_name| Player.new(player_name, self, @deck, 1000) } # starting chips of 1000 per player
         @current_bet = 0
         @pot = 0
         @dealer = 0

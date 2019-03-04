@@ -1,4 +1,4 @@
-require 'hand'
+require_relative 'hand'
 
 # 2 to 6 players - so enter 2 to 6 players when the game starts
 # cards are dealt one at a time for each player nice to be precise in game play that's how to do it
