@@ -14,6 +14,11 @@ class Player
         @deck = deck # so you can draw cards from the deck and add them to the hand, this should be passed from game love it all coming together so well getting through the card logic was the only hard part so great now all the little ends and pieces
     end
 
+    def reset_hand
+        @deck.discards += @hand.cards
+        @hand.cards = Array.new
+    end
+
     # either fold, check (see the bet), or raise
     def get_move # damn getting so good at all this shit lol
         puts "Would you like to [f]old, [c]heck/[c]all, or [r]aise?"

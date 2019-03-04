@@ -37,7 +37,11 @@ class Game
             @pot = 0
             sleep(1)
         end
-        
+        active_players.each { |player| player.reset_hand } # this is the only time all players have their hands reset maybe you should do it when they fold and put their cards back in the discard pile then but this should work fine
+        @deck.reset_deck
+        new_remaining_players = @players.select { |player| player.chips != 0 }.compact # okay you're doing this enough that you really should just fucking move everyone into a new array when they leave the game let's do that later sigh
+        @dealer = (@dealer + 1) % new_remaining_players.length # this makes sure the dealer wraps around to 0 when there are 5 players on 5 it'll modulo to 0 love it so it'll do 0 1 2 3 4 perfect
+        @current_player = (@dealer + 1) % new_remaining_players.length # this also goes one forward from the new dealer to start over again hilariously lol think this is right though not up to date on your poker nuances like you are on chess but this should definitely be good enough love it
     end
 
     def play_turn(players)
