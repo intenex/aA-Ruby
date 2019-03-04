@@ -97,11 +97,19 @@ class Game
                 winner = last_hand.winning_hand(last_hand, next_hand) # use whichever hand was set as the last_hand when there isn't a winner - this was either the hand1 that was set in the very beginning or the last winner when there was actually a winner before the last draw
             end
         end
-        if winner # if there is a winner after all the hands are evaluated
+        if winner # if there is a winner after all the hands are evaluated # amazing every hand has a player though so it's easy actually whew lol # winner rn is a  hand not a player need to change
+            puts "#{winner.player.name} wins the round with #{@pot} chips!"
+            winner.player.chips += @pot
+            @pot = 0
+            ### NEED TO PUT SIDE POT LOGIC HERE LATER ###
             # check if the winner has a side pot if not just give them all the money
             # if they have a side pot...good luck figuring that shit out and make the calls to find the next player to award all the money too lol so much logic here man so close to the finish line
-        else
-            # if there was no winner then split pot between last_hand and next_hand, which were the last two to draw, AND POSSIBLY ALL THE OTHER PEOPLE WHO DREW BEFORE LOL so much to keep track of as edge cases jfc
+        else # if there was no winner then split pot between last_hand and next_hand, which were the last two to draw, AND POSSIBLY ALL THE OTHER PEOPLE WHO DREW BEFORE LOL so much to keep track of as edge cases jfc
+            puts "#{last_hand.player.name} and #{next_hand.player.name} split the pot with #{@pot/2} chips each!"
+            last_hand.player.chips += @pot/2
+            next_hand.player.chips += @pot/2
+            @pot = 0
+            ### MUST CHECK SIDE POT LOGIC AND ALL OTHER POSSIBLE PLAYERS WHO DREW AS WELL FOR EDGE CASES LATER ###
             # check if either drawer has a side pot if so this is very tricky to calculate actually, I believe they get everything in the pot split minus however much more the other person has bet than them, which that person gets back in full --> but how to calculate how much more one person has bet than another? damn. Fuck side pots are hard to calculate actually lol https://www.pokerlistings.com/rules-for-poker-all-in-situations-poker-side-pot-calculator
             # if no side pot, just split the pot perfectly evenly between both players
         end

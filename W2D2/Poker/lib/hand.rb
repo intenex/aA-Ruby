@@ -1,5 +1,6 @@
 class Hand
     attr_accessor :cards
+    attr_reader :player
 
     def initialize(player)
         @cards = Array.new
