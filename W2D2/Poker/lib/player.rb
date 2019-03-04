@@ -44,7 +44,7 @@ class Player
     end
 
     def discard
-        puts "Would you like to discard any cards? Y/N"
+        puts "Would you like to discard any cards #{@name}? Y/N"
         answer = gets.chomp.downcase
         case answer
         when "y"

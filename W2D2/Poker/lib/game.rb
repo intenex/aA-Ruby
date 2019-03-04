@@ -22,9 +22,31 @@ class Game
     # then start with the current player, go around until the betting stops, give the pot to whoever wins it
     # then reset the cards (put every card in each player's hand in the discard pile, set each player's hand to an empty array, call deck#reset_deck)
     # then increment the dealer and the current_player to players[dealer + 1] and that's it love it heh
+    # oh interesting there are just two rounds and then a show down love it
     def play_round
         active_players = @players.select { |player| player.chips != 0 }.compact # instead of removing the players when they run out of cards you do this maybe it's better to just remove the players lol oh well
+        active_players.each { |player| player.hand.cards << @deck.get_card } until active_players.all? { |player| player.hand.cards == 5 } # until all players have 5 cards --> this simulates the correct dealing of cards of one at a time in order to all the cards
+        remaining_players = play_turn(active_players)
+        discard_cards(remaining_players)
+        final_players = play_turn(remaining_players)
+        if final_players.length > 1 # if there's more than one player then show cards
+            showdown(final_players)
+        else # if there's just one player then give the pot to that player
+            final_player[0].chips += @pot
+            puts "#{final_player[0].name} wins the round with @{pot} chips!"
+            @pot = 0
+            sleep(1)
+        end
         
+    end
+
+    def play_turn(players)
+    end
+
+    def discard_cards(players)
+    end
+
+    def showdown(final_players)
     end
 
     def game_over?
