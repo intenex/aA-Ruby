@@ -3,13 +3,15 @@
 # before play begins, an ante is added to the pot
 
 class Player
-    attr_accessor :chips
+    attr_accessor :chips, :side_pot
     attr_reader :hand, :pot, :name
 
     def initialize(name, game, deck, starting_chips) # initialized with a starting pot amount nice
         @name = name
         @hand = Hand.new(self)
         @chips = starting_chips
+        @side_pot = 0
+        @folded = false
         @game = game
         @deck = deck # so you can draw cards from the deck and add them to the hand, this should be passed from game love it all coming together so well getting through the card logic was the only hard part so great now all the little ends and pieces
     end
