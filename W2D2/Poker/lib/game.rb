@@ -1,5 +1,8 @@
 require_relative 'player'
 require_relative 'deck'
+require 'byebug'
+
+# the one thing you didn't account for so far that just seems like a massive pain in the ass to just figure out later or never is side pots and correct attribution of wins lol
 
 # don't forget to account for the ante at one point too
 # your game is way over-engineered for edge cases that can never realistically happen because there are only 2 turns because you didn't realize that about five card draw
@@ -33,7 +36,10 @@ class Game
     def play_round
         active_players = @players.select { |player| player.chips != 0 }.compact # instead of removing the players when they run out of cards you do this maybe it's better to just remove the players lol oh well
         pay_ante(active_players)
-        active_players.each { |player| player.hand.cards << @deck.get_card } until active_players.all? { |player| player.hand.cards == 5 } # until all players have 5 cards --> this simulates the correct dealing of cards of one at a time in order to all the cards
+        #active.players.each is where this gets stuck
+        until active_players.all? { |player| player.hand.cards == 5 } # until all players have 5 cards --> this simulates the correct dealing of cards of one at a time in order to all the cards
+            active_players.each { |player| player.hand.cards << @deck.get_card }
+        end
         remaining_players = play_turn(active_players)
         if remaining_players.length == 1 # if there's only one player left after betting then just have them win the pot
             winning_player(remaining_players[0])
