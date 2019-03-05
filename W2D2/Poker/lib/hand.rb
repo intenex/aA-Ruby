@@ -125,7 +125,7 @@ class Hand
 
     def how_many_suit?(hand) # fucking love it coming together so well
         suit_counter = Hash.new(0)
-        hands.cards.each { |card| suit_counter[card.suit] += 1 }
+        hand.cards.each { |card| suit_counter[card.suit] += 1 }
         suit_counter
     end
 

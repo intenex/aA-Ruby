@@ -2,7 +2,13 @@ require_relative 'player'
 require_relative 'deck'
 require 'byebug'
 
-# the one thing you didn't account for so far that just seems like a massive pain in the ass to just figure out later or never is side pots and correct attribution of wins lol
+# === THINGS NOT YET ACCOUNTED FOR ===
+# Splitting side pots with everyone
+# Make sure when someone raises everyone else has to match that raise before it moves on
+# Fix the discard cards method lol it doesn't discard the correct cards lmao --> note on this: OF COURSE THIS DOESN'T WORK CORRECTLY CHOSEN_CARDS IS A FUCKING ARRAY OF RANDOM NUMBERS NOT CARDS YOU HAVE TO MATCH IT UP WITH THE NUMBERS LOL
+# Make sure the winner check thing actually works correctly
+
+# besides all that I think the basic functionality shockingly works lol which is good enough to move on for now and come back later fuck yeah
 
 # don't forget to account for the ante at one point too
 # your game is way over-engineered for edge cases that can never realistically happen because there are only 2 turns because you didn't realize that about five card draw
@@ -37,15 +43,13 @@ class Game
         active_players = @players.select { |player| player.chips != 0 }.compact # instead of removing the players when they run out of cards you do this maybe it's better to just remove the players lol oh well
         pay_ante(active_players)
         #active.players.each is where this gets stuck
-        until active_players.all? { |player| player.hand.cards == 5 } # until all players have 5 cards --> this simulates the correct dealing of cards of one at a time in order to all the cards
-            active_players.each { |player| player.hand.cards << @deck.get_card }
-        end
+        active_players.each { |player| player.hand.cards << @deck.get_card } until active_players.all? { |player| player.hand.cards.length == 5 } # until all players have 5 cards --> this simulates the correct dealing of cards of one at a time in order to all the cards --> ah hilarious error lol needs to be cards.length amazing love it
         remaining_players = play_turn(active_players)
         if remaining_players.length == 1 # if there's only one player left after betting then just have them win the pot
             winning_player(remaining_players[0])
             reset_round(active_players)
             return
-        elsif @current_bet == 0 # aka if everyone checked and no one bet, then restart the game, throw in all the cards, shuffle the deck, change the dealers, etc
+        elsif @current_bet == 0 # aka if everyone checked or for some reason everyone folded lol and no one bet, then restart the game, throw in all the cards, shuffle the deck, change the dealers, etc
             reset_round(active_players) # pot stays the same no one wins it just continues again love it
             return # restart hell yeah # this does the same thing as just calling the same method except doesn't go lower in the stack and goes back up to the stack so you don't go arbitrarily deep in the stack same deal
         end
@@ -67,17 +71,20 @@ class Game
         sleep(1)
     end
 
-    def reset_round
+    def reset_round(active_players)
         active_players.each { |player| player.reset_hand; player.folded = false; player.side_pot = nil } # this is the only time all players have their hands reset maybe you should do it when they fold and put their cards back in the discard pile then but this should work fine # reset folded # just in case reset the side_pot too because why not just to be safe and avoid edge cases since you've already learned that lesson
         @deck.reset_deck
         new_remaining_players = @players.select { |player| player.chips != 0 }.compact # okay you're doing this enough that you really should just fucking move everyone into a new array when they leave the game let's do that later sigh
         @current_bet = 0
-        @dealer = (@dealer + 1) % new_remaining_players.length # this makes sure the dealer wraps around to 0 when there are 5 players on 5 it'll modulo to 0 love it so it'll do 0 1 2 3 4 perfect
-        @current_player = (@dealer + 1) % new_remaining_players.length # this also goes one forward from the new dealer to start over again hilariously lol think this is right though not up to date on your poker nuances like you are on chess but this should definitely be good enough love it
+        if new_remaining_players != 0 # if there are any players left lol could also do > 1 but eh
+            @dealer = (@dealer + 1) % new_remaining_players.length # this makes sure the dealer wraps around to 0 when there are 5 players on 5 it'll modulo to 0 love it so it'll do 0 1 2 3 4 perfect
+            @current_player = (@dealer + 1) % new_remaining_players.length # this also goes one forward from the new dealer to start over again hilariously lol think this is right though not up to date on your poker nuances like you are on chess but this should definitely be good enough love it
+        end
     end
 
     def play_turn(players) # this should return all the players left in the round after the turn
         players.each { |player| player.get_move }
+        players.select { |player| !player.folded } # select all the players that haven't folded to return love it
     end
 
     def discard_cards(players)

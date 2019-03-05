@@ -5,7 +5,7 @@ require_relative 'hand'
 # before play begins, an ante is added to the pot
 
 class Player
-    attr_accessor :chips, :side_pot
+    attr_accessor :chips, :side_pot, :folded
     attr_reader :hand, :pot, :name
 
     def initialize(name, game, deck, starting_chips) # initialized with a starting pot amount nice
@@ -26,7 +26,9 @@ class Player
     # either fold, check (see the bet), or raise
     def get_move # damn getting so good at all this shit lol
         return if @folded || @side_pot # if the side_pot is not nil then this player doesn't have a side pot and isn't all in, and also don't let them do anything if they've folded
-        puts "Your turn, #{name}! The current bet is #{@game.current_bet}.\nWould you like to [f]old, [c]heck/[c]all, or [r]aise?"
+        puts "Your turn, #{name}! Your hand is: #{hand.cards[0].to_s}, #{hand.cards[1].to_s}, #{hand.cards[2].to_s}, #{hand.cards[3].to_s}, #{hand.cards[4].to_s} # interesting these line breaks put the tabs that are included too incidentally
+The pot is #{@game.pot}, you have #{@chips} chips, and the current bet is #{@game.current_bet}.
+Would you like to [f]old, [c]heck/[c]all, or [r]aise?"
         answer = gets.chomp.downcase
         case answer
         when "f"
@@ -34,6 +36,7 @@ class Player
         when "c"
             if @chips >= @game.current_bet
                 @chips -= @game.current_bet
+                @game.pot += @game.current_bet
             else # if fewer chips than the current bet then they go all in
                 @game.pot += @chips
                 @side_pot = @chips
@@ -64,7 +67,7 @@ class Player
         when "y"
             c = @hand.cards.sort_by { |card| card.value }
             puts "Choose up to three cards to discard like so: 1 2 3
-            1: #{c[0].to_s}, 2: #{c[1].to_s}, 3: #{c[2].to_s}, 4: #{c[3].to_s}, 5: #{c[4].to_s}"
+1: #{c[0].to_s}, 2: #{c[1].to_s}, 3: #{c[2].to_s}, 4: #{c[3].to_s}, 5: #{c[4].to_s}"
             chosen_cards = gets.chomp.split.map(&:to_i)
             if chosen_cards.length > 3 || chosen_cards.length == 0
                 raise ArgumentError.new("Choose between 1-3 cards. Try again.")
@@ -73,11 +76,12 @@ class Player
             elsif chosen_cards.detect { |num| chosen_cards.count(num) > 1 } # if this isn't nil it means it found some number that was repeated more than once amazing #detect method look into this more for sure https://stackoverflow.com/questions/8921999/ruby-how-to-find-and-return-a-duplicate-value-in-array
                 raise ArgumentError.new("No duplicate choices, please. Try again.")
             else # if all those pass then should be good to go lol
-                chosen_cards.each { |card| @deck.discards << @hand.cards.delete(card) } # delete each card that was chosen from the hand, and shovel it into the discard pile of the @deck lol
+                # OF COURSE THIS DOESN'T WORK CORRECTLY CHOSEN_CARDS IS A FUCKING ARRAY OF RANDOM NUMBERS NOT CARDS YOU HAVE TO MATCH IT UP WITH THE NUMBERS LOL
+                chosen_cards.each { |card| @deck.discards << @hand.cards.delete(card) } # not deleting the right cards somehow figure that out later # delete each card that was chosen from the hand, and shovel it into the discard pile of the @deck lol
                 chosen_cards.length.times { @hand.cards << @deck.get_card } # shovel in a card from the @deck.get_card method which should get a card from the top of the deck and return it and delete it love it (pop)
                 c = @hand.cards.sort_by { |card| card.value } # get the new cards think this is necessary who knows
                 puts "#{chosen_cards.length} new cards added successfully. Your new hand is:
-                1: #{c[0].to_s}, 2: #{c[1].to_s}, 3: #{c[2].to_s}, 4: #{c[3].to_s}, 5: #{c[4].to_s}"
+1: #{c[0].to_s}, 2: #{c[1].to_s}, 3: #{c[2].to_s}, 4: #{c[3].to_s}, 5: #{c[4].to_s}"
                 sleep(2)
             end
         when "n"
