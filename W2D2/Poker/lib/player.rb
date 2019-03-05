@@ -25,16 +25,20 @@ class Player
 
     # either fold, check (see the bet), or raise
     def get_move # damn getting so good at all this shit lol
-        return if @side_pot # if the side_pot is not nil then this player doesn't 
-        puts "Your turn, #{name}!\nWould you like to [f]old, [c]heck/[c]all, or [r]aise?"
+        return if @folded || @side_pot # if the side_pot is not nil then this player doesn't have a side pot and isn't all in, and also don't let them do anything if they've folded
+        puts "Your turn, #{name}! The current bet is #{@game.current_bet}.\nWould you like to [f]old, [c]heck/[c]all, or [r]aise?"
         answer = gets.chomp.downcase
         case answer
         when "f"
-            # call fold
+            @folded = true
         when "c"
-            # find the call_amt
-            # raise an error if the call_amt is higher than the pot amt of the player, otherwise go through
-            # match the current bet amount and stay in
+            if @chips >= @game.current_bet
+                @chips -= @game.current_bet
+            else # if fewer chips than the current bet then they go all in
+                @game.pot += @chips
+                @side_pot = @chips
+                @chips = 0
+            end
         when "r"
             puts "How much would you like to raise?"
             raise_amt = gets.chomp.to_i

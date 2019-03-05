@@ -43,6 +43,7 @@ class Game
             reset_round(active_players) # pot stays the same no one wins it just continues again love it
             return # restart hell yeah # this does the same thing as just calling the same method except doesn't go lower in the stack and goes back up to the stack so you don't go arbitrarily deep in the stack same deal
         end
+        @current_bet = 0 # reset the current_bet
         discard_cards(remaining_players)
         final_players = play_turn(remaining_players)
         if final_players.length > 1 # if there's more than one player then show cards
