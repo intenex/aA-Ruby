@@ -1,6 +1,5 @@
 require_relative 'player'
 require_relative 'deck'
-require 'byebug'
 
 # === THINGS NOT YET ACCOUNTED FOR ===
 # Splitting side pots with everyone
