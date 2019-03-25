@@ -37,6 +37,11 @@ def not_useful_but_perfect_recursive_subsets_practice(arr) # awesome to get to d
     last_subset = subsets(arr)
     current_subset = last_subset.map { |subset| subset + [last_ele] }
     last_subset + current_subset # finally it works this is pretty good just needed the base case for arr.length 1 sad
+end # nvm exactly how you did it last time lol the ones you had to flatten were fibonacci and permutations and make better change so spend more time on those later too for sure love all this shit
+
+def largest_contiguous_subsum_1(arr)
+    contiguous_subsets = contiguous_subsets(arr)
+    contiguous_subsets.max_by { |subset| subset.sum }
 end
 
 def contiguous_subsets(arr)
@@ -44,8 +49,9 @@ def contiguous_subsets(arr)
     arr.each_index do |i1|
         all_subsets << [arr[i1]]
         arr.each_index do |i2|
-            all_subsets << arr[i1..i2] if i2 > i1
+            all_subsets << arr[i1..i2] if i2 > i1 # yeah ranges are the way to go awesome
         end
     end
     all_subsets
 end
+
