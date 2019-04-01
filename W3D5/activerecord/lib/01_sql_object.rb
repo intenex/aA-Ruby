@@ -71,10 +71,14 @@ class SQLObject
     question_marks = (["?"] * (SQLObject.columns.length-1)).join(',')
     insert_string = "INSERT INTO #{self.class.table_name} (#{columns}) VALUES (#{question_marks})"
     DBConnection.execute(insert_string, *attribute_values) # fucking killed it it's working thank god lmfao you fucking got the fucking question marks and the splat operator working the splat operator will break a fucking array into all its elements and just pass all those in as separate arguments fucking love it
+    self.id = DBConnection.last_insert_row_id # omfg killed it fuck yeah let's fucking do this shit!!!
   end
 
   def update
-    # ...
+    columns = SQLObject.columns[1..-1].map do
+      
+    end.join(',') # your hilariously bad code when no one's watching lol good to know you can write very clean code though when needed
+    update_string = "UPDATE #{self.class.table_name} SET #{columns} WHERE id = #{self.id}"
   end
 
   def save
