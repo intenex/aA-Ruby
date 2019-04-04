@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+    helper_method :current_user
+
     def login!
         @user = User.find_by_credentials(params[:user][:email], params[:user][:password])
         if @user == false

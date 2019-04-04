@@ -10,6 +10,22 @@
   </head>
 
   <body>
+    <% if current_user %>
+      <p>Welcome, <%=current_user.email%>!  </p>
+      <form action="<%=session_url%>" method="POST">
+        <%= auth_token %>
+        <input type="hidden" name="_method" value="DELETE">
+        <input type="button" value="Logout">
+      </form>
+    <% else %>
+      <form action="<%=new_user_url%>" method="GET">
+        <input type="button" value="Signup">
+      </form>
+      <form action="<%=new_session_url%>" method="GET">
+        <input type="button" value="Login">
+      </form>
+    <% end %>
+
     <%= yield %>
   </body>
 
