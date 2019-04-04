@@ -1,0 +1,24 @@
+<% if user.persisted?
+    action_url = user_url(@ser)
+    submit_text = "Edit"
+   else
+    action_url = users_url
+    submit_text = "Create"
+   end
+%>
+
+<form action="<%=action_url%>" method="POST">
+    <%= auth_token %>
+    <% unless user.persisted? %>
+        <%= patch_method_override %>
+    <% end %>
+    <label>Email:
+        <input type="email" name="user[email]" value="<%=@user.email%>">
+    </label>
+
+    <label>Password:
+        <input type="password" name="user[password]">
+    </label>
+
+    <input type="submit" value="<%=submit_text%>">
+</form>
