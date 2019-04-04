@@ -1,6 +1,7 @@
 <h1>Create a new user!</h1>
+<br>
 
-<%= render "form", user: @user %>
+<%= render "form", user: @user, action_url: users_url, submit_text: "Create" %>
 
 <% content_for :footer do %>
     <p>This is our user signup page.</p>

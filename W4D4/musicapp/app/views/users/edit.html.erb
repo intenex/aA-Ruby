@@ -1,6 +1,7 @@
 <h1>Edit your details</h1>
+<br>
 
-<%= render "form", user: @user %>
+<%= render "form", user: @user, action_url: user_url(@user), submit_text: "Edit" %>
 
 <% content_for :footer do %>
 <p>This is the user edit page.</p>

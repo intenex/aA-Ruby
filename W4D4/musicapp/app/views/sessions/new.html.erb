@@ -1,0 +1,8 @@
+<h1>Login</h1>
+<br>
+
+<%= render "users/form", user: @user, action_url: session_url, submit_text: "Login" %>
+
+<%= content_for :footer do %>
+  <p>This is our login page.</p>
+<% end %>
