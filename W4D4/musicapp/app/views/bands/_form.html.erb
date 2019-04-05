@@ -1,0 +1,19 @@
+<%
+    if band.persisted?
+        action_url = band_url(band)
+        submit_text = "Edit band name"
+    else
+        action_url = bands_url
+        submit_text = "Create new band"
+    end
+%>
+
+<form action="<%action_url%>" method="POST">
+    <%= auth_token %>
+    <% if band.persisted? %>
+        <%= patch_method_override %>
+    <% end %>
+    <label>Name
+        <input type="text" name="band[name]" value="<%band.name%>">
+    </label>
+</form>

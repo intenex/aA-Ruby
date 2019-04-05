@@ -10,6 +10,17 @@
   </head>
 
   <body>
+    <% if flash[:errors] %>
+    <ul>
+      <% flash[:errors].each do |error| %>
+        <li><%= error %></li>
+    </ul>
+    <% end %>
+
+    <header>
+    <h1>Music App</h1>
+    </header>
+
     <% if current_user %>
       <p>Welcome, <%=current_user.email%>!  </p>
       <form action="<%=session_url%>" method="POST">
