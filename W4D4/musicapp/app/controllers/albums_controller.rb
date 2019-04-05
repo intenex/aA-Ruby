@@ -1,7 +1,8 @@
 class AlbumsController < ApplicationController
     def new
+        @bands = Band.all
         @album = Album.new
-        @album.band_id = params[:band_id] # this is prefixed as this is a nested route love it
+        @band = Band.find_by(id: params[:band_id]) # this is prefixed as this is a nested route love it
         render :new
     end
 

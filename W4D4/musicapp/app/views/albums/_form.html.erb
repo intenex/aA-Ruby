@@ -1,0 +1,50 @@
+<!--
+# == Schema Information
+#
+# Table name: albums
+#
+#  id           :bigint(8)        not null, primary key
+#  title        :string           not null
+#  year         :integer          not null
+#  band_id      :integer          not null
+#  studio_album :boolean          not null
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#
+-->
+
+<%
+    if album.persisted?
+        action_url = album_url(album)
+        submit_text = "Edit album"
+    else
+        action_url = albums_url
+        submit_text = "Create new album"
+    end
+%>
+
+<form action="<%action_url%>" method="POST">
+    <%= auth_token %>
+    <% if album.persisted? %>
+        <%= patch_method_override %>
+    <% end %>
+    <label>Band
+        <select>   
+            <% @bands.each do |band| %>
+                <option <%= "selected" if band == @band %> value="<%=band.id%>"><%= band.name %></option>
+            <% end %>
+        </select>
+    </label>
+    <label>Title
+        <input type="text" name="album[title]" value="<%=album.title%>">
+    </label>
+    <label>Year
+        <input type="number" name="album[year]" value="<%=album.year%>">
+    </label>
+    <label>Studio Album?
+        <input type="radio" name="album[studio_album]" value="true" checked>True<br>
+        <input type="radio" name="album[studio_album" value="false">False
+    </label>
+
+    <input type="submit" value="<%=submit_text%>">
+</form>

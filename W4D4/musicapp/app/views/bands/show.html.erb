@@ -1,0 +1,12 @@
+<h1><%= @band.name %></h1>
+
+<% unless @band.albums.empty? %>
+
+<%= @band.albums.each do |album| %>
+    <br><br>
+    <h2><%= album.title %></h2>
+    <ul>
+        <li>Year: <%= album.year %></li>
+        <li><%= album.studio_album ? "Studio Album" : "Live Album" %></li>
+    </ul>
+<% end %>
