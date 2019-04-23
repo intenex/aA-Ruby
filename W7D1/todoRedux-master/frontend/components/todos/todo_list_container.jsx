@@ -7,7 +7,7 @@ const mapStateToProps = (state, ownProps) => ({ // implicit object return fat ar
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  receiveTodo: todo => dispatch(receiveTodo(todo))
+  receiveTodo: todo => dispatch(receiveTodo(todo)) // look more into how this thing has access to the receiveTodo function just globally like this think through it a little bit later for sure. A lot to think through and work with for sure right now man definitely do it all.
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TodoList);
