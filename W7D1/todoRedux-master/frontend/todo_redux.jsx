@@ -3,11 +3,14 @@ import { receiveTodo, receiveTodos } from "./actions/todo_actions";
 import Root from "./components/root";
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { allTodos } from './reducers/selectors';
 
 const store = configureStore();
 window.receiveTodo = receiveTodo;
 window.receiveTodos = receiveTodos;
 window.store = store;
+window.allTodos = allTodos;
+window.React = React; // shouldn't need this line but something breaks in todo_list_container and todo_list without it look into it more hmm
 
 document.addEventListener("DOMContentLoaded", (event) => {
     const rootElement = document.getElementById('root');
