@@ -1,15 +1,16 @@
 import { RECEIVE_TODOS, RECEIVE_TODO } from "./../actions/todo_actions";
 
+// total placeholder so great
 const intialState = {
   1: {
     id: 1,
-    title: "wash car",
+    title: "wash me",
     body: "with soap",
     done: false
   },
   2: {
     id: 2,
-    title: "wash dog",
+    title: "wash you",
     body: "with shampoo",
     done: true
   }
