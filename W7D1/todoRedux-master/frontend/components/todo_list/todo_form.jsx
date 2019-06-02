@@ -10,7 +10,7 @@ class TodoForm extends React.Component {
 
   render() {
     return (
-      <li>This is a placeholder that will become a form</li>
+      <li>This is a placeholder that will become a form whee</li>
     );
   }
 }
