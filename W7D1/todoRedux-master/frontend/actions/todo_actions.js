@@ -3,7 +3,7 @@ export const RECEIVE_TODO = "RECEIVE_TODO";
 
 // to receive just one todo
 export const receiveTodo = todo => {
-  return { type: RECEIVE_TODO, todo }; // this is todo: todo yep
+  return { type: RECEIVE_TODO, todo }; // this is todo: todo yep --> this is the todo object namespaced here yep
 };
 
 // to receive multiple todos at once yep

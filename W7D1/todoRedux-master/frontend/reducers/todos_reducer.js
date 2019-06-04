@@ -17,10 +17,10 @@ const initialState = {
 
 export default function todosReducer(state = initialState, action) { // if there is no state passed in set it to the default state this is true the first time this thing is called
   switch (action.type) {
-    case RECEIVE_TODO:
-      const newTodo = action.todo;
-      const newState = Object.assign({}, state, newTodo);
-      newState[newTodo.id] = newTodo;
+    case RECEIVE_TODO: // if receiving a single todo
+      const newTodo = action.todo; // the todo will be the object namespaced on the action object as .todo
+      const newState = Object.assign({}, state, newTodo); // Object.assign will assign all the values of state to the {} empty POJO and then for some reason pass the newTodo values over too to the {} not sure why or if that's correct hmm
+      newState[newTodo.id] = newTodo; // this is correct --> this sets the correct attribute/key on newState to the value of the newTodo object
       return newState;
     case RECEIVE_TODOS:
       const newTodos = {};

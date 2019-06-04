@@ -19,8 +19,8 @@ import App from './app';
 //   }
 // }
 
-// functional component style
-const Root = ({store}) => ( // god damn it you needed to return explicitly sigh
+// functional component style 
+const Root = ({store}) => ( // god damn it you needed to return explicitly sigh || you mean when you have no brackets you don't need to return explicitly right for a fat arrow function pretty sure that's what you meant lol
   <Provider store={store}>
     <App />
   </Provider>
