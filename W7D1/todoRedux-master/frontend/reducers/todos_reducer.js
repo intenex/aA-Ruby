@@ -1,7 +1,6 @@
 import { RECEIVE_TODOS, RECEIVE_TODO } from "./../actions/todo_actions";
 
-// total placeholder so great
-const intialState = {
+const initialState = {
   1: {
     id: 1,
     title: "wash me",
@@ -16,7 +15,7 @@ const intialState = {
   }
 };
 
-export default function todosReducer(state = intialState, action) {
+export default function todosReducer(state = initialState, action) { // if there is no state passed in set it to the default state this is true the first time this thing is called
   switch (action.type) {
     case RECEIVE_TODO:
       const newTodo = action.todo;
