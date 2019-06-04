@@ -22,7 +22,7 @@ export default function todosReducer(state = initialState, action) { // if there
       const newTodo = action.todo; // the todo will be the object namespaced on the action object as .todo
       const newState = Object.assign({}, state); // Object.assign will assign all the values of state to the {} empty POJO and then for some reason pass the newTodo values over too to the {} not sure why or if that's correct hmm
       newState[newTodo.id] = newTodo; // this is correct --> this sets the correct attribute/key on newState to the value of the newTodo object
-      return newState;
+      return newState; // crazy that you found and fixed that bug you must have really not understood JS as well as you do now don't even understand how you put it in like this but good to know you really can understand this code and fix bugs easily and that that was a real bug from before fucking dope
     case RECEIVE_TODOS:
       const newTodos = {}; // this is the entirety of the new slice of todos state // look more into hoisting of variables and all that for sure
       action.todos.forEach(el => { // yep for each todo set the new state's 
