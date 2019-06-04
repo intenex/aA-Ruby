@@ -28,7 +28,7 @@ export default function todosReducer(state = initialState, action) { // if there
         newTodos[el.id] = el;
       });
       return newTodos;
-    default:
+    default: // if no action.type is found it'll run this basically the first time you run the reducer with nothing passed in
       return state;
   }
 }
