@@ -4,8 +4,6 @@ export function allTodos(state) { // dope works flawlessly really grokking it no
   return Object.values(state.todos); // kind of impressive you did this with map but what the fuck lmao how were you writing code like this wtf glad to know you've actually leveled up in JS but also nuts that you were doing this though it's honestly impressive you could use .map like that didn't even know .map was a JS function anymore have to do way more code love this shit so much man
 }
 
-Object.keys(state.todos).map(el => state.todos[el]);
-
 // oh thank god it's not your fucking idiocy somehow their fucking instructions
 // tell you to do that unbelievable shit thank god okay so you're not so bad at
 // coding lmao they somehow wanted you to do it that way wtf
