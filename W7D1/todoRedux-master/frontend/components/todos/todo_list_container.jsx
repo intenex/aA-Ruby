@@ -2,8 +2,10 @@ import { connect } from 'react-redux';
 import TodoList from './todo_list';
 import { allTodos } from '../../reducers/selectors';
 
-const mapStateToProps = (state, ownProps) => ({ // implicit object return fat arrow function dope
-  todos: allTodos(state)
+// container components do actually all the hard work of the logic behind the scenes
+
+const mapStateToProps = (state, ownProps) => ({ // implicit object return fat arrow function dope // right love it as long as no brackets around it so great
+  todos: allTodos(state) // awesome using the selector here dope
 });
 
 const mapDispatchToProps = (dispatch) => ({
