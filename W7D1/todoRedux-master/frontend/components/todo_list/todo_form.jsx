@@ -1,4 +1,5 @@
 import React from 'react';
+import { uniqueId } from '../../utils/util'; // right when not a single default import gets a single object of all the exports namespaced and you have to object deconstruct to get the ones you love love it
 
 class TodoForm extends React.Component {
   constructor(props) {
@@ -24,7 +25,10 @@ class TodoForm extends React.Component {
 
   addTodo(event) {
     event.preventDefault(); // stop it from actually reloading the page
-    this.props.receiveTodo({title: this.state.todo});
+    this.props.receiveTodo({
+      id: uniqueId(), // get a unique ID
+      title: this.state.todo
+    });
   }
 
   render() { // oh fuck yeah this is exactly as far as you got with your code let's make new changes now :)
