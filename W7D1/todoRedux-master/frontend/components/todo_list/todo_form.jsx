@@ -8,9 +8,13 @@ class TodoForm extends React.Component {
     };
   }
 
+  addTodo(event) {
+    
+  }
+
   render() { // oh fuck yeah this is exactly as far as you got with your code let's make new changes now :)
     return (
-      <form>
+      <form onSubmit={this.addTodo}>
         <label>Todo:
           <input type="text" name="todo"></input>
         </label>
