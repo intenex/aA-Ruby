@@ -7,7 +7,8 @@ class TodoListItem extends React.Component {
   }
 
   handleRemove(event) {
-
+    event.preventDefault(); // don't think there is a default for buttons but why not
+    this.props.removeTodo(this.props.todo);
   }
 
   render() {
