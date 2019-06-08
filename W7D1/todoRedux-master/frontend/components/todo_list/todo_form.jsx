@@ -2,7 +2,7 @@ import React from 'react';
 
 class TodoForm extends React.Component {
   constructor(props) {
-    super(props);
+    super(props); // recall what the React.Component does with props it just sets them to this.props right props=props? man rusty on your JS get back into it can't wait
     this.state = {
       todo: ''
     };
@@ -24,7 +24,7 @@ class TodoForm extends React.Component {
 
   addTodo(event) {
     event.preventDefault(); // stop it from actually reloading the page
-    console.log(this.state.todo);
+    this.props.receiveTodo({title: this.state.todo});
   }
 
   render() { // oh fuck yeah this is exactly as far as you got with your code let's make new changes now :)
