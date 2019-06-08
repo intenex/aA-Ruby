@@ -24,7 +24,7 @@ class TodoListItem extends React.Component {
         <div>
           <h3>{this.props.todo.title}</h3>
           <button onClick={this.handleRemove}>Delete Todo</button>
-          <button onClick={this.updateTodo}>{this.props.todo.done ? "Done" : "Undo"}</button>
+          <button onClick={this.updateTodo}>{this.props.todo.done ? "Undo" : "Done"}</button>
         </div>
       </li>
     );
