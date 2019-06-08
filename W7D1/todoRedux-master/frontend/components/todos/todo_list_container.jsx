@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import TodoList from './todo_list';
+import { receiveTodo, removeTodo } from '../../actions/todo_actions';
 import { allTodos } from '../../reducers/selectors';
 
 // container components do actually all the hard work of the logic behind the scenes
