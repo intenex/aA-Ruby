@@ -1,4 +1,4 @@
-import TodoListItem from './todo_list_item';
+import TodoListItem from '../todo_list/todo_list_item'; // holy shit automatic updating jesus christ that's amazing
 import TodoForm from './../todo_list/todo_form';
 
 // right presentational components are just components that just do the html and stuff

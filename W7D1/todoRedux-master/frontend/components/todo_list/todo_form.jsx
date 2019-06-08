@@ -16,6 +16,7 @@ class TodoForm extends React.Component {
   // right it rerenders every time so you have to save it
   // as the new value love it heh
   // nope lol you fixed it now
+  // so I suppose this is a controlled input
   handleChange(event) {
     console.log(event.target.value);
     this.setState({todo: event.target.value});
