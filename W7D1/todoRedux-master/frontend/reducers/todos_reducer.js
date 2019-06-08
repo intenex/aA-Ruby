@@ -1,4 +1,4 @@
-import { RECEIVE_TODOS, RECEIVE_TODO } from "./../actions/todo_actions";
+import { RECEIVE_TODOS, RECEIVE_TODO, REMOVE_TODO } from "./../actions/todo_actions";
 
 const initialState = {
   1: {
@@ -29,6 +29,10 @@ export default function todosReducer(state = initialState, action) { // if there
         newTodos[el.id] = el;
       });
       return newTodos;
+    case REMOVE_TODO:
+      const modifiedState = Object.assign({}, state);
+      delete modifiedState[action.todo.id]; // this is how to remove it p sure yep
+      return modifiedState; // interesting so you either have a break or a return yeah makes sense a case statement inside a function can just return to get out of it love it 
     default: // if no action.type is found it'll run this basically the first time you run the reducer with nothing passed in
       return state;
   }
