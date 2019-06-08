@@ -19,10 +19,11 @@ class TodoForm extends React.Component {
   // nope lol you fixed it now
   // so I suppose this is a controlled input
   handleChange(event) {
-    console.log(event.target.value);
     this.setState({todo: event.target.value});
   }
 
+  // totally nuts this triggers a re-render without you doing anything else
+  // remember how to get that to work but fuck yes
   addTodo(event) {
     event.preventDefault(); // stop it from actually reloading the page
     this.props.receiveTodo({
