@@ -1,4 +1,13 @@
-const TodoListItem = ({todo}) => <li>{todo.title}</li>;
-// each todo list item this is just a list item of each todo
+class TodoListItem extends React.Component {
+  constructor(props) {
+    super(props);
+  }
 
+  render() {
+    return (
+      <li>{this.propstodo.title}</li>
+    );
+  }
+
+}
 export default TodoListItem;

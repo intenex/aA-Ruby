@@ -13,7 +13,8 @@ const mapStateToProps = (state, ownProps) => ({ // implicit object return fat ar
 // yeahhh not clear how this has access to receiveTodo really strange lol damn look into this more for sure
 // weird that this works without importing '../../actions/todo_actions' where the receiveTodo is stored or maybe it doesn't work lol look into it more
 const mapDispatchToProps = (dispatch) => ({
-  receiveTodo: todo => dispatch(receiveTodo(todo)) // look more into how this thing has access to the receiveTodo function just globally like this think through it a little bit later for sure. A lot to think through and work with for sure right now man definitely do it all.
+  receiveTodo: todo => dispatch(receiveTodo(todo)), // look more into how this thing has access to the receiveTodo function just globally like this think through it a little bit later for sure. A lot to think through and work with for sure right now man definitely do it all.
+  removeTodo: todo => dispatch(removeTodo(todo)) // seriously how does this have access to this man
 });
 
 // this creates a connected component that can access state lower down in components without needing prop-threading and state prop-threading to have the state passed down as a prop manually to each child component right this allows you to create a connected Component that can transform implicit context into props yep love it
