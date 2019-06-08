@@ -9,15 +9,16 @@ class TodoForm extends React.Component {
   }
 
   addTodo(event) {
-    
+    console.log(event);
   }
 
   render() { // oh fuck yeah this is exactly as far as you got with your code let's make new changes now :)
     return (
       <form onSubmit={this.addTodo}>
         <label>Todo:
-          <input type="text" name="todo"></input>
+          <input type="text" name="todo" />
         </label>
+        <input type="submit" value="Submit" />
       </form>
     );
   }
