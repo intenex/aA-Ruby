@@ -1,8 +1,6 @@
 import configureStore from "./store/store.js";
 import Root from "./components/root";
-import React from 'react';
 import ReactDOM from 'react-dom';
-import { allTodos } from './reducers/selectors';
 
 // yep this is the entry file now you actually know all your code fucking dope
 const store = configureStore();
