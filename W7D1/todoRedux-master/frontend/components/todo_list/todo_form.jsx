@@ -28,7 +28,8 @@ class TodoForm extends React.Component {
     event.preventDefault(); // stop it from actually reloading the page
     this.props.receiveTodo({ // this function calls dispatch again and passes it an action object which is created with the receiveTodo action creator which takes in this todo object here as a payload and puts it in a wrapper action object that also has a type to know what kind of action to take with it once it hits the reducer so fucking great totally fucking understand this code now fucking love life man
       id: uniqueId(), // get a unique ID
-      title: this.state.todo
+      title: this.state.todo,
+      done: false
     });
   }
 
