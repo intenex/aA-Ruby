@@ -4,6 +4,7 @@ class TodoListItem extends React.Component {
   constructor(props) {
     super(props);
     this.handleRemove = this.handleRemove.bind(this);
+    this.updateTodo = this.updateTodo.bind(this);
   }
 
   handleRemove(event) {
