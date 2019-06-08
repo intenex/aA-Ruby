@@ -11,13 +11,19 @@ class TodoListItem extends React.Component {
     this.props.removeTodo(this.props.todo);
   }
 
+  updateTodo(event) {
+    event.preventDefault();
+    this.props.todo.done = !this.props.todo.done;
+    this.props.receiveTodo(this.props.todo);
+  }
+
   render() {
     return (
       <li>
         <div>
           <h3>{this.props.todo.title}</h3>
           <button onClick={this.handleRemove}>Delete Todo</button>
-          <button>Done</button>
+          <button onClick={this.updateTodo}>{this.props.todo.done ? "Done" : "Undo"}</button>
         </div>
       </li>
     );

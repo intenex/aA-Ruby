@@ -12,7 +12,7 @@ import TodoForm from './../todo_list/todo_form';
 // is a rerender called whenever redux state changes? whenever it would affect something down the line which it would here since this uses the todos slice of state from mapStateToProps and that was updated I think React/Redux magically knows that so fucking great can't wait to teach this to everyone else and really understand it through the teaching
 const TodoList = ({todos, receiveTodo, removeTodo}) => ( // ah right okay perfect the parentheses work fantastic here for jsx still not clear exactly how that syntactic sugar works right it has to do with the extension of this file name it must read in the jsx first and parse that first before making it all JS love it
   <ul>
-    {todos.map(todo => <TodoListItem todo={todo} removeTodo={removeTodo}/>)}
+    {todos.map(todo => <TodoListItem todo={todo} receiveTodo={receiveTodo} removeTodo={removeTodo}/>)}
     <TodoForm receiveTodo={receiveTodo}/>
   </ul>
 );
