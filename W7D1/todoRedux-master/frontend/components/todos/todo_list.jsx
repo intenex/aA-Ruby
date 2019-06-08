@@ -1,3 +1,4 @@
+import React from 'react'; // weird what is trying to have react defined here does jsx need react hmm
 import TodoListItem from '../todo_list/todo_list_item'; // holy shit automatic updating jesus christ that's amazing
 import TodoForm from './../todo_list/todo_form';
 
