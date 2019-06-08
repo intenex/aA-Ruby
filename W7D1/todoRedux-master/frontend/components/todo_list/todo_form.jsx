@@ -7,7 +7,7 @@ class TodoForm extends React.Component {
       value: ''
     };
     this.handleChange = this.handleChange.bind(this); // right have to bind this because it's going to be called function style by the component which is passed this as a callback uninvoked yep love it
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.addTodo = this.addTodo.bind(this);
   }
 
   // basically whenever the text changes the state will change
@@ -19,8 +19,7 @@ class TodoForm extends React.Component {
 
   addTodo(event) {
     event.preventDefault(); // stop it from actually reloading the page
-    console.log(event);
-    console.log(event.target.value);
+    console.log(this.state.value);
   }
 
   render() { // oh fuck yeah this is exactly as far as you got with your code let's make new changes now :)
