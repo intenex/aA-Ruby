@@ -1,8 +1,9 @@
-let path = require('path');
+const path = require('path');
 
 module.exports = {
   entry: './entry.jsx',
   output: {
+    path: path.resolve(__dirname),
     filename: './bundle.js',
   },
   module: {
