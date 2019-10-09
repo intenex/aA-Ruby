@@ -3,8 +3,8 @@ import React from 'react';
 class TodoListItem extends React.Component {
   constructor(props) {
     super(props);
-    this.deleteTodo.bind(this);
-    this.updateTodo.bind(this);
+    this.deleteTodo = this.deleteTodo.bind(this);
+    this.updateTodo = this.updateTodo.bind(this);
   }
 
   deleteTodo(event) {
