@@ -1,6 +1,8 @@
 import { Provider } from 'react-redux';
 import App from './app';
 
-export default (props) => (
-  
+export default ({store}) => (
+  <Provider store={store}>
+    <App />
+  </Provider>
 );
