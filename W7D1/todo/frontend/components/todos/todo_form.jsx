@@ -14,15 +14,26 @@ class TodoList extends React.Component {
 
   updateTitle(event) {
     event.preventDefault();
+    this.setState({title: event.currentTarget.value}); // passed an object that it merges with existing state love it
   }
 
   updateBody(event) {
     event.preventDefault();
+    this.setState({body: event.currentTarget.value});
   }
+
+
 
   render() {
     return(
-      <h1>Hello</h1>
+      <div>
+        <label>Title:
+          <input onChange={this.updateTitle} value={this.state.word}/>
+        </label>
+        <label>Body:
+          <input onChange={this.updateBody} value={this.state.body}/>
+        </label>
+      </div>
     )
   }
 }
