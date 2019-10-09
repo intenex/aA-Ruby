@@ -25,6 +25,7 @@ class TodoList extends React.Component {
   render() {
     const receiveTodo = this.props.receiveTodo;
     const formattedTodo = {
+      id: uniqueId(),
       title: this.state.title,
       body: this.state.body
     };
