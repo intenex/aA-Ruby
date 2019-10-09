@@ -1,3 +1,3 @@
-export function allTodos({todos}) { // get the todos slice of state
-  return Object.values(todos);
+export function allTodos({todo}) { // get the todos slice of state
+  return Object.values(todo);
 }
