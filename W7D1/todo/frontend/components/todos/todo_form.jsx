@@ -10,6 +10,7 @@ class TodoList extends React.Component {
     };
     this.updateTitle = this.updateTitle.bind(this); // binding creates a scope even when invoked as a callback - how does it do this? Interesting
     this.updateBody = this.updateBody.bind(this);
+    this.createTodo = this.createTodo.bind(this);
   }
 
   updateTitle(event) {
@@ -22,13 +23,17 @@ class TodoList extends React.Component {
     this.setState({body: event.currentTarget.value});
   }
 
-  render() {
-    const receiveTodo = this.props.receiveTodo;
+  createTodo(event) {
+    event.preventDefault();
     const formattedTodo = {
       id: uniqueId(),
       title: this.state.title,
       body: this.state.body
     };
+    this.props.receiveTodo(formattedTodo);
+  }
+
+  render() {
     return(
       <div>
         <label>Title:
@@ -37,7 +42,7 @@ class TodoList extends React.Component {
         <label>Body:
           <input onChange={this.updateBody} value={this.state.body}/>
         </label>
-        <button onClick={receiveTodo(formattedTodo)}>Create Todo!</button>
+        <button onClick={createTodo}>Create Todo!</button>
       </div>
     )
   }

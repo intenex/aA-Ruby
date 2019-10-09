@@ -1,13 +1,14 @@
 import { connect } from 'react-redux';
 import TodoList from './todo_list';
 import { allTodos } from './../../reducers/selectors';
+import { receiveTodo } from './../../actions/todo_actions';
 
 const mapStateToProps = state => ({ // right this returns an object with all the props yep makes sense
   todos: allTodos(state)
 });
 
 const mapDispatchToProps = dispatch => ({
-  receiveTodo: todo => dispatch(receiveTodo(todo)) // figure out if you need to import the receiveTodo action creator or not and if not why not and if you need to import selectors etc. I think you don't because you imported it in the entry.jsx file in which this is ultimately called from so it's in some higher scope, but just test that later by seeing if that works or not if you remove it there. Yep nope you removed it and it still works it is a mystery of the world man
+  receiveTodo: todo => dispatch(receiveTodo(todo)) // omg yes because you removed it elsewhere it finally isn't here when bundle was rebuilt from scratch that makes sense thank god whew
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TodoList);
