@@ -21,9 +21,9 @@ const todosReducer = (state = initialState, action) => {
     case RECEIVE_TODOS:
       Object.freeze(state);
       let todo_objects = {};
-      for (const todo in action.todos) {
+      action.todos.forEach(todo => {
         todo_objects[todo.id] = todo;
-      }
+      });
       return merge({}, todo_objects);
     case RECEIVE_TODO:
       Object.freeze(state);
