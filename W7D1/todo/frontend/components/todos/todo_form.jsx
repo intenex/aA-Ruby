@@ -42,7 +42,7 @@ class TodoList extends React.Component {
         <label>Body:
           <input onChange={this.updateBody} value={this.state.body}/>
         </label>
-        <button onClick={createTodo}>Create Todo!</button>
+        <button onClick={this.createTodo}>Create Todo!</button>
       </div>
     )
   }
