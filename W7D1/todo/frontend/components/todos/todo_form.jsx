@@ -22,9 +22,12 @@ class TodoList extends React.Component {
     this.setState({body: event.currentTarget.value});
   }
 
-
-
   render() {
+    const receiveTodo = this.props.receiveTodo;
+    const formattedTodo = {
+      title: this.state.title,
+      body: this.state.body
+    };
     return(
       <div>
         <label>Title:
@@ -33,6 +36,7 @@ class TodoList extends React.Component {
         <label>Body:
           <input onChange={this.updateBody} value={this.state.body}/>
         </label>
+        <button onClick={receiveTodo(formattedTodo)}>Create Todo!</button>
       </div>
     )
   }
