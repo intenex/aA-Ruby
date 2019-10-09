@@ -1,5 +1,16 @@
 import React from 'react';
 
-export default ({todo}) => (
-  <li>{todo.title}</li>
-);
+class TodoListItem extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    let { todo, removeTodo } = this.props;
+    return(
+      <li>{todo.title}</li>
+    );
+  }
+}
+
+export default TodoListItem;
