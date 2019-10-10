@@ -30,7 +30,7 @@ class TodoListItem extends React.Component {
     return(
       <div>
         <li>{todo.title} -- <button onClick={this.updateTodo}>{doneState}</button> -- <button onClick={this.showDetails}>Show Details</button></li>
-        {this.state.detail && <TodoDetailViewContainer />}
+        {this.state.detail && <TodoDetailViewContainer todo={todo}/>}
       </div>
     );
   }
