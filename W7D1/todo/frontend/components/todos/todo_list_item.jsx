@@ -3,14 +3,7 @@ import React from 'react';
 class TodoListItem extends React.Component {
   constructor(props) {
     super(props);
-    this.deleteTodo = this.deleteTodo.bind(this);
     this.updateTodo = this.updateTodo.bind(this);
-  }
-
-  deleteTodo(event) {
-    event.preventDefault();
-    let { todo, removeTodo } = this.props;
-    removeTodo(todo);
   }
 
   updateTodo(event) {
@@ -25,7 +18,7 @@ class TodoListItem extends React.Component {
     let doneState = "Done";
     if (todo.done) { doneState = "Undo"; }
     return(
-      <li>{todo.title} -- <button onClick={this.updateTodo}>{doneState}</button> -- <button onClick={this.deleteTodo}>Delete Todo!</button></li>
+      <li>{todo.title} -- <button onClick={this.updateTodo}>{doneState}</button></li>
     );
   }
 }
