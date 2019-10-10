@@ -24,13 +24,13 @@ class TodoListItem extends React.Component {
   }
 
   render() {
-    let { todo } = this.props;
+    let { todo, fUpdate } = this.props;
     let doneState = "Done";
     if (todo.done) { doneState = "Undo"; }
     return(
       <div>
         <li>{todo.title} -- <button onClick={this.updateTodo}>{doneState}</button> -- <button onClick={this.showDetails}>Show Details</button></li>
-        {this.state.detail && <TodoDetailViewContainer todo={todo}/>}
+        {this.state.detail && <TodoDetailViewContainer todo={todo} fUpdate={fUpdate} />}
       </div>
     );
   }

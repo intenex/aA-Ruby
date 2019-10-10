@@ -8,8 +8,9 @@ class TodoDetailView extends React.Component {
 
   deleteTodo(event) {
     event.preventDefault();
-    let { todo, removeTodo } = this.props;
+    let { todo, removeTodo, fUpdate } = this.props;
     removeTodo(todo);
+    fUpdate(); // force rerendering the list see if that works
   }
   
   render() {
