@@ -1,4 +1,4 @@
-import { RECEIVE_STEPS, RECEIVE_STEP, REMOVE_STEP } from './../actions/todo_actions':
+import { RECEIVE_STEPS, RECEIVE_STEP, REMOVE_STEP } from './../actions/todo_actions';
 import { merge } from 'lodash';
 
 const initialState = {
@@ -14,7 +14,7 @@ const initialState = {
     done: false,
     todo_id: 1
   }
-}
+};
 
 const stepsReducer = (state = initialState, action) => {
   const newState = merge({}, state);
