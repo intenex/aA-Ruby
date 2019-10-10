@@ -39,5 +39,7 @@ class TodoListItem extends React.Component {
 // note {this.state.detail && <TodoDetailViewContainer />} works because if the first
 // statement evaluates to true the entire thing will evaluate to the value of the second thing passed after &&
 // and if the first statement is false it'll evaluate to just false and not do anything brilliant
+// from https://reactjs.org/docs/conditional-rendering.html
+// remember to try the ternary operator too later like so {this.state.detail ? <TodoDetailViewContainer /> : <div></div>} see if you can just put nothing after the : or maybe just write false or something instead of <div></div> pretty sure you can hmm
 
 export default TodoListItem;
