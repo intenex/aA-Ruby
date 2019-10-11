@@ -35,8 +35,10 @@ class StepForm extends React.Component {
       todo_id: todoId,
       done: false
     };
+    console.log(step);
     receiveStep(step);
     this.setState({title:"", body:""}); // reset the state
+    console.log(this.state);
   }
 
   render() {

@@ -17,8 +17,15 @@ const initialState = {
 };
 
 const stepsReducer = (state = initialState, action) => {
+  Object.freeze(state);
   const newState = merge({}, state);
   switch (action.type) {
+    case RECEIVE_STEPS:
+
+    case RECEIVE_STEP:
+
+    case REMOVE_STEP:
+
     default:
       return state;
   }
