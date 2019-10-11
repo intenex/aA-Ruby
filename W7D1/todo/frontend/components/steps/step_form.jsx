@@ -15,10 +15,14 @@ class StepForm extends React.Component {
 
   updateTitle(event) {
     event.preventDefault();
+    const newTitle = event.currentTarget.value;
+    this.setState({title: newTitle});
   }
 
   updateBody(event) {
     event.preventDefault();
+    const newBody = event.currentTarget.value;
+    this.setState({body: newBody});
   }
 
   handleSubmit(event) {
