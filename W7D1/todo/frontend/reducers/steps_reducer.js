@@ -21,11 +21,13 @@ const stepsReducer = (state = initialState, action) => {
   const newState = merge({}, state);
   switch (action.type) {
     case RECEIVE_STEPS:
-
+      return merge({}, action.steps);
     case RECEIVE_STEP:
-
+      newState[action.step.id] = action.step;
+      return newState;
     case REMOVE_STEP:
-
+      delete newState[action.step.id];
+      return newState;
     default:
       return state;
   }
