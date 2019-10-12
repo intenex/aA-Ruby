@@ -7,7 +7,7 @@ import Root from './components/root';
 const addLoggingToDispatch = ( {getState, dispatch} ) => next => action => {
   console.log(`Old State: ${getState()}`);
   console.log(`Action: ${action}`);
-  const result = dispatch(action);
+  const result = next(action);
   console.log(`New State: ${getState()}`);
   return result;
 };
