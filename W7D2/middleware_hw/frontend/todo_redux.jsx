@@ -4,11 +4,12 @@ import configureStore from './store/store';
 
 import Root from './components/root';
 
-const addLoggingToDispatch = ( {getState, dispatch} ) => action => {
+const addLoggingToDispatch = ( {getState, dispatch} ) => next => action => {
   console.log(`Old State: ${getState()}`);
   console.log(`Action: ${action}`);
-  dispatch(action);
+  const result = dispatch(action);
   console.log(`New State: ${getState()}`);
+  return result;
 };
 
 document.addEventListener('DOMContentLoaded', () => {
