@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const preloadedState = localStorage.state ?
     JSON.parse(localStorage.state) : {};
   let store = configureStore(preloadedState);
-  store = applyMiddlewares(store, addLoggingToDispatch); // reassign store to the new store with all the middlewares applied love it
 
   const root = document.getElementById('content');
   ReactDOM.render(<Root store={store} />, root);
