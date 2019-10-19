@@ -1,5 +1,5 @@
 import { RECEIVE_SEARCH_GIPHYS } from '../actions/giphy_actions';
-import { merge } from './lodash';
+// import { merge } from 'lodash';
 
 const giphysReducer = (state = [], action) => {
   // Object.freeze(state);
@@ -11,3 +11,5 @@ const giphysReducer = (state = [], action) => {
       return state;
   }
 };
+
+export default giphysReducer;
