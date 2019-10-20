@@ -26,7 +26,7 @@ export default class GiphysSearch extends React.Component {
       <div>
         <form>
           <label>Search Term
-            <input type="text" value={searchTerm} onClick={this.handleChange}/>
+            <input type="text" value={this.state.searchTerm} onChange={this.handleChange}/>
           </label>
           <input type="submit" value="Search for Giphys!" />
         </form>
