@@ -1,7 +1,7 @@
 import React from 'react';
 
 const GiphysIndexItem = ({ giphy }) => (
-  <li>{console.log(giphy)}Hello!</li>
+  <li><img src={giphy.images.fixed_height.url}/></li>
 );
 
 export default GiphysIndexItem;
