@@ -7,3 +7,5 @@ const GiphysIndex = ({giphys}) => (
     {giphys.map((giphy, idx) => <GiphysIndexItem giphy={giphy} key={idx} />)}
   </ul>
 );
+
+export default GiphysIndex;
