@@ -7,7 +7,6 @@ export default class GiphysSearch extends React.Component {
     super(props);
     this.state = {
       searchTerm: "",
-      giphys: []
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -19,7 +18,7 @@ export default class GiphysSearch extends React.Component {
   }
 
   handleSubmit(e) { // right this is by default clicked yeah dope hmm look into the solution afterwards yeah spend your time to really dig into and love learning things really cannot wait man life is going to be so great go through interviewcake with Mai and Dom afterwards that's key
-    this.props.fetchSearchGiphys(this.state.searchTerm).then(giphys => this.setState({giphys: giphys}));
+    this.props.fetchSearchGiphys(this.state.searchTerm).then(() => this.setState({searchTerm: ""})); // reset the searchTerm and the key actually is not resetting the search term but re-rendering the component since now the global state giphys slice is actually active and has real giphys in it I think that's key love it but you have to reset the search term anyway so that's dope and specifically do it after the async thing returns love it
   }
 
   render() {
@@ -31,7 +30,7 @@ export default class GiphysSearch extends React.Component {
           </label>
           <input type="submit" value="Search for Giphys!" />
         </form>
-        <GiphysIndex giphys={this.state.giphys}/>
+        <GiphysIndex giphys={this.props.giphys}/>
       </div>
     )
   }

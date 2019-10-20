@@ -1,4 +1,5 @@
 import * as APIUtil from '../util/api_util';
+import { resolve } from 'dns';
 
 export const RECEIVE_SEARCH_GIPHYS = 'RECEIVE_SEARCH_GIPHYS';
 
