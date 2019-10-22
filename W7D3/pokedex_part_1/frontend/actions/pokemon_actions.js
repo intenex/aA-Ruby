@@ -1,4 +1,4 @@
-import * as APIUTIL from './../util/api_util';
+import * as APIUTIL from './../util/api_util'; // ah no need for the beginning ./ love it can just do ../ yep makes perfect sense
 export const RECEIVE_ALL_POKEMON = "RECEIVE_ALL_POKEMON";
 
 export const receiveAllPokemon = pokemon => ({
