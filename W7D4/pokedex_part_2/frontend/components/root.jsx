@@ -6,7 +6,7 @@ import PokemonIndexContainer from './pokemon/pokemon_index_container'; // right 
 const Root = ({store}) => ( // from props get the store specifically love it right you get passed a props object just destructure what attributes you want great
   <Provider store={store}>
     <HashRouter>
-      <PokemonIndexContainer />
+      <Route path="/" component={PokemonIndexContainer} />
     </HashRouter>
   </Provider>
 );
