@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { HashRouter, Route } from 'react-router-dom';
+import { HashRouter, Route } from 'react-router-dom'; // interesting must import it here too even if you do it in the router? Hmm think on that more
 import configureStore from './store/store';
 import Root from './components/root.jsx';
 
