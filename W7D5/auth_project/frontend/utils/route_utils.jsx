@@ -21,7 +21,7 @@ const Auth = ({component: Component, exact, loggedIn, path}) => (
 // only if logged in allow them to access these
 // remember all jsx React components must be capitalized hence why we need to specifically name it we say map the key component: to the value Component that we can then use
 // yeah just typing it all out by hand even if quickly makes a world of difference in muscle memory and really remembering it wow and if you only remember chunks you can extract the rest so well man recalling is so incredible
-const Protected = ({component: Component, exact, loggedIn, props}) => (
+const Protected = ({component: Component, exact, loggedIn, path}) => (
   <Route path={path} exact={exact} render={props => (
     loggedIn ? (
       <Component {...props} />
@@ -31,5 +31,9 @@ const Protected = ({component: Component, exact, loggedIn, props}) => (
   )} />
 );
 
-export const AuthRoute = component => withRouter(connect(mapStateToProps, mapDispatchToProps))(component);
-export const ProtectedRoute = component => withRouter
+const mapStateToProps = state => ({
+  loggedIn: Boolean(state.session.currentUser) // if there is a currentUser then let's call them logged in
+});
+
+export const AuthRoute = withRouter(connect(mapStateToProps)(Auth));
+export const ProtectedRoute = withRouter(connect(mapStateToProps)(Protected));
