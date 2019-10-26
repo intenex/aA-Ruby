@@ -10,7 +10,7 @@ import { withRouter, Route, Redirect } from 'react-router-dom';
 
 const Auth = ({component: Component, exact, loggedIn, path}) => (
   <Route path={path} exact={exact} render={props => (
-    loggedIn ? (
+    !loggedIn ? (
       <Component {...props} />
     ) : (
       <Redirect to="/login" />
@@ -35,5 +35,5 @@ const mapStateToProps = state => ({
   loggedIn: Boolean(state.session.currentUser) // if there is a currentUser then let's call them logged in
 });
 
-export const AuthRoute = withRouter(connect(mapStateToProps)(Auth));
+export const AuthRoute = withRouter(connect(mapStateToProps)(Auth)); // right so pass this route component, exac, loggedIn, and path just like a Route love it ah in jsx that's how it works everything you pass as an attribute in the tag is part of a props object that's passed through amazing great to understand that
 export const ProtectedRoute = withRouter(connect(mapStateToProps)(Protected));
