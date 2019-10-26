@@ -2,11 +2,16 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 export default ({ currentUser, logout }) => {
-  const display = (
+  const display = currentUser ? ( // wrap these in the auth thing later yeah it was obviously username wtf is wrong with his model lol
     <div>
-      <Link className="btn" to="/signup">Sign Up</Link>
-      <Link className="btn" to="/login">Log In</Link>
+      <p>Hello, {currentUser.username}!</p>
+      <button onClick={logout}>Log Out</button>
     </div>
+  ) : (
+      <div>
+      <Link className = "btn" to = "/signup">Sign Up</Link>
+    <Link className="btn" to="/login">Log In</Link>
+    </div >
   );
 
   return (

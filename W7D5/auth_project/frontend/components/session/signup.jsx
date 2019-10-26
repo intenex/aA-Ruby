@@ -35,7 +35,7 @@ export default class Signup extends React.Component {
           <label>Email:
             <input type="text" value={this.state.email} onChange={this.handleInput("email")} />
           </label>
-          <label>Username:
+          <label>Password:
             <input type="password" value={this.state.password} onChange={this.handleInput("password")} />
           </label>
           <input type="submit" value="Sign up!" />
